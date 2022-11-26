@@ -1,0 +1,21 @@
+:host ::ng-deep .dialog-component {
+	.message-title {
+		background-color: rgba(128, 128, 128, 0.1);
+		text-align: left;
+		padding-left: 5px;
+	}
+
+	.message-text {
+		text-align: left;
+		padding-left: 5px;
+	}
+
+	.button-area {
+		display: flex;
+		justify-content: center;
+
+		.cancel-btn {
+			margin-left: 20px;
+		}
+	}
+}

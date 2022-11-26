@@ -1,0 +1,9 @@
+<div class="message-container">
+	<app-alert
+		*ngFor="let msg of alerts$ | async"
+		[message]="msg"
+		[dismissTimeInMillis]="msg.dismissTimeInMillis"
+		[dismissProgrammatically$]="dismissAll$"
+	>
+	</app-alert>
+</div>

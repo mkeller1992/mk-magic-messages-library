@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "mk-magic-messages": {
+      "projectType": "library",
+      "root": "projects/mk-magic-messages",
+      "sourceRoot": "projects/mk-magic-messages/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/mk-magic-messages/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mk-magic-messages/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mk-magic-messages/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/mk-magic-messages/src/test.ts",
+            "tsConfig": "projects/mk-magic-messages/tsconfig.spec.json",
+            "karmaConfig": "projects/mk-magic-messages/karma.conf.js"
+          }
+        }
+      }
+    }
+  }
+}

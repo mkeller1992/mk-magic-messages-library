@@ -1,0 +1,9 @@
+<div *ngIf="message" class="clickable-area">
+	<div class="msg-{{ message.type }}" [@state]="message.state" (@state.done)="onDismissalCompleted()">
+		<div class="btn-dismiss">
+			<i class="fa fa-times"></i>
+		</div>
+
+		<span [innerHtml]="message.text | newlineAndTabs"></span>
+	</div>
+</div>
