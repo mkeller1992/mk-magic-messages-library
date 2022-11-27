@@ -1,15 +1,16 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, Observable, Subject, tap, firstValueFrom } from 'rxjs';
-import { DialogComponent, DialogData } from './message-service/dialogs/dialog.component';
-import { MessageState } from './message-service/models/message-state.constant';
-import { MessageType } from './message-service/models/message-type.constant';
-import { Message } from './message-service/models/message.model';
-import { ComponentType } from '@angular/cdk/portal';
+import { BehaviorSubject, firstValueFrom, Observable, Subject, tap } from 'rxjs';
+import { DialogComponent, DialogData } from './core/dialogs/dialog.component';
+import { MessageState } from './core/models/message-state.constant';
+import { MessageType } from './core/models/message-type.constant';
+import { Message } from './core/models/message.model';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class MessagesService {
 
 	private messagesSubject = new BehaviorSubject<Message[]>([]);
@@ -44,29 +45,34 @@ export class MessagesService {
 		this.dismissAllSubject.next(true);
 	}
 
-	public showNotification(title: string, text: string, align = 'center', okayBtnTxt = 'OK'): Promise<boolean | null> {
-		return this.showDialog(title, text, align, okayBtnTxt, null);
+	public showNotification(title: string, text: string, align = 'center', okayBtnTxt = 'OK', disableOutsideClick = true): Promise<boolean | null> {
+		return this.showDialog(title, text, align, okayBtnTxt, null, disableOutsideClick);
 	}
 
-	public showCustomNotification<T>(comp: ComponentType<T>, inputData: any, compWidth = '250px', okayBtnTxt = 'OK'): Observable<any> {
+	showCustomNotification<T>(comp: ComponentType<T>, inputData: any, disableOutsideClick: boolean, compWidth = '250px', okayBtnTxt = 'OK'): Promise<any> {
 		inputData.okayBtn = okayBtnTxt;
 		const dialogRef = this.dialog.open<T>(comp, {
 			width: compWidth,
 			data: inputData,
+			disableClose: disableOutsideClick
 		});
 
-		return dialogRef.afterClosed();
+		return firstValueFrom(dialogRef.afterClosed()
+			.pipe(
+				tap(val => console.log('showCustomNotification() returns:', val))
+			));
 	}
 
-	public showDialog(
+	showDialog(
 		msgTitle: string,
 		msgText: string,
-		alignment: string = 'center',
+		alignment: string = 'left',
 		okayBtnTxt: string = 'OK',
-		cancelBtnTxt: string | null = 'Abbrechen'
-	): Promise<boolean | null> {
+		cancelBtnTxt: string | null = 'Abbrechen',
+		disableOutsideClick = true): Promise<boolean | null> {
 		const dialogRef = this.dialog.open(DialogComponent, {
-			maxWidth: '600px',
+			maxWidth: '550px',
+			disableClose: disableOutsideClick,
 			data: {
 				title: msgTitle,
 				text: msgText,
@@ -76,8 +82,10 @@ export class MessagesService {
 			} as DialogData,
 		});
 
-		const afterClosed$ = dialogRef.afterClosed().pipe(tap((val) => console.warn('showDialog() returns ', val)));
-		return firstValueFrom(afterClosed$);
+		return firstValueFrom(dialogRef.afterClosed()
+			.pipe(
+				tap(val => console.log('showDialog() returns:', val))
+			));
 	}
 
 	private addMessage(text: string, type: string, dismissTime: number) {

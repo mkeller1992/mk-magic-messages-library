@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Message } from './core/models/message.model';
+import { MessagesService } from './messages.service';
 
 @Component({
-  selector: 'lib-mk-magic-messages',
-  template: `
-  	<script defer src="./assets/fontawesome-all.js"></script>
-    <!-- Message Container -->
-	<app-alerts-container></app-alerts-container>
-  `,
-  styles: [
-  ]
+  selector: 'magic-messages',
+  templateUrl: './messages.component.html',
+  styleUrls: ['./messages.component.scss']
 })
-export class MessagesComponent implements OnInit {
+export class MessagesComponent {
 
-  constructor() { }
+	alerts$: Observable<Message[]>;
 
-  ngOnInit(): void {
-  }
+	dismissAll$: Observable<boolean>;
 
+	constructor(public msgService: MessagesService) {
+		this.alerts$ = this.msgService.messages$;
+		this.dismissAll$ = msgService.dismissAll$;
+	}
 }

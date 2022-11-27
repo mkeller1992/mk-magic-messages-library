@@ -1,18 +1,17 @@
-import { NgModule } from '@angular/core';
-import { MessagesComponent } from './messages.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { AlertComponent } from './message-service/alerts/alert/alert.component';
-import { AlertsContainerComponent } from './message-service/alerts/alerts-container.component';
-import { DialogComponent } from './message-service/dialogs/dialog.component';
-import { NewlineAndTabsPipe } from './message-service/pipes/new-line-and-tabs.pipe';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { NgModule } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AlertComponent } from './core/alert/alert.component';
+import { DialogComponent } from './core/dialogs/dialog.component';
+import { NewlineAndTabsPipe } from './core/pipes/new-line-and-tabs.pipe';
+import { MessagesComponent } from './messages.component';
+import { MatButtonModule } from '@angular/material/button'
 
 
 @NgModule({
   declarations: [
     MessagesComponent,
-	AlertsContainerComponent,
 	AlertComponent,
 	DialogComponent,
 	NewlineAndTabsPipe
@@ -20,10 +19,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
   imports: [
 	CommonModule,
 	BrowserAnimationsModule,
-	MatDialogModule
+	MatDialogModule,
+	MatButtonModule
   ],
   exports: [
-    MessagesComponent,
+    MessagesComponent
   ]
 })
 export class MkMagicMessagesModule { }

@@ -13,8 +13,13 @@ export class AppComponent implements OnInit {
 
   }
 	ngOnInit(): void {
-		this.msgSvc.showError('TEST');
-		this.msgSvc.showInfo('TEST');
+		this.msgSvc.showInfo('TEST', 100_000);
+		this.msgSvc.showError('This is a test-message');
+		this.msgSvc.showInfo('INFO');
+		this.msgSvc.showWarning('Warning');
+
+		this.msgSvc.showDialog('This is the title', 'And this is the displayed message and it is a very long message. Just for testing purposes!');
+
 	}
 
 }
