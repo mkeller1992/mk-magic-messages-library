@@ -11,24 +11,23 @@ describe("MessagesComponent", () => {
 
   beforeEach(async () => {
 
-    mockMessagesService = jasmine.createSpyObj('', ['showInfo'],  { messages$: of([new Message('', '', 222)]), dismissAll$: of(true) });
+    mockMessagesService = jasmine.createSpyObj('', ['showInfo'],  { messages$: of([new Message('', '', 1000)]), dismissAll$: of(true) });
 
     await TestBed.configureTestingModule({
-      declarations: [MessagesComponent],
-      providers: [{ provide: MessagesService, useValue: mockMessagesService }],
-      imports: []
-    }).compileComponents();
-  });
+		declarations: [MessagesComponent],
+		providers: [{ provide: MessagesService, useValue: mockMessagesService }],
+		imports: []
+		}).compileComponents();
+	});
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(MessagesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(MessagesComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  describe('method1', () => {
-    it('should ...', () => {
-      expect(component).toBeTruthy();
-    });
-  });
+	it('should create component', () => {
+		expect(component).toBeTruthy();
+	});
+
 })
