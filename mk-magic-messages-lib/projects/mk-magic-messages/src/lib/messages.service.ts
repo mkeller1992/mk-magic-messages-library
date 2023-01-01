@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { DialogPosition, MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, firstValueFrom, Observable, Subject, tap } from 'rxjs';
 import { DialogComponent, DialogData } from './core/dialogs/dialog.component';
 import { MessageState } from './core/models/message-state.constant';
@@ -12,7 +12,7 @@ import { Message } from './core/models/message.model';
 })
 
 export class MessagesService {
-
+	//
 	private messagesSubject = new BehaviorSubject<Message[]>([]);
 
 	public messages$: Observable<Message[]> = this.messagesSubject.asObservable();
@@ -25,54 +25,51 @@ export class MessagesService {
 		// nothing to do here
 	}
 
-	public showInfo(message: string, dismissTime: number = 10_000) {
-		this.addMessage(message, MessageType.DEFAULT, dismissTime);
+	showInfo(message: string, dismissTimeInMillis: number = 10_000) {
+		this.addMessage(message, MessageType.DEFAULT, dismissTimeInMillis);
 	}
 
-	public showSuccess(message: string, dismissTime: number = 4_000) {
-		this.addMessage(message, MessageType.OK, dismissTime);
+	showSuccess(message: string, dismissTimeInMillis: number = 4_000) {
+		this.addMessage(message, MessageType.OK, dismissTimeInMillis);
 	}
 
-	public showWarning(message: string, dismissTime: number = 10_000) {
-		this.addMessage(message, MessageType.WARNING, dismissTime);
+	showWarning(message: string, dismissTimeInMillis: number = 10_000) {
+		this.addMessage(message, MessageType.WARNING, dismissTimeInMillis);
 	}
 
-	public showError(message: string, dismissTime: number = 2_147_483_647) {
-		this.addMessage(message, MessageType.ERROR, dismissTime);
+	showError(message: string, dismissTimeInMillis: number = 2_147_483_647) {
+		this.addMessage(message, MessageType.ERROR, dismissTimeInMillis);
 	}
 
-	public clear() {
+	clear() {
 		this.dismissAllSubject.next(true);
 	}
 
-	public showNotification(title: string, text: string, align = 'center', okayBtnTxt = 'OK', disableOutsideClick = true): Promise<boolean | null> {
-		return this.showDialog(title, text, align, okayBtnTxt, null, disableOutsideClick);
+	showNotification(title: string, text: string, align = 'center', okayBtnTxt = 'OK'): Promise<boolean | null> {
+		return this.showDialog(title, text, align, okayBtnTxt, null);
 	}
 
-	showCustomNotification<T>(comp: ComponentType<T>, inputData: any, disableOutsideClick: boolean, compWidth = '250px', okayBtnTxt = 'OK'): Promise<any> {
-		inputData.okayBtn = okayBtnTxt;
+	showCustomNotification<T, U>(comp: ComponentType<T>, inputData: any, disableOutsideClick: boolean,
+								compWidth = '500px', modalPosition = {} as DialogPosition): Promise<U> {
+
 		const dialogRef = this.dialog.open<T>(comp, {
 			width: compWidth,
 			data: inputData,
+			position: modalPosition,
 			disableClose: disableOutsideClick
 		});
 
-		return firstValueFrom(dialogRef.afterClosed()
+		return firstValueFrom<U>(dialogRef.afterClosed()
 			.pipe(
-				tap(val => console.log('showCustomNotification() returns:', val))
+				tap(val => console.log('showCustomNotification() returns ', val))
 			));
 	}
 
-	showDialog(
-		msgTitle: string,
-		msgText: string,
-		alignment: string = 'left',
-		okayBtnTxt: string = 'OK',
-		cancelBtnTxt: string | null = 'Abbrechen',
-		disableOutsideClick = true): Promise<boolean | null> {
+	showDialog(msgTitle: string, msgText: string, alignment: string = 'center',
+		okayBtnTxt: string = 'OK', cancelBtnTxt: string | null = 'Abbrechen'): Promise<boolean | null> {
+
 		const dialogRef = this.dialog.open(DialogComponent, {
-			maxWidth: '550px',
-			disableClose: disableOutsideClick,
+			maxWidth: '600px',
 			data: {
 				title: msgTitle,
 				text: msgText,
@@ -84,7 +81,7 @@ export class MessagesService {
 
 		return firstValueFrom(dialogRef.afterClosed()
 			.pipe(
-				tap(val => console.log('showDialog() returns:', val))
+				tap((val) => console.warn('showDialog() returns ', val))
 			));
 	}
 

@@ -1,7 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { fromEvent, Observable, race, Subscription, timer } from 'rxjs';
-import { first, tap } from 'rxjs/operators';
+import { first, repeat, takeUntil, tap } from 'rxjs/operators';
+import { MessagesService } from '../../messages.service';
 import { MessageState } from '../models/message-state.constant';
 import { Message } from '../models/message.model';
 
@@ -66,19 +67,20 @@ import { Message } from '../models/message.model';
 	],
 })
 export class AlertComponent implements OnInit, OnDestroy {
- //
+	//
 	@Input()
 	message!: Message;
 
 	@Input()
 	dismissTimeInMillis = 2_147_483_647;
 
-	@Input()
-	dismissProgrammatically$!: Observable<boolean>;
+	readonly mouseenter$ = fromEvent(this.elementRef.nativeElement, 'mouseenter');
+	readonly mouseleave$ = fromEvent(this.elementRef.nativeElement, 'mouseleave');
 
 	subs = new Subscription();
 
 	constructor(@Inject(ElementRef) private readonly elementRef: ElementRef<HTMLElement>,
+				private msgService: MessagesService,
 				private cdRef: ChangeDetectorRef) {}
 
 	ngOnInit(): void {
@@ -86,10 +88,13 @@ export class AlertComponent implements OnInit, OnDestroy {
 		const dismissalByUser$: Observable<any> = fromEvent(this.elementRef.nativeElement, 'mouseup');
 
 		// If dismissal is requested programmatically from message-service:
-		const dismissalByService$: Observable<any> = this.dismissProgrammatically$;
+		const dismissalByService$: Observable<any> = this.msgService.dismissAll$;
 
-		// Observable that closes the message after a given time:
-		const dismissalAfterTimeout$: Observable<any> = timer(this.dismissTimeInMillis);
+		// Observable that closes the message after a given time,
+		// unless user hovers over the message with a cursor => 'takeUntil()' and 'repeat()'
+		const dismissalAfterTimeout$: Observable<any> = timer(this.dismissTimeInMillis).pipe(
+			takeUntil(this.mouseenter$),
+			repeat({ delay: () => this.mouseleave$ })); // on mouseleave: Resubscribe to source (here: 'timer()')
 
 		this.subs.add(race([dismissalByUser$, dismissalByService$, dismissalAfterTimeout$])
 			.pipe(

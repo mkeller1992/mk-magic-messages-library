@@ -12,10 +12,7 @@ export class MessagesComponent {
 
 	alerts$: Observable<Message[]>;
 
-	dismissAll$: Observable<boolean>;
-
-	constructor(public msgService: MessagesService) {
+	constructor(private msgService: MessagesService) {
 		this.alerts$ = this.msgService.messages$;
-		this.dismissAll$ = msgService.dismissAll$;
 	}
 }
