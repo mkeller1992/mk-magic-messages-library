@@ -1,7 +1,7 @@
-<div *ngIf="message" class="clickable-area">
-	<div class="msg-container msg-{{ message.type }}" [@state]="message.state" (@state.done)="onDismissalCompleted()">
+<div *ngIf="alertParams" class="clickable-area">
+	<div class="alert-container alert-{{ alertParams.type }}" [@state]="alertParams.state" (@state.done)="onDismissalCompleted()">
 		
-		<div class="message-text" [innerHtml]="message.text | newlineAndTabs"></div>
+		<div class="alert-text" [innerHtml]="alertParams.text | newlineAndTabs"></div>
 
 		<div class="btn-dismiss">
 			<i class="fa fa-times"></i>

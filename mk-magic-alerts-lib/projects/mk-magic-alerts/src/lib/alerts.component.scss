@@ -1,6 +1,6 @@
-/** message-container **/
+/** alerts-container **/
 
-.message-container {
+.alerts-container {
 	position: fixed;
 	top: 0px;
 	left: 15px;
@@ -8,25 +8,25 @@
 	z-index: 1020;
 }
 @media (min-width: 768px) {
-	.message-container {
+	.alerts-container {
 		left: 10%;
 		right: 10%;
 	}
 }
 @media (min-width: 992px) {
-	.message-container {
+	.alerts-container {
 		left: 20%;
 		right: 20%;
 	}
 }
 @media (min-width: 1200px) {
-	.message-container {
+	.alerts-container {
 		left: 25%;
 		right: 25%;
 	}
 }
 @media (min-width: 1500px) {
-	.message-container {
+	.alerts-container {
 		left: 30%;
 		right: 30%;
 	}

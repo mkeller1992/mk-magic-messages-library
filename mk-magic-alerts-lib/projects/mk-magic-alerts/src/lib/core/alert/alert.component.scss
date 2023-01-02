@@ -1,7 +1,7 @@
-.msg-info,
-.msg-success,
-.msg-warning,
-.msg-error {
+.alert-info,
+.alert-success,
+.alert-warning,
+.alert-error {
 	position: relative;
 	padding: 5px 15px;
 	margin: 0px 0px;
@@ -12,22 +12,22 @@
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 6px 20px 0 rgba(0, 0, 0, 0.08);
 	z-index: 1020 !important;
 }
-.msg-info {
+.alert-info {
 	color: #004085;
 	border-color: #004085;
 	background-color: #b8daff;
 }
-.msg-success {
+.alert-success {
 	color: #155724;
 	border-color: #155724;
 	background-color: #c3e6cb;
 }
-.msg-warning {
+.alert-warning {
 	color: #856404;
 	border-color: #856404;
 	background-color: #ffeeba;
 }
-.msg-error {
+.alert-error {
 	color: #721c24;
 	border-color: #721c24;
 	background-color: #f8d7da;
@@ -37,7 +37,7 @@
 	cursor: pointer;
 }
 
-.msg-container {
+.alert-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -46,6 +46,6 @@
 .btn-dismiss:hover {
 	color: #fc2112;
 }
-.message-text {
+.alert-text {
 	font: 400 16px / 20px Roboto;
 }

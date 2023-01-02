@@ -3,11 +3,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-<!-- Message Container -->
-<div class="message-container">
+<!-- Alerts Container -->
+<div class="alerts-container">
 	<app-alert
-		*ngFor="let msg of alerts$ | async"
-		[message]="msg"
-		[dismissTimeInMillis]="msg.dismissTimeInMillis">
+		*ngFor="let alertParams of alerts$ | async"
+		[alertParams]="alertParams"
+		[dismissTimeInMillis]="alertParams.dismissTimeInMillis">
 	</app-alert>
 </div>

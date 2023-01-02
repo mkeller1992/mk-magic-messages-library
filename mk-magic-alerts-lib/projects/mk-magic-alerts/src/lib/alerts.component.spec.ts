@@ -2,31 +2,31 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from '@angular/platform-browser';
 import { of } from "rxjs";
-import { Alert } from "./core/models/alert.model";
+import { AlertsStoreService } from './alerts-store.service';
 import { AlertsComponent } from "./alerts.component";
-import { AlertsService } from "./alerts.service";
+import { Alert } from "./core/models/alert.model";
 
 describe('AlertsComponent', () => {
   let component: AlertsComponent;
   let fixture: ComponentFixture<AlertsComponent>;
-  let msgService: AlertsService;
-  const infoMsgTxt = 'Info Message';
-  const errorMsgTxt = 'Error Message';
+  let alertsStore: AlertsStoreService;
+  const infoAlertTxt = 'Info Alert';
+  const errorAlertTxt = 'Error Alert';
 
 	beforeEach(() => {
-		// create a stub for the MessagesService
-		msgService = jasmine.createSpyObj('', ['showInfo'], 
-						{ messages$: of([new Alert(infoMsgTxt, 'info', 1000),
-										 new Alert(errorMsgTxt, 'error', 500)]),
-						  dismissAll$: of(false) });
+		// create a stub for the Alerts-Service
+		alertsStore = jasmine.createSpyObj('', [], 
+						{ alerts$: of([new Alert(infoAlertTxt, 'info', 1000), new Alert(errorAlertTxt, 'error', 500)]),
+						  /* dismissAll$: of(false)*/ });
 
 		// configure the component
 		TestBed.configureTestingModule({
 			declarations: [AlertsComponent],
 			providers: [
-				{ provide: AlertsService, useValue: msgService },
+				{ provide: AlertsStoreService, useValue: alertsStore },
 			],
-		}).compileComponents();
+		})
+		.compileComponents();
 
 		// create a fixture for the component
 		fixture = TestBed.createComponent(AlertsComponent);
@@ -52,11 +52,11 @@ describe('AlertsComponent', () => {
 		expect(alerts.length).toEqual(2);
 
 		// Check properties of first alert
-		expect(alerts[0].properties['message'].text).toContain(infoMsgTxt);
+		expect(alerts[0].properties['alertParams'].text).toContain(infoAlertTxt);
 		expect(typeof alerts[0].properties['dismissTimeInMillis']).toEqual('number');
 
 		// Check text of second alert:
-		expect(alerts[1].properties['message'].text).toContain(errorMsgTxt);		
+		expect(alerts[1].properties['alertParams'].text).toContain(errorAlertTxt);		
 	});
 
 })

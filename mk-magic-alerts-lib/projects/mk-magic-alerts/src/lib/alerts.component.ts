@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AlertsStoreService } from './alerts-store.service';
 import { Alert } from './core/models/alert.model';
-import { AlertsService } from './alerts.service';
 
 @Component({
   selector: 'magic-alerts',
@@ -12,7 +12,7 @@ export class AlertsComponent {
 
 	alerts$: Observable<Alert[]>;
 
-	constructor(private alertsService: AlertsService) {
-		this.alerts$ = this.alertsService.messages$;
+	constructor(private alertsStore: AlertsStoreService) {
+		this.alerts$ = this.alertsStore.alerts$;
 	}
 }
