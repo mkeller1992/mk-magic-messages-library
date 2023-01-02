@@ -1,19 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { MatDialog } from "@angular/material/dialog";
 import { Alert } from "./core/models/alert.model";
 
 import { AlertsService } from './alerts.service';
 
 describe('AlertsService', () => {
   let service: AlertsService;
-  let mockMatDialog: MatDialog;
 
   beforeEach(() => {
 
-    mockMatDialog = jasmine.createSpyObj(['open']);
-
     TestBed.configureTestingModule({
-      providers: [{ provide: MatDialog, useValue: mockMatDialog }],
+      providers: [],
     });
 
     service = TestBed.inject(AlertsService);
@@ -22,6 +18,7 @@ describe('AlertsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
 
   it('messages should be emitted', (done) => {
 
