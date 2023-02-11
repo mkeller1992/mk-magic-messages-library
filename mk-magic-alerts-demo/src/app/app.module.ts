@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MkMagicAlertsModule } from '@mk-magic-alerts';
@@ -17,7 +16,6 @@ import { AppComponent } from './app.component';
     AppRoutingModule,
 	BrowserAnimationsModule,
 	MkMagicAlertsModule,
-	MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
