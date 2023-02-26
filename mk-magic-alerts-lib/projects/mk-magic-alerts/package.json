@@ -1,13 +1,26 @@
 {
   "name": "mk-magic-alerts",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "description": "Flying in alerts for Angular applications",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkeller1992/mk-magic-messages-library.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "Angular",
+    "Angular 2",
+    "ng2",
+    "ngx",
+    "alerts"
+  ],
   "dependencies": {
     "tslib": "^2.5.0"
   },
   "peerDependencies": {
     "@angular/common": "^15.1.4",
     "@angular/core": "^15.1.4",
-	"@angular/forms": "^15.1.4",
-	"@angular/animations": "^15.1.4"
+	  "@angular/forms": "^15.1.4",
+	  "@angular/animations": "^15.1.4"
   }
 }
