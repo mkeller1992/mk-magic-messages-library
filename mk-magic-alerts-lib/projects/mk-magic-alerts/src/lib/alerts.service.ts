@@ -6,7 +6,6 @@ import { AlertsStoreService } from './alerts-store.service';
 })
 
 export class AlertsService {
-	//
 
 	constructor(private alertsStore: AlertsStoreService) {}
 

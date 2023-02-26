@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { fromEvent, Observable, race, Subscription, timer } from 'rxjs';
+import { fromEvent, Observable, race, Subject, timer } from 'rxjs';
 import { first, repeat, takeUntil, tap } from 'rxjs/operators';
 import { AlertsStoreService } from '../../alerts-store.service';
 import { AlertState } from '../models/alert-state';
@@ -77,7 +77,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 	readonly mouseenter$ = fromEvent(this.elementRef.nativeElement, 'mouseenter');
 	readonly mouseleave$ = fromEvent(this.elementRef.nativeElement, 'mouseleave');
 
-	subs = new Subscription();
+	private destroy$ = new Subject<void>();
 
 	constructor(@Inject(ElementRef) private readonly elementRef: ElementRef<HTMLElement>,
 				private alertsStore: AlertsStoreService,
@@ -96,12 +96,13 @@ export class AlertComponent implements OnInit, OnDestroy {
 			takeUntil(this.mouseenter$),
 			repeat({ delay: () => this.mouseleave$ })); // on mouseleave: Resubscribe to source (here: 'timer()')
 
-		this.subs.add(race([dismissalByUser$, dismissalByService$, dismissalAfterTimeout$])
+		race([dismissalByUser$, dismissalByService$, dismissalAfterTimeout$])
 			.pipe(
 				first(), // after first emission, unsubscribe also from the winning observable
-				tap(() => this.setDismissalStart())
+				tap(() => this.setDismissalStart()),
+				takeUntil(this.destroy$)
 			)
-			.subscribe());
+			.subscribe();
 	}
 
 	/* Triggers the animated disappearing of the alert */
@@ -120,6 +121,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 
 
 	ngOnDestroy(): void {
-		this.subs.unsubscribe();
+		this.destroy$.next();
+		this.destroy$.unsubscribe();
 	}
 }
