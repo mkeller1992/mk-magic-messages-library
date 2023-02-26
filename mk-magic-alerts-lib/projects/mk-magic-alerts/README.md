@@ -1,6 +1,6 @@
 # Mk-Magic-Alerts
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.4.
+Display animated success-, info-, warning- and error-alerts in your Angular application.
 
 ## Installation
 
