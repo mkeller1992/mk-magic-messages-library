@@ -1,27 +1,58 @@
-# MkMagicMessagesLib
+# Mk-Magic-Alerts
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.4.
+Display animated success-, info-, warning- and error-alerts in your Angular application.
 
-## Development server
+## Installation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+#### [npm](https://www.npmjs.com/package/mk-magic-alerts)
+```
+npm i mk-magic-alerts
+```
 
-## Code scaffolding
+## Quick Start
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+1. Add `MkMagicAlertsModule` to your module:
+```
+import { MkMagicAlertsModule } from 'mk-magic-alerts';
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+@NgModule({
+  declarations: [],
+  imports: [
+	MkMagicAlertsModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
 
-## Running unit tests
+2. Add the following code to the HTML-template of your `AppComponent`:
+```
+<magic-alerts></magic-alerts>
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+3. Import `AlertsService` in the component you want to display an alert:
 
-## Running end-to-end tests
+```
+import { AlertsService } from 'mk-magic-alerts';
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+constructor(private alertsSvc: AlertsService){}
 
-## Further help
+ngOnInit(): void {
+  const displayDurationInMillis = 3000;		
+  this.alertsSvc.showError('Show me for 3 sec', displayDurationInMillis);
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+  this.alertsSvc.showError('Show me till user clicks exit');
+
+  this.alertsSvc.showInfo('Info Alert');
+  this.alertsSvc.showSuccess('Success Alert');
+  this.alertsSvc.showWarning('Warn Alert');
+}
+```
+
+4. To reset all active alerts, invoke the `clear()`-method:
+
+```
+this.alertsSvc.clear();
+```
