@@ -3,5 +3,4 @@
  */
 
 export * from './lib/alerts.service';
-export * from './lib/alerts.component';
 export * from './lib/mk-magic-alerts.module';
