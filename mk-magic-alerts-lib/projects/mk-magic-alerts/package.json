@@ -1,6 +1,6 @@
 {
   "name": "mk-magic-alerts",
-  "version": "16.1.0",
+  "version": "16.1.1",
   "description": "Flying in alerts for Angular applications",
   "repository": {
     "type": "git",
