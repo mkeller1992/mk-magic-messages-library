@@ -9,15 +9,14 @@ import { NewlineAndTabsPipe } from './core/pipes/new-line-and-tabs.pipe';
 @NgModule({
   declarations: [
     AlertsComponent,
-	AlertComponent,
-	NewlineAndTabsPipe
+	  AlertComponent,
+	  NewlineAndTabsPipe
   ],
   imports: [
-	CommonModule,
-	BrowserAnimationsModule,
+	  CommonModule,
+	  BrowserAnimationsModule,
   ],
   exports: [
-    AlertsComponent
   ]
 })
 export class MkMagicAlertsModule { }
