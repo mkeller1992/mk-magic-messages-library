@@ -2,6 +2,8 @@
 
 Display animated success-, info-, warning- and error-alerts in your Angular application.
 
+**Breaking change**: As of version 16.1.0, the placement of `<magic-alerts></magic-alerts>` in the html of the AppComponent is omitted!
+
 ## Installation
 
 #### [npm](https://www.npmjs.com/package/mk-magic-alerts)

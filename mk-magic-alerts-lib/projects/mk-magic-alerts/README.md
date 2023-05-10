@@ -26,13 +26,7 @@ import { MkMagicAlertsModule } from 'mk-magic-alerts';
 })
 export class AppModule { }
 ```
-
-2. Add the following code to the HTML-template of your `AppComponent`:
-```
-<magic-alerts></magic-alerts>
-```
-
-3. Import `AlertsService` in the component you want to display an alert:
+2. Import `AlertsService` in the component you want to display an alert:
 
 ```
 import { AlertsService } from 'mk-magic-alerts';
@@ -51,7 +45,7 @@ ngOnInit(): void {
 }
 ```
 
-4. To reset all active alerts, invoke the `clear()`-method:
+3. To reset all active alerts, invoke the `clear()`-method:
 
 ```
 this.alertsSvc.clear();

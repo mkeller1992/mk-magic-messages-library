@@ -1,6 +1,6 @@
 /** alerts-container **/
 
-.alerts-container {
+#mk-magic-messages.alerts-container {
 	position: fixed;
 	top: 0px;
 	left: 15px;
@@ -8,25 +8,25 @@
 	z-index: 1020;
 }
 @media (min-width: 768px) {
-	.alerts-container {
+	#mk-magic-messages.alerts-container {
 		left: 10%;
 		right: 10%;
 	}
 }
 @media (min-width: 992px) {
-	.alerts-container {
+	#mk-magic-messages.alerts-container {
 		left: 20%;
 		right: 20%;
 	}
 }
 @media (min-width: 1200px) {
-	.alerts-container {
+	#mk-magic-messages.alerts-container {
 		left: 25%;
 		right: 25%;
 	}
 }
 @media (min-width: 1500px) {
-	.alerts-container {
+	#mk-magic-messages.alerts-container {
 		left: 30%;
 		right: 30%;
 	}

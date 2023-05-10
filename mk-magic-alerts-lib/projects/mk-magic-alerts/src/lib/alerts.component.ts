@@ -10,9 +10,7 @@ import { Alert } from './core/models/alert.model';
 })
 export class AlertsComponent {
 
-	alerts$: Observable<Alert[]>;
+	alerts$: Observable<Alert[]> = this.alertsStore.alerts$;
 
-	constructor(private alertsStore: AlertsStoreService) {
-		this.alerts$ = this.alertsStore.alerts$;
-	}
+	constructor(private alertsStore: AlertsStoreService) { }
 }

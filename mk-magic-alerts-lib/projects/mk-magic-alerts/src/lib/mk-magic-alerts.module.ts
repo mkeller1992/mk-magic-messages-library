@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AlertsInitializerService } from './alerts-initializer.service';
 import { AlertsComponent } from './alerts.component';
 import { AlertComponent } from './core/alert/alert.component';
 import { NewlineAndTabsPipe } from './core/pipes/new-line-and-tabs.pipe';
@@ -17,6 +18,15 @@ import { NewlineAndTabsPipe } from './core/pipes/new-line-and-tabs.pipe';
 	  BrowserAnimationsModule,
   ],
   exports: [
+  ],
+  providers: [
+    {
+			provide: APP_INITIALIZER,
+			deps: [AlertsInitializerService],
+			useFactory: (startupClass: AlertsInitializerService) => () => startupClass.initializeAlertsComponent(),
+			multi: true,
+		},
+
   ]
 })
 export class MkMagicAlertsModule { }
