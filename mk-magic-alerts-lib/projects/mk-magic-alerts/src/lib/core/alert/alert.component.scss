@@ -1,51 +1,77 @@
-.alert-info,
-.alert-success,
-.alert-warning,
-.alert-error {
-	position: relative;
-	padding: 5px 15px;
-	margin: 0px 0px;
-	border-radius: 4px;
-	border-width: 1px;
-	border-style: solid;
-	overflow: hidden;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 6px 20px 0 rgba(0, 0, 0, 0.08);
-	z-index: 1020 !important;
-}
-.alert-info {
-	color: #004085;
-	border-color: #004085;
-	background-color: #b8daff;
-}
-.alert-success {
-	color: #155724;
-	border-color: #155724;
-	background-color: #c3e6cb;
-}
-.alert-warning {
-	color: #856404;
-	border-color: #856404;
-	background-color: #ffeeba;
-}
-.alert-error {
-	color: #721c24;
-	border-color: #721c24;
-	background-color: #f8d7da;
-}
+$color-info: #004085;
+$color-success: #155724;
+$color-warning: #856404;
+$color-error: #721c24;
+
+$hover-color-info: #3366ff;
+$hover-color-success: #30a24d;
+$hover-color-warning: #b38600;
+$hover-color-error: #ff4c59;
 
 .clickable-area {
-	cursor: pointer;
-}
+  cursor: pointer;
 
-.alert-container {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
+  .alert-container {
+    position: relative;
+    padding: 5px 15px;
+    margin: 0px 0px;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 6px 20px 0 rgba(0, 0, 0, 0.08);
+    z-index: 1020 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.btn-dismiss:hover {
-	color: #fc2112;
-}
-.alert-text {
-	font: 400 16px / 20px Roboto;
+    .alert-text {
+      font: 400 16px / 20px Roboto;
+    }
+
+    .btn-dismiss {
+      align-self: flex-start;
+      margin-top: 1px;
+    }
+  }
+
+  .alert-info {
+    color: $color-info;
+    border-color: $color-info;
+    background-color: #b8daff;
+
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-info, 0 0 20px $hover-color-info;
+    }
+  }
+
+  .alert-success {
+    color: $color-success;
+    border-color: $color-success;
+    background-color: #c3e6cb;
+
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-success, 0 0 20px $hover-color-success;
+    }
+  }
+
+  .alert-warning {
+    color: $color-warning;
+    border-color: $color-warning;
+    background-color: #ffeeba;
+
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-warning, 0 0 20px $hover-color-warning;
+    }
+  }
+
+  .alert-error {
+    color: $color-error;
+    border-color: $color-error;
+    background-color: #f8d7da;
+
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-error, 0 0 20px $hover-color-error;
+    }
+  }
 }

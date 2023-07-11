@@ -1,74 +1,21 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { fromEvent, Observable, race, Subject, timer } from 'rxjs';
+import { Observable, Subject, fromEvent, race, timer } from 'rxjs';
 import { first, repeat, takeUntil, tap } from 'rxjs/operators';
 import { AlertsStoreService } from '../../alerts-store.service';
 import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
+import { alertAnimations } from './alert-animations';
 
 @Component({
 	selector: 'app-alert',
 	templateUrl: './alert.component.html',
 	styleUrls: ['./alert.component.scss'],
-	animations: [
-		trigger('state', [
-			state(
-				'void',
-				style({
-					height: '0',
-					width: '0',
-					'padding-top': '0',
-					'padding-bottom': '0',
-					'margin-top': '5px',
-					'margin-bottom': '0',
-					opacity: '0',
-				})
-			),
-			state(
-				AlertState.DISPLAY,
-				style({
-					height: '*',
-					'padding-top': '*',
-					'padding-bottom': '*',
-					'margin-top': '5px',
-					'margin-bottom': '0',
-				})
-			),
-			state(
-				AlertState.DISMISS,
-				style({
-					height: '0',
-					width: '0',
-					'padding-top': '0',
-					'padding-bottom': '0',
-					'margin-top': '5px',
-					'margin-bottom': '0',
-					'border-width': '0',
-					opacity: '0',
-				})
-			),
-			state(
-				AlertState.DISMISSED,
-				style({
-					height: '0',
-					width: '0',
-					'padding-top': '0',
-					'padding-bottom': '0',
-					'margin-top': '0',
-					'margin-bottom': '0',
-					'border-width': '0',
-					opacity: '0',
-				})
-			),
-			transition('* => display', animate('0.5s ease')),
-			transition('display => dismiss', animate('0.5s ease')),
-			transition('dismiss => dismissed', animate('0.3s ease')),
-		]),
-	],
+	animations: alertAnimations,
 })
+
 export class AlertComponent implements OnInit, OnDestroy {
-	//
-	@Input()
+
+	@Input({ required: true })
 	alertParams!: Alert;
 
 	@Input()
