@@ -1,6 +1,6 @@
 {
   "name": "mk-magic-alerts",
-  "version": "16.1.4",
+  "version": "17.0.0",
   "description": "Flying in alerts for Angular applications",
   "repository": {
     "type": "git",
@@ -15,13 +15,13 @@
     "alerts"
   ],
   "dependencies": {
-    "tslib": "^2.5.0"
+    "tslib": "^2.6.0"
   },
   "peerDependencies": {
-    "@angular/common": "^16.0.0",
-    "@angular/core": "^16.0.0",
-	  "@angular/forms": "^16.0.0",
-	  "@angular/animations": "^16.0.0",
+    "@angular/common": "^17.0.0",
+    "@angular/core": "^17.0.0",
+	  "@angular/forms": "^17.0.0",
+	  "@angular/animations": "^17.0.0",
     "rxjs": "~7.8.1"
   }
 }
