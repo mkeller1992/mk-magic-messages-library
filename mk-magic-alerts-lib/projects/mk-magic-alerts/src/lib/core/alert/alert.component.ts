@@ -21,27 +21,28 @@ export class AlertComponent implements OnInit, OnDestroy {
 	@Input()
 	dismissTimeInMillis = 2_147_483_647;
 
-	readonly mouseenter$ = fromEvent(this.elementRef.nativeElement, 'mouseenter');
-	readonly mouseleave$ = fromEvent(this.elementRef.nativeElement, 'mouseleave');
-
 	private destroy$ = new Subject<void>();
 
-	constructor(@Inject(ElementRef) private readonly elementRef: ElementRef<HTMLElement>,
+	constructor(private readonly elementRef: ElementRef<HTMLElement>,
 				private alertsStore: AlertsStoreService,
 				private cdRef: ChangeDetectorRef) {}
 
 	ngOnInit(): void {
+
+		const mouseenter$: Observable<Event> = fromEvent(this.elementRef.nativeElement, 'mouseenter');
+		const mouseleave$: Observable<Event> = fromEvent(this.elementRef.nativeElement, 'mouseleave');
+
 		// Observable that allows closing of the alert by user-click:
-		const dismissalByUser$: Observable<any> = fromEvent(this.elementRef.nativeElement, 'mouseup');
+		const dismissalByUser$: Observable<Event> = fromEvent(this.elementRef.nativeElement, 'mouseup');
 
 		// If dismissal is requested programmatically from alerts-service:
-		const dismissalByService$: Observable<any> = this.alertsStore.dismissAll$;
+		const dismissalByService$: Observable<void> = this.alertsStore.dismissAll$;
 
 		// Observable that closes the alert after a given time,
 		// unless user hovers over the alert with a cursor => 'takeUntil()' and 'repeat()'
-		const dismissalAfterTimeout$: Observable<any> = timer(this.dismissTimeInMillis).pipe(
-			takeUntil(this.mouseenter$),
-			repeat({ delay: () => this.mouseleave$ })); // on mouseleave: Resubscribe to source (here: 'timer()')
+		const dismissalAfterTimeout$: Observable<0> = timer(this.dismissTimeInMillis).pipe(
+			takeUntil(mouseenter$),
+			repeat({ delay: () => mouseleave$ })); // on mouseleave: Resubscribe to source (here: 'timer()')
 
 		race([dismissalByUser$, dismissalByService$, dismissalAfterTimeout$])
 			.pipe(
@@ -53,13 +54,13 @@ export class AlertComponent implements OnInit, OnDestroy {
 	}
 
 	/* Triggers the animated disappearing of the alert */
-	private setDismissalStart() {
+	setDismissalStart() {
 		this.alertParams.state = AlertState.DISMISS;
 		this.cdRef.detectChanges();
 	}
 
 	/* Is evoked at the end of the animated disappearing of the alert */
-	public onDismissalCompleted() {
+	onDismissalCompleted() {
 		if (this.alertParams?.state === AlertState.DISMISS) {
 			this.alertParams.state = AlertState.DISMISSED;
 			this.cdRef.detectChanges();

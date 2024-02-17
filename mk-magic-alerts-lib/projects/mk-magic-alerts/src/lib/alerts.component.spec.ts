@@ -1,27 +1,44 @@
-import { DebugElement } from '@angular/core';
+import { Component, DebugElement, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from '@angular/platform-browser';
-import { of } from "rxjs";
+import { of } from 'rxjs';
 import { AlertsStoreService } from './alerts-store.service';
 import { AlertsComponent } from "./alerts.component";
 import { Alert } from "./core/models/alert.model";
 
+
+@Component({
+	selector: 'app-alert', // has to equal the selector of the real AlertComponent
+	template: '<div></div>', // Simplified template
+  })
+  class MockAlertComponent {
+
+	@Input({ required: true })
+	alertParams!: Alert;
+
+	@Input()
+	dismissTimeInMillis = 0;
+}
+
+
 describe('AlertsComponent', () => {
   let component: AlertsComponent;
   let fixture: ComponentFixture<AlertsComponent>;
-  let alertsStore: AlertsStoreService;
-  const infoAlertTxt = 'Info Alert';
+  let alertsStore: Partial<AlertsStoreService>;
+
+  const infoAlertTxt = 'Info Alert';  
   const errorAlertTxt = 'Error Alert';
 
 	beforeEach(() => {
-		// create a stub for the Alerts-Service
-		alertsStore = jasmine.createSpyObj('', [], 
-						{ alerts$: of([new Alert(infoAlertTxt, 'info', 1000), new Alert(errorAlertTxt, 'error', 500)]),
-						  /* dismissAll$: of(false)*/ });
+
+		alertsStore = {
+			dismissAll$: of(undefined),
+			alerts$: of([new Alert(infoAlertTxt, 'info', 1000), new Alert(errorAlertTxt, 'error', 500)])
+		}
 
 		// configure the component
 		TestBed.configureTestingModule({
-			declarations: [AlertsComponent],
+			declarations: [AlertsComponent, MockAlertComponent],
 			providers: [
 				{ provide: AlertsStoreService, useValue: alertsStore },
 			],
@@ -46,17 +63,19 @@ describe('AlertsComponent', () => {
 	it('should bind the messages$ observable to the template', () => {
 
 		// get the alerts element from the template
-		const alerts = findAllComponents(fixture, 'app-alert');
+		const alertDebugElements = fixture.debugElement.queryAll(By.directive(MockAlertComponent));
+		const alertComponentInstances: MockAlertComponent[] = alertDebugElements.map(x => x.componentInstance);
 
 		// assert that the alerts were rendered correctly
-		expect(alerts.length).toEqual(2);
+		expect(alertComponentInstances.length).toEqual(2);
 
 		// Check properties of first alert
-		expect(alerts[0].properties['alertParams'].text).toContain(infoAlertTxt);
-		expect(typeof alerts[0].properties['dismissTimeInMillis']).toEqual('number');
+		expect(alertComponentInstances[0].alertParams.text).toContain(infoAlertTxt);
+		expect(alertComponentInstances[0].dismissTimeInMillis).toEqual(1000);
 
 		// Check text of second alert:
-		expect(alerts[1].properties['alertParams'].text).toContain(errorAlertTxt);		
+		expect(alertComponentInstances[1].alertParams.text).toContain(errorAlertTxt);
+		expect(alertComponentInstances[1].dismissTimeInMillis).toEqual(500);	
 	});
 
 })

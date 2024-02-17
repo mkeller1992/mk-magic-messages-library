@@ -12,11 +12,11 @@ export class AlertsStoreService {
 	private alertsSubject = new BehaviorSubject<Alert[]>([]);
 
 	// Added 'auditTime(100)' to prevent error 'NG0100: Expression has changed after it was checked'
-	public alerts$: Observable<Alert[]> = this.alertsSubject.asObservable().pipe(auditTime(100));
+	alerts$: Observable<Alert[]> = this.alertsSubject.asObservable().pipe(auditTime(100));
 
 	private dismissAllSubject = new Subject<void>();
 
-	public dismissAll$: Observable<void> = this.dismissAllSubject.asObservable();
+	dismissAll$: Observable<void> = this.dismissAllSubject.asObservable();
 
 	dismissAll() {
 		this.dismissAllSubject.next();
