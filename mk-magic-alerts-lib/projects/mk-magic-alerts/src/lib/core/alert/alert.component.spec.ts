@@ -1,12 +1,12 @@
 import { ChangeDetectorRef, ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs';
 import { AlertsStoreService } from '../../alerts-store.service';
+import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
 import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
 import { AlertComponent } from './alert.component';
-import { of } from 'rxjs';
-import { AlertState } from '../models/alert-state';
 
 describe('AlertComponent', () => {
   let component: AlertComponent;
