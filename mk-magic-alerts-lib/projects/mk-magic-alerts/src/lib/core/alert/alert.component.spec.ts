@@ -38,8 +38,7 @@ describe('AlertComponent', () => {
         { provide: ElementRef, useValue: mockElementRef },
         { provide: AlertsStoreService, useValue: mockAlertsStoreService },
         ChangeDetectorRef,
-      ],
-      schemas: [NO_ERRORS_SCHEMA] // Use this to ignore any unknown elements and attributes
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AlertComponent);
@@ -177,5 +176,5 @@ describe('AlertComponent', () => {
     // Assert
     expect(unsubscribeSpy).toHaveBeenCalled();
   });
-  
+
 });
