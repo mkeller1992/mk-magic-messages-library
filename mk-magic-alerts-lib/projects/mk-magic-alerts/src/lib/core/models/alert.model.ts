@@ -1,7 +1,7 @@
 import { AlertState } from './alert-state';
 
 export class Alert {
- //
+
 	public text: string;
 	public type: string;
 	public state: string;

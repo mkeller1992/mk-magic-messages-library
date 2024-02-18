@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { AnimationEvent } from '@angular/animations';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, fromEvent, race, timer } from 'rxjs';
 import { first, repeat, takeUntil, tap } from 'rxjs/operators';
 import { AlertsStoreService } from '../../alerts-store.service';
@@ -60,8 +61,8 @@ export class AlertComponent implements OnInit, OnDestroy {
 	}
 
 	/* Is evoked at the end of the animated disappearing of the alert */
-	onDismissalCompleted() {
-		if (this.alertParams?.state === AlertState.DISMISS) {
+	onDismissalCompleted(event: AnimationEvent) {
+		if (event.fromState === AlertState.DISPLAY && event.toState === AlertState.DISMISS) {
 			this.alertParams.state = AlertState.DISMISSED;
 			this.cdRef.detectChanges();
 		}
