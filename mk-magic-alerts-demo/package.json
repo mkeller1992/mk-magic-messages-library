@@ -9,7 +9,7 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "test:ci": "jest --runInBand",
-    "deploy": "ng build --configuration=production --base-href \"/mk-magic-messages-library/\""
+    "deploy": "ng build --configuration=production --base-href \"/mk-magic-messages-library/\" --output-path ../docs"
   },
   "private": true,
   "dependencies": {
