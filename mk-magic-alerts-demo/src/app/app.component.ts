@@ -14,13 +14,13 @@ export class AppComponent implements OnInit {
 
   constructor(private msgSvc: AlertsService) {
     this.alertsForm = new FormGroup({
-      successMessage: new FormControl('Success!', Validators.required),
+      successAlert: new FormControl('Success!', Validators.required),
       successDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
-      errorMessage: new FormControl('Error!', Validators.required),
+      errorAlert: new FormControl('Error!', Validators.required),
       errorDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
-      infoMessage: new FormControl('Info!', Validators.required),
+      infoAlert: new FormControl('Info!', Validators.required),
       infoDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
-      warningMessage: new FormControl('Warning!', Validators.required),
+      warningAlert: new FormControl('Warning!', Validators.required),
       warningDuration: new FormControl(1, [Validators.required, Validators.min(1)])
     });
   }
@@ -28,30 +28,30 @@ export class AppComponent implements OnInit {
 
     console.log(`Frontend Version: v${packageJson?.version}`);
 
-		this.displaySuccess('Success-Message', 5);
-    setTimeout(() => this.displayError('Error-Message', 5), 500);
-    setTimeout(() => this.displayInfo('Info-Message', 5), 1000);
-    setTimeout(() => this.displayWarning('Warning-Message', 5), 1500);
+		this.displaySuccess('Success-Alert', 5);
+    setTimeout(() => this.displayError('Error-Alert', 5), 500);
+    setTimeout(() => this.displayInfo('Info-Alert', 5), 1000);
+    setTimeout(() => this.displayWarning('Warning-Alert', 5), 1500);
 	}
 
   submitSuccess() {
-    const { successMessage, successDuration } = this.alertsForm.value;
-    this.displaySuccess(successMessage, successDuration);
+    const { successAlert, successDuration } = this.alertsForm.value;
+    this.displaySuccess(successAlert, successDuration);
   }
 
   submitError() {
-    const { errorMessage, errorDuration } = this.alertsForm.value;
-    this.displayError(errorMessage, errorDuration);
+    const { errorAlert, errorDuration } = this.alertsForm.value;
+    this.displayError(errorAlert, errorDuration);
   }
 
   submitInfo() {
-    const { infoMessage, infoDuration } = this.alertsForm.value;
-    this.displayInfo(infoMessage, infoDuration);
+    const { infoAlert, infoDuration } = this.alertsForm.value;
+    this.displayInfo(infoAlert, infoDuration);
   }
 
   submitWarning() {
-    const { warningMessage, warningDuration } = this.alertsForm.value;
-    this.displayWarning(warningMessage, warningDuration);
+    const { warningAlert, warningDuration } = this.alertsForm.value;
+    this.displayWarning(warningAlert, warningDuration);
   }
 
   private displaySuccess(msg: string, durationInSec: number) {
