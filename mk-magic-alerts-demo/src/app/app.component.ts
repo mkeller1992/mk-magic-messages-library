@@ -14,24 +14,24 @@ export class AppComponent implements OnInit {
 
   constructor(private msgSvc: AlertsService) {
     this.alertsForm = new FormGroup({
-      successMessage: new FormControl('', Validators.required),
+      successMessage: new FormControl('Success!', Validators.required),
       successDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
-      errorMessage: new FormControl('', Validators.required),
+      errorMessage: new FormControl('Error!', Validators.required),
       errorDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
-      infoMessage: new FormControl('', Validators.required),
+      infoMessage: new FormControl('Info!', Validators.required),
       infoDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
-      warningMessage: new FormControl('', Validators.required),
+      warningMessage: new FormControl('Warning!', Validators.required),
       warningDuration: new FormControl(1, [Validators.required, Validators.min(1)])
     });
   }
 	ngOnInit(): void {
-    
+
     console.log(`Frontend Version: v${packageJson?.version}`);
 
-		this.displaySuccess('Success', 5);
-		this.displayError('Error', 6);
-		this.displayInfo('Info', 7);
-		this.displayWarning('Warning', 8);
+		this.displaySuccess('Success-Message', 5);
+    setTimeout(() => this.displayError('Error-Message', 5), 500);
+    setTimeout(() => this.displayInfo('Info-Message', 5), 1000);
+    setTimeout(() => this.displayWarning('Warning-Message', 5), 1500);
 	}
 
   submitSuccess() {
