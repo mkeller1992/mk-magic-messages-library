@@ -1,0 +1,61 @@
+<div class="container mt-5">
+    <form [formGroup]="alertsForm">
+      <!-- Success Alert Form Group -->
+      <div class="form-group row mb-4 alert-form-group">
+        <label for="successMessage" class="col-sm-2 col-form-label">Success Message:</label>
+        <div class="col-sm-4">
+          <input id="successMessage" formControlName="successMessage" type="text" class="form-control">
+        </div>
+        <label for="successDuration" class="col-sm-2 col-form-label">Duration (seconds):</label>
+        <div class="col-sm-2">
+          <input id="successDuration" formControlName="successDuration" type="number" min="1" class="form-control">
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-success" (click)="submitSuccess()">Display Success</button>
+        </div>
+      </div>
+      <!-- Error Alert Form Group -->
+      <div class="form-group row mb-4 alert-form-group">
+        <label for="errorMessage" class="col-sm-2 col-form-label">Error Message:</label>
+        <div class="col-sm-4">
+          <input id="errorMessage" formControlName="errorMessage" type="text" class="form-control">
+        </div>
+        <label for="errorDuration" class="col-sm-2 col-form-label">Duration (seconds):</label>
+        <div class="col-sm-2">
+          <input id="errorDuration" formControlName="errorDuration" type="number" min="1" class="form-control">
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-danger" (click)="submitError()">Display Error</button>
+        </div>
+      </div>
+      <!-- Info Alert Form Group -->
+      <div class="form-group row mb-4 alert-form-group">
+        <label for="infoMessage" class="col-sm-2 col-form-label">Info Message:</label>
+        <div class="col-sm-4">
+          <input id="infoMessage" formControlName="infoMessage" type="text" class="form-control">
+        </div>
+        <label for="infoDuration" class="col-sm-2 col-form-label">Duration (seconds):</label>
+        <div class="col-sm-2">
+          <input id="infoDuration" formControlName="infoDuration" type="number" min="1" class="form-control">
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-info" (click)="submitInfo()">Display Info</button>
+        </div>
+      </div>
+      <!-- Warning Alert Form Group -->
+      <div class="form-group row mb-4 alert-form-group">
+        <label for="warningMessage" class="col-sm-2 col-form-label">Warning Message:</label>
+        <div class="col-sm-4">
+          <input id="warningMessage" formControlName="warningMessage" type="text" class="form-control">
+        </div>
+        <label for="warningDuration" class="col-sm-2 col-form-label">Duration (seconds):</label>
+        <div class="col-sm-2">
+          <input id="warningDuration" formControlName="warningDuration" type="number" min="1" class="form-control">
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-warning" (click)="submitWarning()">Display Warning</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  

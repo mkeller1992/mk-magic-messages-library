@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^17.2.1",
     "@angular/platform-browser-dynamic": "^17.2.1",
     "@angular/router": "^17.2.1",
+    "bootstrap": "^5.3.3",
     "mk-magic-alerts": "file:../mk-magic-alerts-lib/dist/mk-magic-alerts",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
