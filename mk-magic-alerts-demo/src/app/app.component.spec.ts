@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { AlertsService } from '@mk-magic-alerts';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 class MockAlertsService {
   showSuccess = jest.fn();
@@ -19,7 +20,7 @@ describe('AppComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
-      // Provide the mock instead of the real service
+      imports: [ReactiveFormsModule],
       providers: [
         { provide: AlertsService, useValue: mockAlertsService }
       ]
@@ -30,18 +31,30 @@ describe('AppComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    jest.useRealTimers(); // Clean up and use real timers after tests
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should call AlertsService methods on ngOnInit', () => {
-    // Calls to ngOnInit are automatically handled by Angular when the component is created
-    // but you can call it again for the sake of testing if needed
-    // component.ngOnInit();
+    jest.useFakeTimers();
+    component.ngOnInit();
 
-    expect(mockAlertsService.showSuccess).toHaveBeenCalledWith('TEST', 6_000);
-    expect(mockAlertsService.showError).toHaveBeenCalledWith('This is a test-message with a very long text. This is a test-message with a very long text. ');
-    expect(mockAlertsService.showInfo).toHaveBeenCalledWith('INFO');
-    expect(mockAlertsService.showWarning).toHaveBeenCalledWith('Warning');
+    // No need to advance time for the synchronous call to showSuccess, which should be checked directly
+    expect(mockAlertsService.showSuccess).toHaveBeenCalledWith('Success-Alert', 5_000);
+
+    // Advance timers just enough for the first setTimeout to trigger
+    jest.advanceTimersByTime(500);
+    expect(mockAlertsService.showError).toHaveBeenCalledWith('Error-Alert', 5_000);
+
+    // Advance timers to trigger the second setTimeout
+    jest.advanceTimersByTime(500);
+    expect(mockAlertsService.showInfo).toHaveBeenCalledWith('Info-Alert', 5_000);
+    // Advance timers for the third setTimeout
+    jest.advanceTimersByTime(500);
+    expect(mockAlertsService.showWarning).toHaveBeenCalledWith('Warning-Alert', 5_000);
   });
 });

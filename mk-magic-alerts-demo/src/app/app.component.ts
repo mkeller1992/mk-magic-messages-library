@@ -24,8 +24,8 @@ export class AppComponent implements OnInit {
       warningDuration: new FormControl(1, [Validators.required, Validators.min(1)])
     });
   }
-	ngOnInit(): void {
 
+	ngOnInit(): void {
     console.log(`Frontend Version: v${packageJson?.version}`);
 
 		this.displaySuccess('Success-Alert', 5);
