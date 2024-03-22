@@ -47,16 +47,16 @@ jobs:
         LATEST_PUBLISHED_VERSION=$(npm view $PACKAGE_NAME version 2>/dev/null || echo "0.0.0")
         if [ "$CURRENT_VERSION" = "$LATEST_PUBLISHED_VERSION" ]; then
           echo "Version $CURRENT_VERSION is already published. Skipping publish..."
-          echo "skip_publish=true" >> $GITHUB_ENV
+          echo "execute_publish=false" >> $GITHUB_ENV
         else
           echo "Version $CURRENT_VERSION is new. Proceeding with publish..."
-          echo "skip_publish=false" >> $GITHUB_ENV
+          echo "execute_publish=true" >> $GITHUB_ENV
         fi
       working-directory: ./mk-magic-alerts-lib/dist/mk-magic-alerts
 
     # Publish the library to npm if the version has been updated
     - name: Publish to npm
-      if: env.skip_publish == 'false'
+      if: env.execute_publish == 'true'
       run: npm publish
       working-directory: ./mk-magic-alerts-lib/dist/mk-magic-alerts
       env:
