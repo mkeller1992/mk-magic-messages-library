@@ -50,13 +50,13 @@ jobs:
           echo "::set-output name=skip_publish::true"
         else
           echo "Version $CURRENT_VERSION is new. Proceeding with publish..."
-          echo "::set-output name=skip_publish::false"
+          echo "skip_publish=true" >> $GITHUB_ENV
         fi
       working-directory: ./mk-magic-alerts-lib/dist/mk-magic-alerts
 
     # Publish the library to npm if the version has been updated
     - name: Publish to npm
-      if: steps.check_version.outputs.skip_publish == 'false'
+      if: env.skip_publish == 'true'
       run: npm publish
       working-directory: ./mk-magic-alerts-lib/dist/mk-magic-alerts
       env:
