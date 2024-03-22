@@ -9,6 +9,9 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Set TARGET_BRANCH variable
+        run: echo "TARGET_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ env.TARGET_BRANCH }}
@@ -18,30 +21,31 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Identify and set the latest 'v'-prefixed tag from the main branch
+      - name: Identify and set the latest 'v'-prefixed tag from the specified branch
         run: |
           # Fetch the main branch
-          git fetch --prune --unshallow origin ${{ env.TARGET_BRANCH }}
+          git fetch --prune --unshallow -v origin ${{ env.TARGET_BRANCH }}
           
           # Fetch all tags
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/* --tags
+          git fetch --depth=1 -v origin +refs/tags/*:refs/tags/* --tags
 
           # Filter tags that start with 'v', sort them, and get the latest
           LATEST_DEPLOYED_VERSION=$(git tag -l "v*" | sort -V | tail -n1)
-
-          # Check if a version was found, if not, set a default value
-          if [ -z "$LATEST_DEPLOYED_VERSION" ]; then
-            LATEST_DEPLOYED_VERSION="v0.0.0"
-          else
-            # Remove the 'v' prefix if needed
-            LATEST_DEPLOYED_VERSION=${LATEST_DEPLOYED_VERSION#v}
-          fi
-
+          LATEST_DEPLOYED_VERSION=${LATEST_DEPLOYED_VERSION#v} # Remove the 'v' prefix if needed
           echo "Latest Deployed Version: $LATEST_DEPLOYED_VERSION"
           echo "LATEST_DEPLOYED_VERSION=${LATEST_DEPLOYED_VERSION}" >> $GITHUB_ENV
 
+      - name: Build and link mk-magic-alerts
+        run: |
+          (cd ./mk-magic-alerts-lib && npm install && npm run build && npm link)
+          (cd ./mk-magic-alerts-demo && npm link mk-magic-alerts)
+
       - name: Install Dependencies
         run: npm install
+        working-directory: ./mk-magic-alerts-demo
+
+      - name: Run Tests
+        run: npm run test:ci
         working-directory: ./mk-magic-alerts-demo
 
       - name: Check if Deployment is Needed
@@ -80,7 +84,7 @@ jobs:
           folder: mk-magic-alerts-demo/dist/mk-magic-alerts-demo
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: '🚀 v${{ env.CURRENT_VERSION }} deployed to GitHub Pages'
-
+      
       - name: Set a version-tag
         if: env.deploy_needed == 'true' && success()
         run: |

@@ -29,7 +29,7 @@ jobs:
       working-directory: ./mk-magic-alerts-lib
 
     # Run tests at the root level
-    - name: Test
+    - name: Run Tests
       run: npm run test:ci
       working-directory: ./mk-magic-alerts-lib
 

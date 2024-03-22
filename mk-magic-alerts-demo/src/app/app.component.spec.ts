@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AlertsService } from '@mk-magic-alerts';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
 
 class MockAlertsService {
   showSuccess = jest.fn();
