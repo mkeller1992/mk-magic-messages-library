@@ -60,4 +60,4 @@ jobs:
       run: npm publish
       working-directory: ./mk-magic-alerts-lib/dist/mk-magic-alerts
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_FOR_MAGIC_MSG_LIB }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_FOR_MAGIC_MSG_LIB }}
