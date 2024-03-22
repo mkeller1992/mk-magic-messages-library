@@ -35,7 +35,7 @@ jobs:
 
     # Build the library from the specified subdirectory
     - name: Build Library
-      run: npm run build
+      run: ng build
       working-directory: ./mk-magic-alerts-lib/projects/mk-magic-alerts
 
     # Check if version has been updated
