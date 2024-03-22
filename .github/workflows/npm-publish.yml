@@ -20,7 +20,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 'node' # Use latest Node.js version
+        node-version: 'lts/*' # Use the latest LTS version of Node.js
         registry-url: 'https://registry.npmjs.org'
 
     # Install dependencies at the root level
