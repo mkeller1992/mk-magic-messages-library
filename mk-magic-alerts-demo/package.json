@@ -28,7 +28,7 @@
     "zone.js": "~0.14.4"
   },
   "devDependencies": {
-    "@angular-builders/jest": "^17.0.1",
+    "@angular-builders/jest": "^17.0.1", // TODO enable ng test (thats what the library is here for)
     "@angular-devkit/build-angular": "^17.2.0",
     "@angular/cli": "~17.2.0",
     "@angular/compiler-cli": "^17.2.1",
