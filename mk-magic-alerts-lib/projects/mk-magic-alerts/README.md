@@ -52,3 +52,50 @@ ngOnInit(): void {
 ```
 this.alertsSvc.clear();
 ```
+
+## Mocking AlertsService for Unit Testing
+
+To facilitate unit testing of components and services that depend on `AlertsService`, our library provides a `MockAlertsService`. This mock implementation offers empty methods corresponding to those of the actual `AlertsService`, allowing you to easily spy on them and control their behavior in your tests without having to worry about their real implementations.
+
+### Usage
+
+1. **Import the Mock Service**: First, ensure that the `MockAlertsService` is imported into your test file.
+
+    ```typescript
+    import { MockAlertsService } from 'mk-magic-alerts';
+    ```
+
+2. **Configure TestBed**: Use `MockAlertsService` to replace `AlertsService` in your TestBed configuration. This is done by providing it in the `providers` array of your test module setup.
+
+    ```typescript
+    TestBed.configureTestingModule({
+      // Other configuration...
+      providers: [
+        { provide: AlertsService, useClass: MockAlertsService }
+      ]
+    });
+    ```
+
+    Alternatively, if you prefer to directly instantiate and provide the mock without Angular's dependency injection, you can create an instance of the mock and use `useValue`:
+
+    ```typescript
+    const mockAlertsService = new MockAlertsService();
+    TestBed.configureTestingModule({
+      // Other configuration...
+      providers: [
+        { provide: AlertsService, useValue: mockAlertsService }
+      ]
+    });
+    ```
+
+3. **Spying on Methods**: In your tests, you can now spy on the `MockAlertsService` methods using Jest's `spyOn` method. This allows you to mock return values, verify that the methods were called, and inspect the arguments passed to them.
+
+    ```typescript
+    it('should call showInfo method', () => {
+      // Assuming you're inside a describe block for a component or service
+      const alertsService = TestBed.inject(AlertsService);
+      const showInfoSpy = jest.spyOn(alertsService, 'showInfo');
+      // Trigger the action that results in showInfo being called
+      expect(showInfoSpy).toHaveBeenCalledWith('Expected text', 10000);
+    });
+    ```
