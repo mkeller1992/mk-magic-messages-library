@@ -11,6 +11,9 @@ jobs:
     env:
       BASE_DIR: ./mk-magic-alerts-lib
       PROJECT_NAME: mk-magic-alerts
+      # 1.) Register TOKEN on npm-website: Access Tokens > Generate New Token > Classic Token > Automation
+      # 2.) Store it on GitHub-website: repository > Settings > Secrets and variables > New repository secret
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_FOR_MAGIC_MSG_LIB }}
     steps:
       # Checkout the repository to the runner
       - uses: actions/checkout@v4
@@ -67,7 +70,7 @@ jobs:
         run: npm publish
         working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_FOR_MAGIC_MSG_LIB }}
+          NODE_AUTH_TOKEN: ${{ env.NODE_AUTH_TOKEN }}
 
       # Set a version-tag for the deployed commit
       - name: Set a version-tag for the commit to the specified branch
