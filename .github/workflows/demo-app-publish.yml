@@ -57,17 +57,24 @@ jobs:
         id: version_check
         run: |
           # Extract the current version from package.json
-          CURRENT_VERSION=$(node -p "require('./${{ env.DEMO_APP_FOLDER_NAME }}/package.json').version")
+          CURRENT_VERSION=$(node -p "require('./${{ env.DEMO_APP_BASE_DIR }}/package.json').version")
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
           echo "Current Version: $CURRENT_VERSION"
+      
+          # Fetch tags, filter those ending with '-demo', and extract the version part
+          git fetch --prune --unshallow origin +refs/tags/*:refs/tags/* --tags
+          TAGS_WITH_DEMO=$(git tag -l "v*-demo")
+          LATEST_DEPLOYED_VERSION_WITH_DEMO=$(echo "$TAGS_WITH_DEMO" | sort -V | tail -n1)
 
-          # Read the latest deployed version from the environment variable
-          LATEST_DEPLOYED_VERSION=${{ env.LATEST_DEPLOYED_VERSION }}
-          echo "Latest Deployed Version: $LATEST_DEPLOYED_VERSION"
-
+          # Remove prefix 'v' and suffix '-demo' for comparison
+          LATEST_DEPLOYED_VERSION=${LATEST_DEPLOYED_VERSION_WITH_DEMO%-demo}          
+          LATEST_DEPLOYED_VERSION=${LATEST_DEPLOYED_VERSION#v}
+          
+          echo "Latest Deployed Version for comparison: $LATEST_DEPLOYED_VERSION"
+          
           # Use sort to compare semantic versions, and consider deployment if the current is newer
-          if [ "$(printf '%s\n' "$LATEST_DEPLOYED_VERSION" "$CURRENT_VERSION" | sort -V | head -n1)" != "$CURRENT_VERSION" ]; then
-            echo "Version $CURRENT_VERSION is new. Proceeding with publish..."
+          if [ -z "$LATEST_DEPLOYED_VERSION" ] || [ "$(printf '%s\n' "$LATEST_DEPLOYED_VERSION" "$CURRENT_VERSION" | sort -V | head -n1)" != "$CURRENT_VERSION" ]; then
+            echo "Version $CURRENT_VERSION is new or no '-demo' tags found. Proceeding with publish..."
             echo "deploy_needed=true" >> $GITHUB_ENV
           else
             echo "The current version is not newer; no deployment needed."
@@ -90,11 +97,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: '🚀 v${{ env.CURRENT_VERSION }} deployed to GitHub Pages'
       
-      - name: Set a version-tag for the commit to the specified branch
+      - name: Set a tag of the form 'v-0.0.0-demo' on the specified branch
         if: env.deploy_needed == 'true' && success()
         run: |
           # Set a tag preceding a 'v' on the specified branch
-          git tag v${{ env.CURRENT_VERSION }}
+          git tag v${{ env.CURRENT_VERSION }}-demo
           git push origin v${{ env.CURRENT_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

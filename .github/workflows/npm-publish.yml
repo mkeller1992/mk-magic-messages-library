@@ -65,3 +65,12 @@ jobs:
         working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_FOR_MAGIC_MSG_LIB }}
+
+      - name: Set a version-tag for the commit to the specified branch
+        if: env.execute_publish == 'true' && success()
+        run: |
+          # Set a tag of the form 'v-0.0.0-lib' on the specified branch
+          git tag v${{ env.CURRENT_VERSION }}-lib
+          git push origin v${{ env.CURRENT_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
