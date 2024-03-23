@@ -69,6 +69,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_FOR_MAGIC_MSG_LIB }}
 
+      # Set a version-tag for the deployed commit
       - name: Set a version-tag for the commit to the specified branch
         if: env.execute_publish == 'true' && success()
         run: |
