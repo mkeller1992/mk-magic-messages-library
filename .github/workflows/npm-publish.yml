@@ -8,56 +8,60 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    env:
+      BASE_DIR: ./mk-magic-alerts-lib
+      PROJECT_NAME: mk-magic-alerts
     steps:
-    # Checkout the repository to the runner
-    - uses: actions/checkout@v3
+      # Checkout the repository to the runner
+      - uses: actions/checkout@v3
 
-    # Install jq tool for JSON processing
-    - name: Install jq
-      run: sudo apt-get install jq
+      # Install jq tool for JSON processing
+      - name: Install jq
+        run: sudo apt-get install jq
 
-    # Setup Node.js environment
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20.x'
-        registry-url: 'https://registry.npmjs.org'
+      # Setup Node.js environment
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
 
-    # Install dependencies at the root level
-    - name: Install Dependencies
-      run: npm install
-      working-directory: ./mk-magic-alerts-lib
+      # Install dependencies at the root level
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ${{ env.BASE_DIR }}
 
-    # Run tests at the root level
-    - name: Run Tests
-      run: npm run test:ci
-      working-directory: ./mk-magic-alerts-lib
+      # Run tests at the root level
+      - name: Run Tests
+        run: npm run test:ci
+        working-directory: ${{ env.BASE_DIR }}
 
-    # Build the library from the specified subdirectory
-    - name: Build Library
-      run: npx ng build
-      working-directory: ./mk-magic-alerts-lib/projects/mk-magic-alerts
+      # Build the library from the specified subdirectory
+      - name: Build Library
+        run: npx ng build
+        working-directory: ${{ env.BASE_DIR }}/projects/${{ env.PROJECT_NAME }}
 
-    # Check if version has been updated
-    - name: Check if version has been updated
-      id: check_version
-      run: |
-        PACKAGE_NAME=$(jq -r '.name' package.json)
-        CURRENT_VERSION=$(jq -r '.version' package.json)
-        LATEST_PUBLISHED_VERSION=$(npm view $PACKAGE_NAME version 2>/dev/null || echo "0.0.0")
-        if [ "$CURRENT_VERSION" = "$LATEST_PUBLISHED_VERSION" ]; then
-          echo "Version $CURRENT_VERSION is already published. Skipping publish..."
-          echo "execute_publish=false" >> $GITHUB_ENV
-        else
-          echo "Version $CURRENT_VERSION is new. Proceeding with publish..."
-          echo "execute_publish=true" >> $GITHUB_ENV
-        fi
-      working-directory: ./mk-magic-alerts-lib/dist/mk-magic-alerts
+      # Check if version has been updated
+      - name: Check if version has been updated
+        id: check_version
+        run: |
+          PACKAGE_NAME=$(jq -r '.name' package.json)
+          CURRENT_VERSION=$(jq -r '.version' package.json)
+          LATEST_PUBLISHED_VERSION=$(npm view $PACKAGE_NAME version 2>/dev/null || echo "0.0.0")
+          if [ "$CURRENT_VERSION" = "$LATEST_PUBLISHED_VERSION" ]; then
+            echo "Version $CURRENT_VERSION is already published. Skipping publish..."
+            echo "execute_publish=false" >> $GITHUB_ENV
+          else
+            echo "Version $CURRENT_VERSION is new. Proceeding with publish..."
+            echo "execute_publish=true" >> $GITHUB_ENV
+          fi
+        working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
 
-    # Publish the library to npm if the version has been updated
-    - name: Publish to npm
-      if: env.execute_publish == 'true'
-      run: npm publish
-      working-directory: ./mk-magic-alerts-lib/dist/mk-magic-alerts
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_FOR_MAGIC_MSG_LIB }}
+      # Publish the library to npm if the version has been updated
+      # Register TOKEN on npm-website
+      - name: Publish to npm
+        if: env.execute_publish == 'true'
+        run: npm publish
+        working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_FOR_MAGIC_MSG_LIB }}

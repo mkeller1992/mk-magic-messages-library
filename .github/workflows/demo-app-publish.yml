@@ -8,6 +8,10 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    env:
+      DEMO_APP_BASE_DIR: ./mk-magic-alerts-demo
+      LIB_BASE_DIR: ./mk-magic-alerts-lib
+      PROJECT_NAME: mk-magic-alerts
     steps:
       - name: Set TARGET_BRANCH variable
         run: echo "TARGET_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
@@ -37,22 +41,22 @@ jobs:
 
       - name: Build and link mk-magic-alerts
         run: |
-          (cd ./mk-magic-alerts-lib && npm install && npm run build && npm link)
-          (cd ./mk-magic-alerts-demo && npm link mk-magic-alerts)
+          (cd ${{ env.LIB_BASE_DIR }} && npm install && npm run build && npm link)
+          (cd ${{ env.DEMO_APP_BASE_DIR }} && npm link ${{ env.PROJECT_NAME }})
 
       - name: Install Dependencies
         run: npm install
-        working-directory: ./mk-magic-alerts-demo
+        working-directory: ${{ env.DEMO_APP_BASE_DIR }}
 
       - name: Run Tests
         run: npm run test:ci
-        working-directory: ./mk-magic-alerts-demo
+        working-directory: ${{ env.DEMO_APP_BASE_DIR }}
 
       - name: Check if Deployment is Needed
         id: version_check
         run: |
           # Extract the current version from package.json
-          CURRENT_VERSION=$(node -p "require('./mk-magic-alerts-demo/package.json').version")
+          CURRENT_VERSION=$(node -p "require('${{ env.DEMO_APP_BASE_DIR }}/package.json').version")
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
           echo "Current Version: $CURRENT_VERSION"
 
@@ -74,21 +78,21 @@ jobs:
       - name: Build Angular Project
         if: env.deploy_needed == 'true'
         run: npm run deploy
-        working-directory: ./mk-magic-alerts-demo
+        working-directory: ${{ env.DEMO_APP_BASE_DIR }}
         
       - name: Deploy to GitHub Pages
         if: env.deploy_needed == 'true'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: mk-magic-alerts-demo/dist/mk-magic-alerts-demo
+          folder: ${{ env.DEMO_APP_BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: '🚀 v${{ env.CURRENT_VERSION }} deployed to GitHub Pages'
       
       - name: Set a version-tag for the commit to the specified branch
         if: env.deploy_needed == 'true' && success()
         run: |
-          # Set a tag preceeding a 'v' on the specified branch
+          # Set a tag preceding a 'v' on the specified branch
           git tag v${{ env.CURRENT_VERSION }}
           git push origin v${{ env.CURRENT_VERSION }}
         env:
