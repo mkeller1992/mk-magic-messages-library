@@ -74,6 +74,6 @@ jobs:
         run: |
           # Set a tag of the form 'v-0.0.0-lib' on the specified branch
           git tag v${{ env.CURRENT_VERSION }}-lib
-          git push origin v${{ env.CURRENT_VERSION }}
+          git push origin v${{ env.CURRENT_VERSION }}-lib
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

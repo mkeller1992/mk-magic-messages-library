@@ -103,6 +103,6 @@ jobs:
         run: |
           # Set a tag preceding a 'v' on the specified branch
           git tag v${{ env.CURRENT_VERSION }}-demo
-          git push origin v${{ env.CURRENT_VERSION }}
+          git push origin v${{ env.CURRENT_VERSION }}-demo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
