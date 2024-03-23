@@ -23,7 +23,7 @@ jobs:
 
       - name: Identify and set the latest 'v'-prefixed tag from the specified branch
         run: |
-          # Fetch the main branch
+          # Fetch the specified branch
           git fetch --prune --unshallow -v origin ${{ env.TARGET_BRANCH }}
           
           # Fetch all tags
@@ -85,10 +85,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: '🚀 v${{ env.CURRENT_VERSION }} deployed to GitHub Pages'
       
-      - name: Set a version-tag
+      - name: Set a version-tag for the commit to the specified branch
         if: env.deploy_needed == 'true' && success()
         run: |
-          # Set a tag preceeding a 'v' on main-branch
+          # Set a tag preceeding a 'v' on the specified branch
           git tag v${{ env.CURRENT_VERSION }}
           git push origin v${{ env.CURRENT_VERSION }}
         env:
