@@ -58,7 +58,7 @@ jobs:
         working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
 
       # Publish the library to npm if the version has been updated
-      # Register TOKEN on npm-website
+      # Register TOKEN on npm-website and set it on GitHub-website
       - name: Publish to npm
         if: env.execute_publish == 'true'
         run: npm publish
