@@ -17,12 +17,12 @@ jobs:
       - name: Set TARGET_BRANCH variable
         run: echo "TARGET_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ env.TARGET_BRANCH }}
       
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
 
