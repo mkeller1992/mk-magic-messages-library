@@ -57,9 +57,9 @@ jobs:
         id: version_check
         run: |
           # Extract the current version from package.json
-          CURRENT_VERSION=$(node -p "require('./${{ env.DEMO_APP_BASE_DIR }}/package.json').version")
+          PACKAGE_NAME=$(jq -r '.name' package.json)
+          CURRENT_VERSION=$(jq -r '.version' package.json)
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-          echo "Current Version: $CURRENT_VERSION"
       
           # Fetch tags, filter those ending with '-demo', and extract the version part
           git fetch --prune --unshallow origin +refs/tags/*:refs/tags/* --tags
@@ -80,6 +80,7 @@ jobs:
             echo "The current version is not newer; no deployment needed."
             echo "deploy_needed=false" >> $GITHUB_ENV
           fi
+        working-directory: ./${{ env.DEMO_APP_FOLDER_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

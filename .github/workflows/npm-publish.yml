@@ -45,8 +45,11 @@ jobs:
       - name: Check if version has been updated
         id: check_version
         run: |
+          # Extract the current version from package.json
           PACKAGE_NAME=$(jq -r '.name' package.json)
           CURRENT_VERSION=$(jq -r '.version' package.json)
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+
           LATEST_PUBLISHED_VERSION=$(npm view $PACKAGE_NAME version 2>/dev/null || echo "0.0.0")
           if [ "$CURRENT_VERSION" = "$LATEST_PUBLISHED_VERSION" ]; then
             echo "Version $CURRENT_VERSION is already published. Skipping publish..."
