@@ -10,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEMO_APP_FOLDER_NAME: mk-magic-alerts-demo
+      DEMO_PROJECT_NAME: mk-magic-alerts-demo
       LIB_FOLDER_NAME: mk-magic-alerts-lib
-      PROJECT_NAME: mk-magic-alerts
+      LIB_NAME: mk-magic-alerts
     steps:
       - name: Set TARGET_BRANCH variable
         run: echo "TARGET_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
@@ -42,7 +43,7 @@ jobs:
       - name: Build and link mk-magic-alerts
         run: |
           (cd ./${{ env.LIB_FOLDER_NAME }} && npm install && npm run build && npm link)
-          (cd ./${{ env.DEMO_APP_FOLDER_NAME }} && npm link ${{ env.PROJECT_NAME }})
+          (cd ./${{ env.DEMO_APP_FOLDER_NAME }} && npm link ${{ env.LIB_NAME }})
 
       - name: Install Dependencies
         run: npm install
@@ -85,7 +86,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: ${{ env.DEMO_APP_FOLDER_NAME }}/dist/${{ env.PROJECT_NAME }}
+          folder: ${{ env.DEMO_APP_FOLDER_NAME }}/dist/${{ env.DEMO_PROJECT_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: '🚀 v${{ env.CURRENT_VERSION }} deployed to GitHub Pages'
       
