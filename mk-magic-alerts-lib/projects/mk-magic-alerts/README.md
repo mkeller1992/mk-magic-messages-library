@@ -11,7 +11,14 @@ This library is compatible with **Angular 17** and above.
 
 **Breaking change**: As of version 16.1.0, the placement of `<magic-alerts></magic-alerts>` in the html of the AppComponent is omitted!
 
-## Installation
+---
+
+## Demo
+https://mkeller1992.github.io/mk-magic-messages-library
+
+---
+
+## Setup
 
 #### [npm](https://www.npmjs.com/package/mk-magic-alerts)
 ```
