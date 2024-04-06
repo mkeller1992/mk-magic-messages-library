@@ -1,6 +1,13 @@
 # Mk-Magic-Alerts
 
+---
+[![npm version](https://badge.fury.io/js/mk-magic-alerts.svg)](https://badge.fury.io/js/mk-magic-alerts)
+![build status](https://github.com/mkeller1992/mk-magic-messages-library/actions/workflows/npm-publish.yml/badge.svg)
+[![codecov](https://codecov.io/gh/mkeller1992/mk-magic-messages-library/graph/badge.svg?token=FZYEC8Y47D)](https://codecov.io/gh/mkeller1992/mk-magic-messages-library)
+
 Display animated success-, info-, warning- and error-alerts in your Angular application.
+
+This library is compatible with **Angular 17** and above.
 
 **Breaking change**: As of version 16.1.0, the placement of `<magic-alerts></magic-alerts>` in the html of the AppComponent is omitted!
 
