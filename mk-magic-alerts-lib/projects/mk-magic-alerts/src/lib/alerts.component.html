@@ -5,9 +5,10 @@
 
 <!-- Alerts Container -->
 <div id="mk-magic-messages" class="alerts-container">
-	<app-alert
-		*ngFor="let alertParams of alerts$ | async"
-		[alertParams]="alertParams"
-		[dismissTimeInMillis]="alertParams.dismissTimeInMillis">
-	</app-alert>
+	@for(alertParams of alerts$ | async; track alertParams) {
+		<app-alert
+			[alertParams]="alertParams"
+			[dismissTimeInMillis]="alertParams.dismissTimeInMillis">
+		</app-alert>
+	}
 </div>

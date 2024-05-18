@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { AlertsService, MockAlertsService } from '@mk-magic-alerts';
 import { AppComponent } from './app.component';
 
@@ -16,8 +15,7 @@ describe('AppComponent', () => {
     mockAlertsService = new MockAlertsService();
 
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      imports: [ReactiveFormsModule],
+      imports: [AppComponent],
       providers: [
         { provide: AlertsService, useValue: mockAlertsService }
       ]

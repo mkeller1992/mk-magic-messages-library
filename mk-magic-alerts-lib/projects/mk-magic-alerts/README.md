@@ -8,7 +8,7 @@ Display animated success-, info-, warning- and error-alerts in your Angular appl
 
 This library is compatible with **Angular 17** and above.
 
-**Breaking change**: As of version 16.1.0, the placement of `<magic-alerts></magic-alerts>` in the html of the AppComponent is omitted!
+**Breaking change**: As of version 17.2.0, the placement of `<magic-alerts></magic-alerts>` in the html of the AppComponent is omitted!
 
 ---
 
@@ -30,17 +30,28 @@ npm i mk-magic-alerts
 1. Add `MkMagicAlertsModule` to your module:
 ```
 import { MkMagicAlertsModule } from 'mk-magic-alerts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [],
   imports: [
-	MkMagicAlertsModule,
+	BrowserAnimationsModule, // required animations module
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
 ```
+If your app consists of **standalone components** and has no modules, make sure your `main.ts` contains `provideAnimations()`:
+```
+bootstrapApplication(AppComponent, {
+	providers: [
+		provideRouter(APP_ROUTES),
+		provideAnimations(), // required
+  ]
+});
+```
+
 2. Import `AlertsService` in the component you want to display an alert:
 
 ```

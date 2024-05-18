@@ -1,6 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'newlineAndTabs' })
+@Pipe({ 
+	name: 'newlineAndTabs',
+	standalone: true
+ })
+
 export class NewlineAndTabsPipe implements PipeTransform {
 	
 	transform(value: any): any {

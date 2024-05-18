@@ -1,12 +1,11 @@
 import { AnimationEvent } from '@angular/animations';
-import { ChangeDetectorRef, ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ChangeDetectorRef, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Subject } from 'rxjs';
 import { AlertsStoreService } from '../../alerts-store.service';
 import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
-import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
 import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
@@ -32,8 +31,7 @@ describe('AlertComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [AlertComponent, NewlineAndTabsPipe],
-      imports: [NoopAnimationsModule],
+      imports: [AlertComponent, NoopAnimationsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },
         { provide: AlertsStoreService, useValue: mockAlertsStoreService },

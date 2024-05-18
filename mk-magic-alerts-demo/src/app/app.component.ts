@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertsService } from '@mk-magic-alerts';
 import packageJson from '../../package.json';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: true,
+    imports: [ReactiveFormsModule]
 })
 export class AppComponent implements OnInit {
   title = 'mk-magic-alerts-demo';

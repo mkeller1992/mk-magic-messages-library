@@ -5,6 +5,7 @@ import { first, repeat, takeUntil, tap } from 'rxjs/operators';
 import { AlertsStoreService } from '../../alerts-store.service';
 import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
+import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
 import { alertAnimations } from './alert-animations';
 
 @Component({
@@ -12,6 +13,8 @@ import { alertAnimations } from './alert-animations';
 	templateUrl: './alert.component.html',
 	styleUrls: ['./alert.component.scss'],
 	animations: alertAnimations,
+	standalone: true,
+	imports: [NewlineAndTabsPipe]
 })
 
 export class AlertComponent implements OnInit, OnDestroy {

@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AlertsService } from './alerts.service';
 import { AlertsStoreService } from './alerts-store.service';
+import { ApplicationRef, Injector } from '@angular/core';
 
 describe('AlertsService', () => {
   let service: AlertsService;
@@ -12,10 +13,17 @@ describe('AlertsService', () => {
       dismissAll: jest.fn(),
     };
 
+    const mockApplicationRef = {
+      attachView: jest.fn(),
+      detachView: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         AlertsService,
+        Injector,
         { provide: AlertsStoreService, useValue: alertsStoreServiceMock },
+        { provide: ApplicationRef, useValue: mockApplicationRef },
       ],
     });
 
