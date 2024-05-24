@@ -6,9 +6,9 @@
 
 Display animated success-, info-, warning- and error-alerts in your Angular application.
 
-This library is compatible with **Angular 17** and above.
+The latest library version is compatible with **Angular 18**.
 
-**Breaking change**: As of version 17.2.0, the placement of `<magic-alerts></magic-alerts>` in the html of the AppComponent is omitted!
+**Breaking change**: As of version 17.2.0, the import of `MkMagicAlertsModule` is no longer needed for standalone components.
 
 ---
 
