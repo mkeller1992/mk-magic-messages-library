@@ -5,23 +5,22 @@ import { AppComponent } from './app.component';
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let mockAlertsService: MockAlertsService;
+  let mockAlertsService: AlertsService;
 
   beforeEach(async () => {
 
     // Suppress console.logs
     jest.spyOn(console, 'log').mockImplementation(() => {});
 
-    mockAlertsService = new MockAlertsService();
-
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
-        { provide: AlertsService, useValue: mockAlertsService }
+        { provide: AlertsService, useClass: MockAlertsService }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
+    mockAlertsService = TestBed.inject(AlertsService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

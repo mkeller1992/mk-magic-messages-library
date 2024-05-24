@@ -16,7 +16,7 @@ export class AlertsService {
 		this.initializeAlertsComponent();
 	}
 
-	initializeAlertsComponent(): void {
+	private initializeAlertsComponent(): void {
 		if (!this.alertsComponentRef) {
 		  // Create a div element and append it to the document body
 		  const hostElement = document.createElement('div');
