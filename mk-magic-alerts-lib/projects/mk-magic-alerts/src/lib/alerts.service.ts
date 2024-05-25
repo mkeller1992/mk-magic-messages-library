@@ -17,22 +17,20 @@ export class AlertsService {
 	}
 
 	private initializeAlertsComponent(): void {
-		if (!this.alertsComponentRef) {
-		  // Create a div element and append it to the document body
-		  const hostElement = document.createElement('div');
-		  document.body.appendChild(hostElement);
-	  
-		  // Create AlertsComponent and attach it to the DOM
-		  this.alertsComponentRef = createComponent(AlertsComponent, {
-			hostElement,
-			environmentInjector: this.applicationRef.injector,
-			elementInjector: this.injector
-		  });
-	  
-		  // Attach the AlertsComponent to the application
-		  this.applicationRef.attachView(this.alertsComponentRef.hostView);
-		}
-	  }
+		// Create a div element and append it to the document body
+		const hostElement = document.createElement('div');
+		document.body.appendChild(hostElement);
+	
+		// Create AlertsComponent and attach it to the DOM
+		this.alertsComponentRef = createComponent(AlertsComponent, {
+		hostElement,
+		environmentInjector: this.applicationRef.injector,
+		elementInjector: this.injector
+		});
+	
+		// Attach the AlertsComponent to the application
+		this.applicationRef.attachView(this.alertsComponentRef.hostView);
+	}
 
 	showInfo(text: string, dismissTimeInMillis: number = 10_000) {
 		this.alertsStore.addAlert(text, 'info', dismissTimeInMillis);
