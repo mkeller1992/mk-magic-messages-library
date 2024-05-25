@@ -1,13 +1,13 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { AlertsStoreService } from "./alerts-store.service";
+import { AlertsStore } from "./alerts.store";
 import { Alert } from './core/models/alert.model';
 
-describe("AlertsStoreService", () => {
-  let service: AlertsStoreService;
+describe("AlertsStore", () => {
+  let service: AlertsStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AlertsStoreService);
+    service = TestBed.inject(AlertsStore);
   });
 
   it('should be created', () => {
@@ -64,9 +64,9 @@ describe("AlertsStoreService", () => {
 
     // Act
     service.dismissAll$.subscribe(callback);
-
     service.dismissAll(); // This should trigger the emission we're subscribing to
 
+    // Assert
     expect(callback).toHaveBeenCalledTimes(1);
   });
 

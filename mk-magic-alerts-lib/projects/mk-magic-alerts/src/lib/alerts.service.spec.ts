@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { AlertsService } from './alerts.service';
-import { AlertsStoreService } from './alerts-store.service';
-import { ApplicationRef, Injector } from '@angular/core';
+import { AlertsStore } from './alerts.store';
+import { ApplicationRef, Injector, provideZoneChangeDetection } from '@angular/core';
 
 describe('AlertsService', () => {
   let service: AlertsService;
-  let alertsStoreServiceMock: jest.Mocked<Partial<AlertsStoreService>>;
+  let alertsStoreServiceMock: jest.Mocked<Partial<AlertsStore>>;
 
   beforeEach(() => {
     alertsStoreServiceMock = {
@@ -22,7 +22,7 @@ describe('AlertsService', () => {
       providers: [
         AlertsService,
         Injector,
-        { provide: AlertsStoreService, useValue: alertsStoreServiceMock },
+        { provide: AlertsStore, useValue: alertsStoreServiceMock },
         { provide: ApplicationRef, useValue: mockApplicationRef },
       ],
     });

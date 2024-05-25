@@ -7,7 +7,7 @@ import { Alert } from './core/models/alert.model';
 @Injectable({
   providedIn: 'root'
 })
-export class AlertsStoreService {
+export class AlertsStore {
 
 	private alertsSubject = new BehaviorSubject<Alert[]>([]);
 

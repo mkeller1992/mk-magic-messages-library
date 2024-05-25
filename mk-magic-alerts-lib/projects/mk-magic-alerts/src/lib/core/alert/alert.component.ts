@@ -2,7 +2,7 @@ import { AnimationEvent } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, fromEvent, race, timer } from 'rxjs';
 import { first, repeat, takeUntil, tap } from 'rxjs/operators';
-import { AlertsStoreService } from '../../alerts-store.service';
+import { AlertsStore } from '../../alerts.store';
 import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
 import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
@@ -28,7 +28,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 	private destroy$ = new Subject<void>();
 
 	constructor(private readonly elementRef: ElementRef<HTMLElement>,
-				private alertsStore: AlertsStoreService,
+				private alertsStore: AlertsStore,
 				private cdRef: ChangeDetectorRef) {}
 
 	ngOnInit(): void {

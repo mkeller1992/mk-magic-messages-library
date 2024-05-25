@@ -1,12 +1,11 @@
-import { Component, DebugElement, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { By } from '@angular/platform-browser';
-import { of } from 'rxjs';
-import { AlertsStoreService } from './alerts-store.service';
-import { AlertsComponent } from "./alerts.component";
-import { Alert } from "./core/models/alert.model";
-import { AlertComponent } from './core/alert/alert.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs';
+import { AlertsComponent } from "./alerts.component";
+import { AlertsStore } from './alerts.store';
+import { AlertComponent } from './core/alert/alert.component';
+import { Alert } from "./core/models/alert.model";
 
 
 @Component({
@@ -26,7 +25,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 describe('AlertsComponent', () => {
   let component: AlertsComponent;
   let fixture: ComponentFixture<AlertsComponent>;
-  let alertsStore: Partial<AlertsStoreService>;
+  let alertsStore: Partial<AlertsStore>;
 
   const infoAlertTxt = 'Info Alert';  
   const errorAlertTxt = 'Error Alert';
@@ -43,7 +42,7 @@ describe('AlertsComponent', () => {
 			imports: [AlertsComponent, NoopAnimationsModule],
 			providers: [
 				{ provide: AlertComponent, useClass: MockAlertComponent },
-				{ provide: AlertsStoreService, useValue: alertsStore },
+				{ provide: AlertsStore, useValue: alertsStore },
 			],
 		})
 		.compileComponents();
@@ -92,13 +91,3 @@ describe('AlertsComponent', () => {
 	*/
 
 })
-
-/* Helper Methods */
-
-export function findComponent<T>(fixture: ComponentFixture<T>, selector: string): DebugElement {
-	return fixture.debugElement.query(By.css(selector));
-}
-
-export function findAllComponents<T>(fixture: ComponentFixture<T>, selector: string): DebugElement[] {
-	return fixture.debugElement.queryAll(By.css(selector));
-}

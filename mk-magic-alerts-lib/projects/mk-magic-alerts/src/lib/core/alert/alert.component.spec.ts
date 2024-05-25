@@ -3,7 +3,7 @@ import { ChangeDetectorRef, ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Subject } from 'rxjs';
-import { AlertsStoreService } from '../../alerts-store.service';
+import { AlertsStore } from '../../alerts.store';
 import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
 import { AlertComponent } from './alert.component';
@@ -11,7 +11,7 @@ import { AlertComponent } from './alert.component';
 describe('AlertComponent', () => {
   let component: AlertComponent;
   let fixture: ComponentFixture<AlertComponent>;
-  let mockAlertsStoreService: Partial<AlertsStoreService>;
+  let mockAlertsStoreService: Partial<AlertsStore>;
   let mockElementRef: Partial<ElementRef>;
   let dismissAllSubject: Subject<void>;
 
@@ -34,7 +34,7 @@ describe('AlertComponent', () => {
       imports: [AlertComponent, NoopAnimationsModule],
       providers: [
         { provide: ElementRef, useValue: mockElementRef },
-        { provide: AlertsStoreService, useValue: mockAlertsStoreService },
+        { provide: AlertsStore, useValue: mockAlertsStoreService },
         ChangeDetectorRef,
       ]
     }).compileComponents();

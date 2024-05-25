@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AlertsStoreService } from './alerts-store.service';
+import { AlertsStore } from './alerts.store';
 import { AlertComponent } from './core/alert/alert.component';
 import { Alert } from './core/models/alert.model';
 
@@ -16,5 +16,5 @@ export class AlertsComponent {
 
 	alerts$: Observable<Alert[]> = this.alertsStore.alerts$;
 
-	constructor(private alertsStore: AlertsStoreService) { }
+	constructor(private alertsStore: AlertsStore) { }
 }

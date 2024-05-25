@@ -1,5 +1,5 @@
 import { ApplicationRef, ComponentRef, Injectable, Injector, createComponent } from '@angular/core';
-import { AlertsStoreService } from './alerts-store.service';
+import { AlertsStore } from './alerts.store';
 import { AlertsComponent } from './alerts.component';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class AlertsService {
 
 	private alertsComponentRef!: ComponentRef<AlertsComponent>;
 
-	constructor(private alertsStore: AlertsStoreService,
+	constructor(private alertsStore: AlertsStore,
 				private applicationRef: ApplicationRef,
            		private injector: Injector) {
 		this.initializeAlertsComponent();
