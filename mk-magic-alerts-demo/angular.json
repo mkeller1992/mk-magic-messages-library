@@ -81,11 +81,8 @@
           },
           "defaultConfiguration": "development"
         },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n",
-          "options": {
-            "buildTarget": "mk-magic-alerts-demo:build"
-          }
+        "test": {
+          "builder": "@angular-builders/jest:run"
         }
       }
     }
