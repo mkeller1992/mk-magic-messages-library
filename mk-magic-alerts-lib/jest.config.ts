@@ -8,6 +8,7 @@ module.exports = {
     '<rootDir>/dist/',
     '<rootDir>/cypress/',
     '!<rootDir>/projects/mk-magic-alerts/src/lib/mocks/',
+    '!<rootDir>/projects/mk-magic-alerts/src/lib/test-helpers/',
   ],
   modulePathIgnorePatterns: ["<rootDir>/dist/"],
   moduleNameMapper: {
@@ -20,6 +21,7 @@ module.exports = {
     '!<rootDir>/projects/mk-magic-alerts/src/public-api.ts',
     '!<rootDir>/projects/mk-magic-alerts/src/lib/*.module.ts', // Exclude module files
     '!<rootDir>/projects/mk-magic-alerts/src/lib/mocks/*.ts', // Exclude mocks
+    '!<rootDir>/projects/mk-magic-alerts/src/lib/test-helpers/*.ts', // Exclude test-helpers
   ],
   coverageReporters: ['html', 'text', 'text-summary', 'lcov'],
 };
