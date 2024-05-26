@@ -4,7 +4,12 @@
     "outDir": "./out-tsc/spec",
     "types": [
       "jest"
-    ]
+    ],
+    "paths": {
+      "@mk-magic-alerts": [
+        "../mk-magic-alerts-lib/dist/mk-magic-alerts"
+      ]
+    },
   },
   "include": [
     "src/**/*.spec.ts",
