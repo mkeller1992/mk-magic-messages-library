@@ -1,7 +1,7 @@
+import { ApplicationRef, Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { AlertsService } from './alerts.service';
 import { AlertsStore } from './alerts.store';
-import { ApplicationRef, Injector, provideZoneChangeDetection } from '@angular/core';
 
 describe('AlertsService', () => {
   let service: AlertsService;
@@ -13,17 +13,19 @@ describe('AlertsService', () => {
       dismissAll: jest.fn(),
     };
 
-    const mockApplicationRef = {
-      attachView: jest.fn(),
-      detachView: jest.fn(),
+    /*
+    const applicationRefMock = {
+      injector: jest.fn(),
+      attachView: jest.fn()
     };
+
+    const injectorMock = {};
+    */
 
     TestBed.configureTestingModule({
       providers: [
-        AlertsService,
-        Injector,
         { provide: AlertsStore, useValue: alertsStoreServiceMock },
-        { provide: ApplicationRef, useValue: mockApplicationRef },
+        AlertsService
       ],
     });
 
