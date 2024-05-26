@@ -17,44 +17,56 @@ https://mkeller1992.github.io/mk-magic-messages-library
 
 ---
 
-## Setup
+## Install
 
 #### [npm](https://www.npmjs.com/package/mk-magic-alerts)
 ```
 npm i mk-magic-alerts
 ```
-
-## Quick Start
-
-
-1. Add `MkMagicAlertsModule` to your module:
+`@angular/animations package` is a required dependency for this library
 ```
-import { MkMagicAlertsModule } from 'mk-magic-alerts';
+npm install @angular/animations
+```
+## Setup
+
+### For apps based on `Standalone Components`
+Make sure `provideAnimations()` is included in your `main.ts`:
+```typescript
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+bootstrapApplication(AppComponent, {
+	providers: [
+		importProvidersFrom(),
+		provideRouter(APP_ROUTES),
+		provideAnimations() // this is required!
+	]
+}).catch(err => console.error(err));
+```
+
+### For apps based on `ngModule`
+Make sure `BrowserAnimationsModule` is included in your `@NgModule`:
+```typescript
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    AppComponent
+  ],
   imports: [
-	BrowserAnimationsModule, // required animations module
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule // this is required!
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
 ```
-If your app consists of **standalone components** and has no modules, make sure your `main.ts` contains `provideAnimations()`:
-```
-bootstrapApplication(AppComponent, {
-	providers: [
-		provideRouter(APP_ROUTES),
-		provideAnimations(), // required
-  ]
-});
-```
 
-2. Import `AlertsService` in the component you want to display an alert:
+## Usage
+1. Inject `AlertsService` into your component to invoke different kind of alerts as shown below:
 
-```
+```typescript
 import { AlertsService } from 'mk-magic-alerts';
 
 constructor(private alertsSvc: AlertsService){}
@@ -71,9 +83,9 @@ ngOnInit(): void {
 }
 ```
 
-3. To reset all active alerts, invoke the `clear()`-method:
+2. To remove all active alerts, invoke the `clear()`-method:
 
-```
+```typescript
 this.alertsSvc.clear();
 ```
 
