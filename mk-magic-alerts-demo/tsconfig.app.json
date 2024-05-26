@@ -1,9 +1,15 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* Specific settings only applied for ng build (but not for npm start or ng serve) */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "@mk-magic-alerts": [
+        "../mk-magic-alerts-lib/dist/mk-magic-alerts"
+      ],
+      "@angular/*": [ "./node_modules/@angular/*"]
+    },
   },
   "files": [
     "src/main.ts",

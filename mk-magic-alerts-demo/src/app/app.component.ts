@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertsService } from '@mk-magic-alerts';
 import packageJson from '../../package.json';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
     selector: 'app-root',

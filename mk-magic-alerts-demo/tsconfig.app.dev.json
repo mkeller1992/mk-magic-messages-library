@@ -1,0 +1,19 @@
+/* Specific settings only applied for npm start and ng serve (but not for ng build) */
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "outDir": "./out-tsc/app",
+      "types": [],
+      "paths": {
+        "@mk-magic-alerts": [
+          "../mk-magic-alerts-lib/dist/mk-magic-alerts"
+        ]
+      },
+    },
+    "files": [
+      "src/main.ts",
+    ],
+    "include": [
+      "src/**/*.d.ts"
+    ]
+  }
