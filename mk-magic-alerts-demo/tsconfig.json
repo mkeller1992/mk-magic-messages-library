@@ -23,6 +23,11 @@
       "ES2022",
       "dom"
     ],
+    "paths": {
+      "@mk-magic-alerts": [
+        "../mk-magic-alerts-lib/dist/mk-magic-alerts"
+      ]
+    },
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
