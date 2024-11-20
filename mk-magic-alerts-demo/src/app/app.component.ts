@@ -7,7 +7,6 @@ import packageJson from '../../package.json';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: true,
     imports: [ReactiveFormsModule]
 })
 export class AppComponent implements OnInit {
