@@ -6,11 +6,10 @@ import { AlertComponent } from './core/alert/alert.component';
 import { Alert } from './core/models/alert.model';
 
 @Component({
-  selector: 'magic-alerts',
-  templateUrl: './alerts.component.html',
-  styleUrls: ['./alerts.component.scss'],
-  standalone: true,
-  imports: [AlertComponent, AsyncPipe]
+    selector: 'magic-alerts',
+    templateUrl: './alerts.component.html',
+    styleUrls: ['./alerts.component.scss'],
+    imports: [AlertComponent, AsyncPipe]
 })
 export class AlertsComponent {
 

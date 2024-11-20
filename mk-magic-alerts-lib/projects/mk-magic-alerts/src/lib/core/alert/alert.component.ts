@@ -9,12 +9,11 @@ import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
 import { alertAnimations } from './alert-animations';
 
 @Component({
-	selector: 'app-alert',
-	templateUrl: './alert.component.html',
-	styleUrls: ['./alert.component.scss'],
-	animations: alertAnimations,
-	standalone: true,
-	imports: [NewlineAndTabsPipe]
+    selector: 'app-alert',
+    templateUrl: './alert.component.html',
+    styleUrls: ['./alert.component.scss'],
+    animations: alertAnimations,
+    imports: [NewlineAndTabsPipe]
 })
 
 export class AlertComponent implements OnInit, OnDestroy {
