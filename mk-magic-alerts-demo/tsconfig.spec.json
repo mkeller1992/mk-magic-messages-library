@@ -1,16 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
     "outDir": "./out-tsc/spec",
     "types": [
-      "jest"
-    ],
-    "paths": {
-      "@mk-magic-alerts": [
-        "../mk-magic-alerts-lib/dist/mk-magic-alerts"
-      ]
-    },
+      "jest", "node"
+    ]
   },
   "include": [
     "src/**/*.spec.ts",

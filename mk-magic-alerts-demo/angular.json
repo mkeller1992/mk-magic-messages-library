@@ -18,9 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
 			      "preserveSymlinks": true,
-            "outputPath": {
-              "base": "dist/mk-magic-alerts-demo"
-            },
+            "outputPath": "dist/mk-magic-alerts-demo",
             "index": "src/index.html",
             "polyfills": [
               "zone.js"
@@ -83,7 +81,15 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@nrwl/jest:jest"
+          "builder": "@nrwl/jest:jest",          
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss"
+          }
         }
       }
     }
