@@ -77,7 +77,7 @@ describe('AlertComponent', () => {
 		expect(component.alertParams.state).toBe(AlertState.DISMISS);
 
 		// simulate the end of the CSS transition to finalize as DISMISSED
-		component.onContainerTransitionEnd({ propertyName: 'grid-template-rows' } as unknown as TransitionEvent);
+		component.onContainerTransitionEnd({ propertyName: 'opacity' } as unknown as TransitionEvent);
 		// (or: { propertyName: 'opacity' })
 
 		expect(component.alertParams.state).toBe(AlertState.DISMISSED);
@@ -160,15 +160,15 @@ describe('AlertComponent', () => {
 	});
 
 	it('should update alert state to DISMISSED after leave transition ends', () => {
-	// Arrange: component is in the middle of dismissing
-	component.alertParams = { state: AlertState.DISMISS } as any;
+		// Arrange: component is in the middle of dismissing
+		component.alertParams = { state: AlertState.DISMISS } as any;
 
-	// Act: simulate the relevant CSS transition finishing
-	const evt = { propertyName: 'grid-template-rows' } as unknown as TransitionEvent;
-	component.onContainerTransitionEnd(evt);
+		// Act: simulate the relevant CSS transition finishing
+		const evt = { propertyName: 'opacity' } as unknown as TransitionEvent;
+		component.onContainerTransitionEnd(evt);
 
-	// Assert
-	expect(component.alertParams.state).toBe(AlertState.DISMISSED);
+		// Assert
+		expect(component.alertParams.state).toBe(AlertState.DISMISSED);
 	});
 
 	it('should clean up subscriptions on destroy', () => {
