@@ -8,9 +8,12 @@ $hover-color-success: #30a24d;
 $hover-color-warning: #b38600;
 $hover-color-error: #ff4c59;
 
+$gap-size: 5px;
+$neg-gap: -$gap-size;
+
 .clickable-area {
   cursor: pointer;
-  margin-top: 5px;
+  margin-top: $gap-size;
 
   .alert-container {
     position: relative;
@@ -19,25 +22,28 @@ $hover-color-error: #ff4c59;
     border-radius: 4px;
     border-width: 1px;
     border-style: solid;
-    overflow: hidden; /* keep scale/height collapse tidy */
+    overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.08), 0 6px 20px rgba(0,0,0,0.08);
     z-index: 1020 !important;
 
-    /* layout: keep close button on same row at far right */
     display: grid;
     grid-template-columns: 1fr auto; /* text | close */
     column-gap: 15px;
     align-items: center;
 
-    /* anchor scale to top-left to reproduce “dot grows from top-left” */
+    /* Anchor transforms to top-left so scale looks like “shrink to TL” */
     transform-origin: 0 0;
     transform-box: border-box;
+
+    /* Layout height is driven by this var (set in TS) */
+    height: var(--h, auto);
 
     .alert-text {
       min-width: 0;
       font: 400 16px/20px Roboto;
-      /* default opacity is fully visible; overridden in enter/leave phases */
       transition: opacity .1s linear;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .btn-dismiss {
@@ -47,53 +53,57 @@ $hover-color-error: #ff4c59;
     }
   }
 
-  /* ===================== ENTER (void -> display) ===================== */
+  /* ===== ENTER: dot → box (visual) ===== */
   .alert-enter {
-    /* container end state after enter */
-    transform: scale(1);
+    transform: none;   /* end */
     opacity: 1;
     border-width: 1px;
-    /* padding/margins are already at their natural values */
-
     transition:
       transform .3s ease,
       opacity .3s ease,
       border-width .3s ease;
 
-    /* starting state (emulates `state('void', ...)`) */
     @starting-style {
-      transform: scale(0);  /* width/height: 0 “dot” */
+      transform: scale(0); /* start as a dot at TL */
       opacity: 0;
       border-width: 0;
-      /* padding remains, but scale(0) visually collapses */
     }
 
-    /* sequence: show text after container expands */
     .alert-text {
       opacity: 1;
-      transition: opacity .1s linear .3s; /* 100ms, delayed by 300ms */
+      transition: opacity .1s linear .3s;
       @starting-style { opacity: 0; }
     }
   }
 
-  /* ===================== LEAVE (display -> dismiss) ===================== */
+  /* ===== LEAVE: box → dot at TL (visual) + smooth reflow (layout) ===== */
   .alert-leave {
-    /* group: fade text quickly while container collapses */
-    transform: scale(0); /* collapse to top-left */
+    /* Visual shrink to TL */
+    transform: scale(0);
     opacity: 0;
+
+    /* Layout collapse for smooth sibling “ripple up” */
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     border-width: 0;
+	margin-top: $neg-gap; // Makes the disappearing of the gap bewteen alerts smoother
 
     transition:
-      transform .5s ease,   /* container duration 0.5s (matches group) */
+      transform .5s ease,
       opacity .5s ease,
-      border-width .5s ease;
+      height .5s ease,
+      padding-top .5s ease,
+      padding-bottom .5s ease,
+      border-width .5s ease,
+	  margin-top .5s ease;
 
     .alert-text {
       opacity: 0;
-      transition: opacity .05s linear; /* quick fade */
+      transition: opacity .05s linear;
     }
   }
-
+  
   /* ===================== VARIANTS ===================== */
   .alert-info {
     color: $color-info;

@@ -2,6 +2,7 @@
   <div class="clickable-area">
     @if (alertParams.state === 'display') {
       <div
+	  	#container
         class="alert-container alert-{{ alertParams.type }}"
         animate.enter="alert-enter"
         animate.leave="alert-leave"

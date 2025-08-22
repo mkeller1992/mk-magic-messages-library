@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, Subject, fromEvent, race, timer } from 'rxjs';
 import { repeat, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertsStore } from '../alerts.store';
@@ -23,6 +23,8 @@ export class AlertComponent implements OnInit, OnDestroy {
 
 	@Input()
 	dismissTimeInMillis = 2_147_483_647;
+
+	@ViewChild('container', { static: false }) container!: ElementRef<HTMLElement>;
 
 	private destroy$ = new Subject<void>();
 
@@ -57,6 +59,12 @@ export class AlertComponent implements OnInit, OnDestroy {
 	/* Triggers the animated disappearing of the alert */
 	setDismissalStart() {
 		if (this.alertParams.state !== AlertState.DISMISS) {
+    		const el = this.container?.nativeElement;
+			if (el) {
+				// lock current height via CSS var used by the stylesheet
+				el.style.setProperty('--h', `${el.offsetHeight}px`);
+			}
+
 			this.alertParams.state = AlertState.DISMISS;
 			// Zoneless: this runs from RxJS/DOM listeners, so request a render
 			this.cdr.detectChanges();
@@ -67,12 +75,11 @@ export class AlertComponent implements OnInit, OnDestroy {
 	onContainerTransitionEnd(e: TransitionEvent) {
 		// Listen for a property used in your leave transition
 		if (this.alertParams.state === AlertState.DISMISS &&
-			(e.propertyName === 'grid-template-rows' || e.propertyName === 'opacity')) {
+			(e.propertyName === 'height' || e.propertyName === 'opacity')) {
 			this.alertParams.state = AlertState.DISMISSED;
 			this.cdr.detectChanges();
 		}
 	}
-
 
 	ngOnDestroy(): void {
 		this.destroy$.next();
