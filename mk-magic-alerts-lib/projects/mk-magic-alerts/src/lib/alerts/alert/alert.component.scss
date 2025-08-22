@@ -1,0 +1,132 @@
+$color-info: #004085;
+$color-success: #155724;
+$color-warning: #856404;
+$color-error: #721c24;
+
+$hover-color-info: #3366ff;
+$hover-color-success: #30a24d;
+$hover-color-warning: #b38600;
+$hover-color-error: #ff4c59;
+
+.clickable-area {
+	cursor: pointer;
+
+	.alert-container {
+		position: relative;
+		padding: 5px 15px;
+		margin: 0;
+		border-radius: 4px;
+		border-width: 1px;
+		border-style: solid;
+		overflow: hidden;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 6px 20px 0 rgba(0, 0, 0, 0.08);
+		z-index: 1020 !important;
+
+		/* grid layout + animations */
+		display: grid;
+		grid-template-rows: 1fr;         // keep your row animation target
+		grid-template-columns: 1fr auto; // text | close button in one row
+		column-gap: 15px;                 // spacing between text and button
+		align-items: center;
+		transition:
+		grid-template-rows .5s ease,
+		opacity .5s ease,
+		border-width .5s ease;
+
+		.alert-text {
+			min-width: 0;                 /* allow shrinking so button stays on same row */
+			font: 400 16px/20px Roboto;
+			overflow-wrap: anywhere;      /* prevent long tokens from forcing overflow */
+			word-break: break-word;
+			transition: opacity .1s linear; /* will be overridden per enter/leave */
+		}
+
+		.btn-dismiss {
+			align-self: baseline;
+			cursor: pointer;
+			justify-self: end;
+		}
+	}
+
+	/* ENTER */
+	.alert-enter {
+		opacity: 1;
+		grid-template-rows: 1fr;
+		border-width: 1px;
+		transition:
+			grid-template-rows .3s ease,
+			opacity .3s ease,
+			border-width .3s ease;
+
+		@starting-style {
+			opacity: 0;
+			grid-template-rows: 0fr;
+			border-width: 0;
+		}
+
+		.alert-text {
+			opacity: 1;
+			transition: opacity .1s linear .3s;
+			@starting-style { opacity: 0; }
+		}
+	}
+
+	/* LEAVE */
+	.alert-leave {
+		opacity: 0;
+		grid-template-rows: 0fr;
+		border-width: 0;
+		transition:
+			grid-template-rows .5s ease,
+			opacity .5s ease,
+			border-width .5s ease;
+			
+		.alert-text {
+			opacity: 0;
+			transition: opacity .05s linear;
+		}
+	}
+
+
+	/* Alert types */
+
+	.alert-info {
+		color: $color-info;
+		border-color: $color-info;
+		background-color: #b8daff;
+
+		.btn-dismiss:hover {
+			text-shadow: 0 0 10px $hover-color-info, 0 0 20px $hover-color-info;
+		}
+	}
+
+	.alert-success {
+		color: $color-success;
+		border-color: $color-success;
+		background-color: #c3e6cb;
+
+		.btn-dismiss:hover {
+			text-shadow: 0 0 10px $hover-color-success, 0 0 20px $hover-color-success;
+		}
+	}
+
+	.alert-warning {
+		color: $color-warning;
+		border-color: $color-warning;
+		background-color: #ffeeba;
+
+		.btn-dismiss:hover {
+			text-shadow: 0 0 10px $hover-color-warning, 0 0 20px $hover-color-warning;
+		}
+	}
+
+	.alert-error {
+		color: $color-error;
+		border-color: $color-error;
+		background-color: #f8d7da;
+
+		.btn-dismiss:hover {
+			text-shadow: 0 0 10px $hover-color-error, 0 0 20px $hover-color-error;
+		}
+	}
+}

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, auditTime } from 'rxjs';
-import { AlertState } from './core/models/alert-state';
-import { AlertType } from './core/models/alert-type';
-import { Alert } from './core/models/alert.model';
+import { AlertState } from './models/alert-state';
+import { AlertType } from './models/alert-type';
+import { Alert } from './models/alert.model';
 
 @Injectable({
   providedIn: 'root'

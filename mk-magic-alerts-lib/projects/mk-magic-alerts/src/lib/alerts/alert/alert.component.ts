@@ -1,22 +1,22 @@
-import { AnimationEvent } from '@angular/animations';
-import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, fromEvent, race, timer } from 'rxjs';
-import { first, repeat, takeUntil, tap } from 'rxjs/operators';
-import { AlertsStore } from '../../alerts.store';
+import { repeat, take, takeUntil, tap } from 'rxjs/operators';
+import { AlertsStore } from '../alerts.store';
 import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
 import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
-import { alertAnimations } from './alert-animations';
 
 @Component({
     selector: 'app-alert',
     templateUrl: './alert.component.html',
     styleUrls: ['./alert.component.scss'],
-    animations: alertAnimations,
     imports: [NewlineAndTabsPipe]
 })
 
 export class AlertComponent implements OnInit, OnDestroy {
+	private readonly elementRef = inject(ElementRef<HTMLElement>);
+	private readonly alertsStore = inject(AlertsStore);
+	private readonly cdr = inject(ChangeDetectorRef);
 
 	@Input({ required: true })
 	alertParams!: Alert;
@@ -26,17 +26,15 @@ export class AlertComponent implements OnInit, OnDestroy {
 
 	private destroy$ = new Subject<void>();
 
-	constructor(private readonly elementRef: ElementRef<HTMLElement>,
-				private alertsStore: AlertsStore,
-				private cdRef: ChangeDetectorRef) {}
 
 	ngOnInit(): void {
+		const el = this.elementRef.nativeElement;
 
-		const mouseenter$: Observable<Event> = fromEvent(this.elementRef.nativeElement, 'mouseenter');
-		const mouseleave$: Observable<Event> = fromEvent(this.elementRef.nativeElement, 'mouseleave');
+		const mouseenter$: Observable<Event> = fromEvent(el, 'mouseenter');
+		const mouseleave$: Observable<Event> = fromEvent(el, 'mouseleave');
 
 		// Observable that allows closing of the alert by user-click:
-		const dismissalByUser$: Observable<Event> = fromEvent(this.elementRef.nativeElement, 'mouseup');
+		const dismissalByUser$: Observable<Event> = fromEvent(el, 'mouseup');
 
 		// If dismissal is requested programmatically from alerts-service:
 		const dismissalByService$: Observable<void> = this.alertsStore.dismissAll$;
@@ -49,7 +47,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 
 		race([dismissalByUser$, dismissalByService$, dismissalAfterTimeout$])
 			.pipe(
-				first(), // after first emission, unsubscribe also from the winning observable
+				take(1), // after first emission, unsubscribe also from the winning observable
 				tap(() => this.setDismissalStart()),
 				takeUntil(this.destroy$)
 			)
@@ -58,21 +56,26 @@ export class AlertComponent implements OnInit, OnDestroy {
 
 	/* Triggers the animated disappearing of the alert */
 	setDismissalStart() {
-		this.alertParams.state = AlertState.DISMISS;
-		this.cdRef.detectChanges();
+		if (this.alertParams.state !== AlertState.DISMISS) {
+			this.alertParams.state = AlertState.DISMISS;
+			// Zoneless: this runs from RxJS/DOM listeners, so request a render
+			this.cdr.detectChanges();
+		}
 	}
 
-	/* Is evoked at the end of the animated disappearing of the alert */
-	onDismissalCompleted(event: AnimationEvent) {
-		if (event.fromState === AlertState.DISPLAY && event.toState === AlertState.DISMISS) {
+	/** After the leave transition finishes, mark as DISMISSED */
+	onContainerTransitionEnd(e: TransitionEvent) {
+		// Listen for a property used in your leave transition
+		if (this.alertParams.state === AlertState.DISMISS &&
+			(e.propertyName === 'grid-template-rows' || e.propertyName === 'opacity')) {
 			this.alertParams.state = AlertState.DISMISSED;
-			this.cdRef.detectChanges();
+			this.cdr.detectChanges();
 		}
 	}
 
 
 	ngOnDestroy(): void {
 		this.destroy$.next();
-		this.destroy$.unsubscribe();
+		this.destroy$.complete();
 	}
 }

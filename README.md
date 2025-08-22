@@ -7,8 +7,7 @@
 Display animated success-, info-, warning- and error-alerts in your Angular application.
 
 The latest library version is compatible with **Angular 20**.
-
-**Breaking change**: As of version 17.2.0, the import of `MkMagicAlertsModule` is no longer needed for standalone components.
+Starting with version 20.1.0, `mk-magic-alerts` is fully **zoneless-compatible**. 
 
 ---
 
@@ -23,10 +22,7 @@ https://mkeller1992.github.io/mk-magic-messages-library
 ```
 npm i mk-magic-alerts
 ```
-`@angular/animations package` is a required dependency for this library
-```
-npm install @angular/animations
-```
+
 ## Setup
 
 ### For apps based on `Standalone Components`

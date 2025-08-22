@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AlertsService, MockAlertsService } from '@mk-magic-alerts';
 import { AppComponent } from './app.component';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -15,6 +16,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
+		provideZonelessChangeDetection(),
         { provide: AlertsService, useClass: MockAlertsService }
       ]
     }).compileComponents();

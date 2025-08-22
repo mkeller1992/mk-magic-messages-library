@@ -2,8 +2,8 @@ import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AlertsStore } from './alerts.store';
-import { AlertComponent } from './core/alert/alert.component';
-import { Alert } from './core/models/alert.model';
+import { AlertComponent } from './alert/alert.component';
+import { Alert } from './models/alert.model';
 
 @Component({
     selector: 'magic-alerts',

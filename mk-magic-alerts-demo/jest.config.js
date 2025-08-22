@@ -8,7 +8,7 @@ module.exports = {
       '!<rootDir>/src/app/*.routes.ts', // Exclude route-files
     ],
     coverageReporters: ['html', 'text', 'text-summary', 'lcov'],
-        moduleNameMapper: {
+    moduleNameMapper: {
       '^@mk-magic-alerts$': '<rootDir>/../mk-magic-alerts-lib/projects/mk-magic-alerts/src/public-api.ts'
     },
     resolver: 'jest-ts-webcompat-resolver'

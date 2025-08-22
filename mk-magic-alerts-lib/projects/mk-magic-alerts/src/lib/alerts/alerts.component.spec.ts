@@ -1,11 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { AlertsComponent } from "./alerts.component";
 import { AlertsStore } from './alerts.store';
-import { AlertComponent } from './core/alert/alert.component';
-import { Alert } from "./core/models/alert.model";
+import { AlertComponent } from './alert/alert.component';
+import { Alert } from "./models/alert.model";
 
 
 @Component({
@@ -27,7 +26,7 @@ describe('AlertsComponent', () => {
   let fixture: ComponentFixture<AlertsComponent>;
   let alertsStore: Partial<AlertsStore>;
 
-  const infoAlertTxt = 'Info Alert';  
+  const infoAlertTxt = 'Info Alert';
   const errorAlertTxt = 'Error Alert';
 
 	beforeEach(() => {
@@ -39,8 +38,9 @@ describe('AlertsComponent', () => {
 
 		// configure the component
 		TestBed.configureTestingModule({
-			imports: [AlertsComponent, NoopAnimationsModule],
+			imports: [AlertsComponent],
 			providers: [
+				provideZonelessChangeDetection(),
 				{ provide: AlertComponent, useClass: MockAlertComponent },
 				{ provide: AlertsStore, useValue: alertsStore },
 			],
@@ -69,7 +69,7 @@ describe('AlertsComponent', () => {
 		expect(component.alerts$).toBeDefined();
 	});
 
-  
+
 	/*
 	it('should bind the messages$ observable to the template', () => {
 
@@ -86,7 +86,7 @@ describe('AlertsComponent', () => {
 
 		// Check text of second alert:
 		expect(alertComponentInstances[1].alertParams.text).toContain(errorAlertTxt);
-		expect(alertComponentInstances[1].dismissTimeInMillis).toEqual(500);	
+		expect(alertComponentInstances[1].dismissTimeInMillis).toEqual(500);
 	});
 	*/
 

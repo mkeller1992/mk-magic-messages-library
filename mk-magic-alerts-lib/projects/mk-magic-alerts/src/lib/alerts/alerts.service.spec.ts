@@ -1,4 +1,4 @@
-import { ApplicationRef, Injector } from '@angular/core';
+import { ApplicationRef, Injector, provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { AlertsService } from './alerts.service';
 import { AlertsStore } from './alerts.store';
@@ -23,10 +23,11 @@ describe('AlertsService', () => {
     */
 
     TestBed.configureTestingModule({
-      providers: [
-        { provide: AlertsStore, useValue: alertsStoreServiceMock },
-        AlertsService
-      ],
+		providers: [
+			provideZonelessChangeDetection(),
+			{ provide: AlertsStore, useValue: alertsStoreServiceMock },
+			AlertsService
+		],
     });
 
     service = TestBed.inject(AlertsService);
