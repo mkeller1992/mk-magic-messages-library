@@ -9,124 +9,129 @@ $hover-color-warning: #b38600;
 $hover-color-error: #ff4c59;
 
 .clickable-area {
-	cursor: pointer;
+  cursor: pointer;
+  margin-top: 5px;
 
-	.alert-container {
-		position: relative;
-		padding: 5px 15px;
-		margin: 0;
-		border-radius: 4px;
-		border-width: 1px;
-		border-style: solid;
-		overflow: hidden;
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 6px 20px 0 rgba(0, 0, 0, 0.08);
-		z-index: 1020 !important;
+  .alert-container {
+    position: relative;
+    padding: 5px 15px;
+    margin: 0;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
+    overflow: hidden; /* keep scale/height collapse tidy */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08), 0 6px 20px rgba(0,0,0,0.08);
+    z-index: 1020 !important;
 
-		/* grid layout + animations */
-		display: grid;
-		grid-template-rows: 1fr;         // keep your row animation target
-		grid-template-columns: 1fr auto; // text | close button in one row
-		column-gap: 15px;                 // spacing between text and button
-		align-items: center;
-		transition:
-		grid-template-rows .5s ease,
-		opacity .5s ease,
-		border-width .5s ease;
+    /* layout: keep close button on same row at far right */
+    display: grid;
+    grid-template-columns: 1fr auto; /* text | close */
+    column-gap: 15px;
+    align-items: center;
 
-		.alert-text {
-			min-width: 0;                 /* allow shrinking so button stays on same row */
-			font: 400 16px/20px Roboto;
-			overflow-wrap: anywhere;      /* prevent long tokens from forcing overflow */
-			word-break: break-word;
-			transition: opacity .1s linear; /* will be overridden per enter/leave */
-		}
+    /* anchor scale to top-left to reproduce “dot grows from top-left” */
+    transform-origin: 0 0;
+    transform-box: border-box;
 
-		.btn-dismiss {
-			align-self: baseline;
-			cursor: pointer;
-			justify-self: end;
-		}
-	}
+    .alert-text {
+      min-width: 0;
+      font: 400 16px/20px Roboto;
+      /* default opacity is fully visible; overridden in enter/leave phases */
+      transition: opacity .1s linear;
+    }
 
-	/* ENTER */
-	.alert-enter {
-		opacity: 1;
-		grid-template-rows: 1fr;
-		border-width: 1px;
-		transition:
-			grid-template-rows .3s ease,
-			opacity .3s ease,
-			border-width .3s ease;
+    .btn-dismiss {
+      justify-self: end;
+      align-self: baseline;
+      cursor: pointer;
+    }
+  }
 
-		@starting-style {
-			opacity: 0;
-			grid-template-rows: 0fr;
-			border-width: 0;
-		}
+  /* ===================== ENTER (void -> display) ===================== */
+  .alert-enter {
+    /* container end state after enter */
+    transform: scale(1);
+    opacity: 1;
+    border-width: 1px;
+    /* padding/margins are already at their natural values */
 
-		.alert-text {
-			opacity: 1;
-			transition: opacity .1s linear .3s;
-			@starting-style { opacity: 0; }
-		}
-	}
+    transition:
+      transform .3s ease,
+      opacity .3s ease,
+      border-width .3s ease;
 
-	/* LEAVE */
-	.alert-leave {
-		opacity: 0;
-		grid-template-rows: 0fr;
-		border-width: 0;
-		transition:
-			grid-template-rows .5s ease,
-			opacity .5s ease,
-			border-width .5s ease;
-			
-		.alert-text {
-			opacity: 0;
-			transition: opacity .05s linear;
-		}
-	}
+    /* starting state (emulates `state('void', ...)`) */
+    @starting-style {
+      transform: scale(0);  /* width/height: 0 “dot” */
+      opacity: 0;
+      border-width: 0;
+      /* padding remains, but scale(0) visually collapses */
+    }
 
+    /* sequence: show text after container expands */
+    .alert-text {
+      opacity: 1;
+      transition: opacity .1s linear .3s; /* 100ms, delayed by 300ms */
+      @starting-style { opacity: 0; }
+    }
+  }
 
-	/* Alert types */
+  /* ===================== LEAVE (display -> dismiss) ===================== */
+  .alert-leave {
+    /* group: fade text quickly while container collapses */
+    transform: scale(0); /* collapse to top-left */
+    opacity: 0;
+    border-width: 0;
 
-	.alert-info {
-		color: $color-info;
-		border-color: $color-info;
-		background-color: #b8daff;
+    transition:
+      transform .5s ease,   /* container duration 0.5s (matches group) */
+      opacity .5s ease,
+      border-width .5s ease;
 
-		.btn-dismiss:hover {
-			text-shadow: 0 0 10px $hover-color-info, 0 0 20px $hover-color-info;
-		}
-	}
+    .alert-text {
+      opacity: 0;
+      transition: opacity .05s linear; /* quick fade */
+    }
+  }
 
-	.alert-success {
-		color: $color-success;
-		border-color: $color-success;
-		background-color: #c3e6cb;
+  /* ===================== VARIANTS ===================== */
+  .alert-info {
+    color: $color-info;
+    border-color: $color-info;
+    background-color: #b8daff;
 
-		.btn-dismiss:hover {
-			text-shadow: 0 0 10px $hover-color-success, 0 0 20px $hover-color-success;
-		}
-	}
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-info, 0 0 20px $hover-color-info;
+    }
+  }
 
-	.alert-warning {
-		color: $color-warning;
-		border-color: $color-warning;
-		background-color: #ffeeba;
+  .alert-success {
+    color: $color-success;
+    border-color: $color-success;
+    background-color: #c3e6cb;
 
-		.btn-dismiss:hover {
-			text-shadow: 0 0 10px $hover-color-warning, 0 0 20px $hover-color-warning;
-		}
-	}
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-success, 0 0 20px $hover-color-success;
+    }
+  }
 
-	.alert-error {
-		color: $color-error;
-		border-color: $color-error;
-		background-color: #f8d7da;
+  .alert-warning {
+    color: $color-warning;
+    border-color: $color-warning;
+    background-color: #ffeeba;
 
-		.btn-dismiss:hover {
-			text-shadow: 0 0 10px $hover-color-error, 0 0 20px $hover-color-error;
-		}
-	}
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-warning, 0 0 20px $hover-color-warning;
+    }
+  }
+
+  .alert-error {
+    color: $color-error;
+    border-color: $color-error;
+    background-color: #f8d7da;
+
+    .btn-dismiss:hover {
+      text-shadow: 0 0 10px $hover-color-error, 0 0 20px $hover-color-error;
+    }
+  }
 }
