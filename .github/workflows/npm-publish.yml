@@ -4,10 +4,10 @@ on:
   push:
     branches: [ master ]
 
-# Needed for OIDC (Trusted Publishing)
+# Needed for OIDC (Trusted Publishing) and for pushing tags back to the repo
 permissions:
-  id-token: write
-  contents: read
+  id-token: write       # required for npm OIDC (Trusted Publishing)
+  contents: write       # required so github-actions[bot] may 'git push' tags
 
 jobs:
   build-and-publish:
@@ -20,6 +20,8 @@ jobs:
     steps:
       # Checkout the repository to the runner
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # ensure full history so tagging works reliably
 
       # Setup Node.js environment
       - name: Use Node.js
@@ -58,7 +60,7 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ env.CODECOV_TOKEN }}
-          slug: mkeller1992/mk-magic-messages-library
+          slug: mkeller1992/mk-magic-messages-library  # correct repo for coverage
 
       # Build the library from the specified subdirectory
       - name: Build Library
@@ -90,9 +92,12 @@ jobs:
         working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
         # No NODE_AUTH_TOKEN here — OIDC handles auth
 
-      # Tag commit
+      # Tag commit (push tag back to this repository using the built-in GITHUB_TOKEN)
       - name: Tag commit
         if: env.execute_publish == 'true' && success()
         run: |
+          # Configure git author for the automated tag
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag v${{ env.CURRENT_VERSION }}-lib
-          git push origin v${{ env.CURRENT_VERSION }}-lib
+          git push origin "v${{ env.CURRENT_VERSION }}-lib"
