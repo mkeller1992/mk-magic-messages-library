@@ -54,12 +54,13 @@ jobs:
         run: npm run test:ci
         working-directory: ${{ env.BASE_DIR }}
 
-      # Report test coverage (for badge on npm-library-mainpage)
+      # Upload coverage to Codecov.
+      # Since the Codecov GitHub App is installed we can upload without any token.
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ env.CODECOV_TOKEN }}
-          slug: mkeller1992/mk-magic-messages-library
+          files: ${{ env.BASE_DIR }}/coverage/lcov.info  # point directly to LCOV file for faster uploads
+          disable_search: true                           # skip auto-discovery to avoid noisy gcov/python warnings
 
       # Build the library from the specified subdirectory
       - name: Build Library
