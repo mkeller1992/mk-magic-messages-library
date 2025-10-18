@@ -15,7 +15,6 @@ jobs:
     env:
       BASE_DIR: ./mk-magic-alerts-lib
       PROJECT_NAME: mk-magic-alerts
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       # Checkout the repository to the runner
@@ -55,7 +54,7 @@ jobs:
         working-directory: ${{ env.BASE_DIR }}
 
       # Upload coverage to Codecov.
-      # Since the Codecov GitHub App is installed we can upload without any token.
+      # Upload coverage to Codecov (tokenless with Codecov GitHub App or public repo)
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
