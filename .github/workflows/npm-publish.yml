@@ -53,10 +53,11 @@ jobs:
         run: npm run test:ci
         working-directory: ${{ env.BASE_DIR }}
 
-      # Upload coverage to Codecov (tokenless with Codecov GitHub App or public repo)
+      # Upload coverage to Codecov (tokenless with OIDC + Codecov App)
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
+          use_oidc: true
           files: ${{ env.BASE_DIR }}/coverage/lcov.info  # point directly to LCOV file for faster uploads
           disable_search: true                           # skip auto-discovery to avoid noisy gcov/python warnings
 
