@@ -19,13 +19,20 @@ jobs:
 
     steps:
       # Checkout the repository to the runner
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # ensure full history so tagging works reliably
+      - uses: actions/checkout@v5
+
+      # Remove legacy npm configs from runner (avoids 'always-auth' warning in CI)
+      - name: Remove legacy npm configs
+        run: |
+          rm -f .npmrc || true
+          rm -f $HOME/.npmrc || true
+          npm config --location=project delete always-auth || true
+          npm config --location=user delete always-auth || true
+          npm config --location=global delete always-auth || true
 
       # Setup Node.js environment
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
