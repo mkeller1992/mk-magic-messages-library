@@ -82,6 +82,7 @@
           "builder": "@nrwl/jest:jest",          
           "options": {
             "polyfills": [],
+			"configPath": "jest.config.ts",
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss"
           }

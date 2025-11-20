@@ -27,7 +27,7 @@
         "test": {
           "builder": "@nrwl/jest:jest",
             "options": {
-              "configPath": "../../jest.config.ts"
+              "configPath": "jest.config.ts"
             }
         }
       }

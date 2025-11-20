@@ -3,24 +3,19 @@
   "compileOnSave": false,
   "compilerOptions": {
 	"baseUrl": "./",
-    "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
 	"noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "mk-magic-alerts": [
-        "dist/mk-magic-alerts"
-      ]
-    },
 	"skipLibCheck": true,
 	"isolatedModules": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
 	"forceConsistentCasingInFileNames": true,
-    "moduleResolution": "bundler",
+	"useDefineForClassFields": false,
     "importHelpers": true,
+	"moduleResolution": "bundler",
     "target": "ES2022",
     "module": "ES2022"
   },
