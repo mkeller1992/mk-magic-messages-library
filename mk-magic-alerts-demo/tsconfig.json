@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
     "strict": true,
     "resolveJsonModule": true,
     "noImplicitOverride": true,
@@ -10,9 +9,13 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
+
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "useDefineForClassFields": false,
+
     "moduleResolution": "bundler",
     "target": "ES2022",
     "module": "ES2022",
@@ -21,7 +24,6 @@
         "../mk-magic-alerts-lib/dist/mk-magic-alerts"
       ]
     },
-    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
