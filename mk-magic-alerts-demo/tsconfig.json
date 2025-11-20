@@ -22,7 +22,7 @@
     "module": "preserve",
     "paths": {
       "@mk-magic-alerts": [
-        "../mk-magic-alerts-lib/dist/mk-magic-alerts"
+        "../mk-magic-alerts-lib/projects/mk-magic-alerts/src/public-api.ts"
       ]
     },
   },
