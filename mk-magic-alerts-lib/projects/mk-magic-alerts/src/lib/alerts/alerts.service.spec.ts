@@ -1,4 +1,4 @@
-import { ApplicationRef, Injector, provideZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { AlertsService } from './alerts.service';
 import { AlertsStore } from './alerts.store';
@@ -12,15 +12,6 @@ describe('AlertsService', () => {
       addAlert: jest.fn(),
       dismissAll: jest.fn(),
     };
-
-    /*
-    const applicationRefMock = {
-      injector: jest.fn(),
-      attachView: jest.fn()
-    };
-
-    const injectorMock = {};
-    */
 
     TestBed.configureTestingModule({
 		providers: [

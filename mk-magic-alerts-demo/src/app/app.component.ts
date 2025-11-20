@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertsService } from '@mk-magic-alerts';
 import packageJson from '../../package.json';
@@ -10,24 +10,24 @@ import packageJson from '../../package.json';
     imports: [ReactiveFormsModule]
 })
 export class AppComponent implements OnInit {
-  title = 'mk-magic-alerts-demo';
-  alertsForm: FormGroup;
+	private readonly msgSvc = inject(AlertsService);
 
-  constructor(private msgSvc: AlertsService) {
-    this.alertsForm = new FormGroup({
-      successAlert: new FormControl('Success!', Validators.required),
-      successDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
-      errorAlert: new FormControl('Error!', Validators.required),
-      errorDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
-      infoAlert: new FormControl('Info!', Validators.required),
-      infoDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
-      warningAlert: new FormControl('Warning!', Validators.required),
-      warningDuration: new FormControl(3, [Validators.required, Validators.min(1)])
-    });
-  }
+	title = 'mk-magic-alerts-demo';
+	alertsForm!: FormGroup;
 
 	ngOnInit(): void {
 		console.log(`Frontend Version: v${packageJson?.version}`);
+
+		this.alertsForm = new FormGroup({
+			successAlert: new FormControl('Success!', Validators.required),
+			successDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
+			errorAlert: new FormControl('Error!', Validators.required),
+			errorDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
+			infoAlert: new FormControl('Info!', Validators.required),
+			infoDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
+			warningAlert: new FormControl('Warning!', Validators.required),
+			warningDuration: new FormControl(3, [Validators.required, Validators.min(1)])
+		});
 
 		this.displaySuccess('Success-Alert', 5);
 		setTimeout(() => this.displayError('Error-Alert', 5), 500);

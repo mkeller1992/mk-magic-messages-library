@@ -65,7 +65,7 @@ export class AppModule { }
 ```typescript
 import { AlertsService } from 'mk-magic-alerts';
 
-constructor(private alertsSvc: AlertsService){}
+private readonly alertsSvc = inject(AlertsService);
 
 ngOnInit(): void {
   const displayDurationInMillis = 3000;		

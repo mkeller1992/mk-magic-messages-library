@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AlertsStore } from './alerts.store';
 import { AlertComponent } from './alert/alert.component';
@@ -12,8 +12,7 @@ import { Alert } from './models/alert.model';
     imports: [AlertComponent, AsyncPipe]
 })
 export class AlertsComponent {
+	private readonly alertsStore = inject(AlertsStore);
 
 	alerts$: Observable<Alert[]> = this.alertsStore.alerts$;
-
-	constructor(private alertsStore: AlertsStore) { }
 }
