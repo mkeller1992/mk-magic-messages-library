@@ -6,7 +6,7 @@
 
 Display animated success-, info-, warning- and error-alerts in your Angular application.
 
-The latest library version is compatible with **Angular 20**.
+The latest library version is compatible with **Angular 21**.
 Starting with version 20.1.0, `mk-magic-alerts` is fully **zoneless-compatible**. 
 
 ---
