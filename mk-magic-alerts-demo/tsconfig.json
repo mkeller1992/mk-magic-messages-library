@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-	"outDir": "./dist/out-tsc",
     "strict": true,
     "resolveJsonModule": true,
     "noImplicitOverride": true,
@@ -20,7 +19,7 @@
 
     "moduleResolution": "bundler",
     "target": "ES2022",
-    "module": "ES2022",
+    "module": "preserve",
     "paths": {
       "@mk-magic-alerts": [
         "../mk-magic-alerts-lib/dist/mk-magic-alerts"
