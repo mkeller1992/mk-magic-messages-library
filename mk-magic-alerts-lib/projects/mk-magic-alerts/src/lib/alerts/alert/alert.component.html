@@ -1,14 +1,14 @@
-@if (alertParams) {
+@if (alertParams(); as params) {
   <div class="clickable-area">
-    @if (alertParams.state === 'display') {
+    @if (isDisplayed()) {
       <div
-	  	#container
-        class="alert-container alert-{{ alertParams.type }}"
+        #container
+        class="alert-container alert-{{ params.type }}"
         animate.enter="alert-enter"
         animate.leave="alert-leave"
         (transitionend)="onContainerTransitionEnd($event)">
 
-        <div class="alert-text" [innerHtml]="alertParams.text | newlineAndTabs"></div>
+        <div class="alert-text" [innerHtml]="params.text | newlineAndTabs"></div>
 
         <div class="btn-dismiss">
           <i class="fa fa-times"></i>

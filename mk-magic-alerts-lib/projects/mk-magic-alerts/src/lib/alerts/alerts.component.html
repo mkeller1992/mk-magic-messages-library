@@ -1,11 +1,9 @@
-
-
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
 <!-- Alerts Container -->
 <div id="mk-magic-messages" class="alerts-container">
-	@for(alertParams of alerts$ | async; track alertParams) {
+	@for (alertParams of alerts(); track alertParams.id) {
 		<app-alert
 			[alertParams]="alertParams"
 			[dismissTimeInMillis]="alertParams.dismissTimeInMillis">

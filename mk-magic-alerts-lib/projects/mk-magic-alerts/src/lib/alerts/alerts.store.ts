@@ -1,36 +1,53 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, Observable, Subject, auditTime } from 'rxjs';
 import { AlertState } from './models/alert-state';
 import { AlertType } from './models/alert-type';
 import { Alert } from './models/alert.model';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AlertsStore {
+@Service()
 
-	private alertsSubject = new BehaviorSubject<Alert[]>([]);
+export class AlertsStore {
+	private readonly alertsSubject = new BehaviorSubject<Alert[]>([]);
+
+	private nextAlertId = 1;
 
 	// Added 'auditTime(100)' to prevent error 'NG0100: Expression has changed after it was checked'
-	alerts$: Observable<Alert[]> = this.alertsSubject.asObservable().pipe(auditTime(100));
+	private readonly alertsAudited$: Observable<Alert[]> = this.alertsSubject.asObservable().pipe(
+		auditTime(100)
+	);
 
-	private dismissAllSubject = new Subject<void>();
+	readonly alerts = toSignal(this.alertsAudited$, { initialValue: [] });
 
-	dismissAll$: Observable<void> = this.dismissAllSubject.asObservable();
+	private readonly dismissAllSubject = new Subject<void>();
 
-	dismissAll() {
+	readonly dismissAll$: Observable<void> = this.dismissAllSubject.asObservable();
+
+	dismissAll(): void {
 		this.dismissAllSubject.next();
 	}
 
-	addAlert(text: string, type: AlertType, dismissTime: number) {
+	addAlert(text: string, type: AlertType, dismissTimeInMillis: number): void {
 		// Remove already dismissed alerts
 		// filter() makes a shallow copy of the array (a new array, but pointing to the same objects)
-		const activeAlerts = this.alertsSubject.getValue().filter((m) => m.state !== AlertState.DISMISSED);
+		 const activeAlerts = this.alertsSubject
+			.getValue()
+			.filter((alert) => alert.state !== AlertState.DISMISSED);
 
 		// Create and add new message:
-		activeAlerts.push(new Alert(text, type, dismissTime));
+		this.alertsSubject.next([
+			...activeAlerts,
+			this.createAlert(text, type, dismissTimeInMillis)
+		]);
+	}
 
-		// Trigger Observable to display alerts:
-		this.alertsSubject.next(activeAlerts);
+	private createAlert(text: string, type: AlertType, dismissTimeInMillis: number): Alert {
+		return {
+			id: `alert-${this.nextAlertId++}`,
+			text,
+			type,
+			dismissTimeInMillis,
+			state: AlertState.DISPLAY
+		};
 	}
 }

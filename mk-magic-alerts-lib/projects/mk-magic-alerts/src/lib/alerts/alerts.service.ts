@@ -1,10 +1,8 @@
-import { ApplicationRef, ComponentRef, Injectable, Injector, createComponent, inject } from '@angular/core';
+import { ApplicationRef, ComponentRef, Injector, Service, createComponent, inject } from '@angular/core';
 import { AlertsStore } from './alerts.store';
 import { AlertsComponent } from './alerts.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 
 export class AlertsService {
 	private readonly alertsStore = inject(AlertsStore);
@@ -24,9 +22,9 @@ export class AlertsService {
 	
 		// Create AlertsComponent and attach it to the DOM
 		this.alertsComponentRef = createComponent(AlertsComponent, {
-		hostElement,
-		environmentInjector: this.applicationRef.injector,
-		elementInjector: this.injector
+			hostElement,
+			environmentInjector: this.applicationRef.injector,
+			elementInjector: this.injector
 		});
 	
 		// Attach the AlertsComponent to the application
