@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertsService } from '@mk-magic-alerts';
 import packageJson from '../../package.json';
@@ -7,6 +7,7 @@ import packageJson from '../../package.json';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ReactiveFormsModule]
 })
 export class AppComponent implements OnInit {
