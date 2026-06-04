@@ -25,31 +25,31 @@
           "defaultConfiguration": "production"
         },
 		"test": {
-		"builder": "@angular/build:unit-test",
-		"options": {
-			"tsConfig": "tsconfig.spec.json",
-			"runnerConfig": "vitest.config.ts",
-			"providersFile": "projects/mk-magic-alerts/src/test-providers.ts",
-			"coverage": true,
-			"coverageInclude": [
-				"projects/mk-magic-alerts/src/**/*.ts"
-			],
-			"coverageExclude": [
-				"projects/mk-magic-alerts/src/**/*.spec.ts",
-				"projects/mk-magic-alerts/src/test-providers.ts",
-				"projects/mk-magic-alerts/src/public-api.ts",
-				"projects/mk-magic-alerts/src/lib/**/*.module.ts",
-				"projects/mk-magic-alerts/src/lib/**/mocks/**/*.ts",
-				"projects/mk-magic-alerts/src/lib/**/test-helpers/**/*.ts"
-			],
-			"coverageReporters": [
-				"html",
-				"text",
-				"text-summary",
-				"lcov"
-			]
+			"builder": "@angular/build:unit-test",
+			"options": {
+				"tsConfig": "tsconfig.spec.json",
+				"runnerConfig": "vitest.config.ts",
+				"providersFile": "projects/mk-magic-alerts/src/test-providers.ts",
+				"coverage": true,
+				"coverageInclude": [
+					"projects/mk-magic-alerts/src/**/*.ts"
+				],
+				"coverageExclude": [
+					"projects/mk-magic-alerts/src/**/*.spec.ts",
+					"projects/mk-magic-alerts/src/test-providers.ts",
+					"projects/mk-magic-alerts/src/public-api.ts",
+					"projects/mk-magic-alerts/src/lib/**/*.module.ts",
+					"projects/mk-magic-alerts/src/lib/**/mocks/**/*.ts",
+					"projects/mk-magic-alerts/src/lib/**/test-helpers/**/*.ts"
+				],
+				"coverageReporters": [
+					"html",
+					"text",
+					"text-summary",
+					"lcov"
+				]
+			}
 		}
-}
       }
     }
   },
