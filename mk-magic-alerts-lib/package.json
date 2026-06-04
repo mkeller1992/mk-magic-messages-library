@@ -2,12 +2,12 @@
 	"name": "mk-magic-alerts-lib",
 	"version": "0.0.0",
 	"scripts": {
-	"build": "ng build",
-	"watch": "ng build --watch --configuration development",
-	"test": "ng test --coverage",
-	"test:watch": "ng test --watch",
-	"test:ci": "ng test --watch=false --coverage",
-	"reinstall": "npx -y -p rimraf@latest rimraf node_modules package-lock.json && npm i --force"
+		"build": "ng build",
+		"watch": "ng build --watch --configuration development",
+		"test": "ng test --coverage",
+		"test:watch": "ng test --watch",
+		"test:ci": "ng test --watch=false --coverage",
+		"reinstall": "npx -y -p rimraf@latest rimraf node_modules package-lock.json && npm i --force"
 	},
 	"private": true,
 	"dependencies": {
@@ -25,10 +25,11 @@
 		"@angular/build": "^22.0.0",
 		"@angular/cli": "~22.0.0",
 		"@angular/compiler-cli": "^22.0.0",
-		"vitest": "4.1.8",
+		"@types/node": "^25.9.1",
 		"@vitest/coverage-v8": "4.1.8",
 		"jsdom": "^29.1.1",
 		"ng-packagr": "^22.0.0",
-		"typescript": "6.0.3"
+		"typescript": "6.0.3",
+		"vitest": "4.1.8"
 	}
 }

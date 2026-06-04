@@ -30,10 +30,11 @@
 		"@angular/build": "^22.0.0",
 		"@angular/cli": "~22.0.0",
 		"@angular/compiler-cli": "^22.0.0",
-		"vitest": "4.1.8",
+		"@types/node": "^25.9.1",
 		"@vitest/coverage-v8": "4.1.8",
 		"jsdom": "^29.1.1",
-		"typescript": "6.0.3"
+		"typescript": "6.0.3",
+		"vitest": "4.1.8"
 	},
 	"optionalDependencies": {
 		"@rollup/rollup-linux-x64-gnu": "*"
