@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, computed, inject, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, computed, inject, input, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, fromEvent, race, timer } from 'rxjs';
 import { repeat, take, takeUntil, tap } from 'rxjs/operators';
@@ -14,14 +14,12 @@ import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NewlineAndTabsPipe]
 })
-export class AlertComponent {
+export class AlertComponent implements OnInit {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly alertsStore = inject(AlertsStore);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly alertParams = input.required<Alert>();
-
-  readonly dismissTimeInMillis = input(2_147_483_647);
 
   readonly container = viewChild<ElementRef<HTMLElement>>('container');
 
@@ -29,7 +27,9 @@ export class AlertComponent {
 
   readonly isDisplayed = computed(() => this.state() === AlertState.DISPLAY);
 
-  constructor() {
+  readonly dismissTimeInMillis = computed(() => this.alertParams().dismissTimeInMillis);
+
+  ngOnInit(): void {
     const el = this.elementRef.nativeElement;
 
     const mouseenter$: Observable<Event> = fromEvent(el, 'mouseenter');

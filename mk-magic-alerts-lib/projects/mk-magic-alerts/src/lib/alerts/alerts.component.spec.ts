@@ -1,93 +1,100 @@
-import { Component, Input, provideZonelessChangeDetection } from '@angular/core';
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { of } from 'rxjs';
-import { AlertsComponent } from "./alerts.component";
-import { AlertsStore } from './alerts.store';
+import { Component, Input, provideZonelessChangeDetection, signal } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { AlertComponent } from './alert/alert.component';
-import { Alert } from "./models/alert.model";
-
+import { AlertsComponent } from './alerts.component';
+import { AlertsStore } from './alerts.store';
+import { AlertState } from './models/alert-state';
+import { Alert } from './models/alert.model';
 
 @Component({
-	selector: 'app-alert', // has to equal the selector of the real AlertComponent
-	template: '<div></div>', // Simplified template
-  })
-  class MockAlertComponent {
+  selector: 'app-alert', // Has to equal the selector of the real AlertComponent
+  template: '<div></div>'
+})
+class MockAlertComponent {
+  @Input({ required: true })
+  alertParams!: Alert;
 
-	@Input({ required: true })
-	alertParams!: Alert;
-
-	@Input()
-	dismissTimeInMillis = 0;
+  @Input()
+  dismissTimeInMillis = 0;
 }
-
 
 describe('AlertsComponent', () => {
   let component: AlertsComponent;
   let fixture: ComponentFixture<AlertsComponent>;
-  let alertsStore: Partial<AlertsStore>;
 
   const infoAlertTxt = 'Info Alert';
   const errorAlertTxt = 'Error Alert';
 
-	beforeEach(() => {
+  const alerts: Alert[] = [
+    {
+      id: 'alert-1',
+      text: infoAlertTxt,
+      type: 'info',
+      dismissTimeInMillis: 1000,
+      state: AlertState.DISPLAY
+    },
+    {
+      id: 'alert-2',
+      text: errorAlertTxt,
+      type: 'error',
+      dismissTimeInMillis: 500,
+      state: AlertState.DISPLAY
+    }
+  ];
 
-		alertsStore = {
-			dismissAll$: of(undefined),
-			alerts$: of([new Alert(infoAlertTxt, 'info', 1000), new Alert(errorAlertTxt, 'error', 500)])
-		}
+  const alertsStoreMock: Partial<AlertsStore> = {
+    alerts: signal(alerts)
+  };
 
-		// configure the component
-		TestBed.configureTestingModule({
-			imports: [AlertsComponent],
-			providers: [
-				provideZonelessChangeDetection(),
-				{ provide: AlertComponent, useClass: MockAlertComponent },
-				{ provide: AlertsStore, useValue: alertsStore },
-			],
-		})
-		.compileComponents();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AlertsComponent],
+      providers: [
+        provideZonelessChangeDetection(),
+        { provide: AlertsStore, useValue: alertsStoreMock }
+      ]
+    })
+      .overrideComponent(AlertsComponent, {
+        remove: {
+          imports: [AlertComponent]
+        },
+        add: {
+          imports: [MockAlertComponent]
+        }
+      })
+      .compileComponents();
 
-		// create a fixture for the component
-		fixture = TestBed.createComponent(AlertsComponent);
-		component = fixture.componentInstance;
+    fixture = TestBed.createComponent(AlertsComponent);
+    component = fixture.componentInstance;
 
-		// trigger change detection
-		fixture.detectChanges();
-	});
+    fixture.detectChanges();
+  });
 
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
+  });
 
-	it('should create the component', () => {
-		// assert that the component was created
-		expect(component).toBeTruthy();
-	});
+  it('should inject alerts from AlertsStore', () => {
+    expect(component.alerts).toBeDefined();
+    expect(component.alerts()).toEqual(alerts);
+  });
 
-	it('should inject AlertsStoreService', () => {
-		expect(alertsStore).toBeTruthy();
-	});
+  it('should render one AlertComponent per alert', () => {
+    const alertComponents = fixture.debugElement.queryAll(By.directive(MockAlertComponent));
 
-	it('should define alerts$', () => {
-		expect(component.alerts$).toBeDefined();
-	});
+    expect(alertComponents).toHaveLength(2);
+  });
 
+  it('should pass alertParams to child alert components', () => {
+    const alertComponents = fixture.debugElement.queryAll(By.directive(MockAlertComponent));
 
-	/*
-	it('should bind the messages$ observable to the template', () => {
+    const firstAlertComponent = alertComponents[0].componentInstance as MockAlertComponent;
+    const secondAlertComponent = alertComponents[1].componentInstance as MockAlertComponent;
 
-		// get the alerts element from the template
-		const alertDebugElements = fixture.debugElement.queryAll(By.directive(MockAlertComponent));
-		const alertComponentInstances: MockAlertComponent[] = alertDebugElements.map(x => x.componentInstance);
+    expect(firstAlertComponent.alertParams).toEqual(alerts[0]);
+    expect(secondAlertComponent.alertParams).toEqual(alerts[1]);
+  });
 
-		// assert that the alerts were rendered correctly
-		expect(alertComponentInstances.length).toEqual(2);
-
-		// Check properties of first alert
-		expect(alertComponentInstances[0].alertParams.text).toContain(infoAlertTxt);
-		expect(alertComponentInstances[0].dismissTimeInMillis).toEqual(1000);
-
-		// Check text of second alert:
-		expect(alertComponentInstances[1].alertParams.text).toContain(errorAlertTxt);
-		expect(alertComponentInstances[1].dismissTimeInMillis).toEqual(500);
-	});
-	*/
-
-})
+});

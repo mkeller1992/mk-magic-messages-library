@@ -126,7 +126,7 @@ To facilitate unit testing of components and services that depend on `AlertsServ
     it('should call showInfo method', () => {
       // Assuming you're inside a describe block for a component or service
       const alertsService = TestBed.inject(AlertsService);
-      const showInfoSpy = jest.spyOn(alertsService, 'showInfo');
+      const showInfoSpy = vi.spyOn(alertsService, 'showInfo');
       // Trigger the action that results in showInfo being called
       expect(showInfoSpy).toHaveBeenCalledWith('Expected text', 10000);
     });

@@ -78,15 +78,14 @@
           },
           "defaultConfiguration": "development"
         },
-        "test": {
-          "builder": "@nrwl/jest:jest",          
-          "options": {
-            "polyfills": [],
-			"configPath": "jest.config.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss"
-          }
-        }
+		"test": {
+			"builder": "@angular/build:unit-test",
+			"options": {
+				"tsConfig": "tsconfig.spec.json",
+				"runnerConfig": "vitest.config.ts",
+				"providersFile": "src/test-providers.ts"
+			}
+		}
       }
     }
   },

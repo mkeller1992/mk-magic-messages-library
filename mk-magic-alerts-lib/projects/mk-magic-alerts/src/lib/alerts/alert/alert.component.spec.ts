@@ -1,186 +1,205 @@
-import { ChangeDetectorRef, ElementRef, provideZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AlertsStore } from '../alerts.store';
 import { AlertState } from '../models/alert-state';
 import { Alert } from '../models/alert.model';
 import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
-	let component: AlertComponent;
-	let fixture: ComponentFixture<AlertComponent>;
-	let mockAlertsStoreService: Partial<AlertsStore>;
-	let mockElementRef: Partial<ElementRef>;
-	let dismissAllSubject: Subject<void>;
+  let component: AlertComponent;
+  let fixture: ComponentFixture<AlertComponent>;
+  let dismissAllSubject: Subject<void>;
 
-	beforeEach(async () => {
+  function createAlert(dismissTimeInMillis = 2000): Alert {
+    return {
+      id: 'alert-1',
+      text: 'Test Alert',
+      type: 'info',
+      dismissTimeInMillis,
+      state: AlertState.DISPLAY
+    };
+  }
 
-		dismissAllSubject = new Subject<void>();
+  beforeEach(async () => {
+    dismissAllSubject = new Subject<void>();
 
-		mockAlertsStoreService = {
-			dismissAll$: dismissAllSubject.asObservable(),
-		};
+    await TestBed.configureTestingModule({
+      imports: [AlertComponent],
+      providers: [
+        provideZonelessChangeDetection(),
+        {
+          provide: AlertsStore,
+          useValue: {
+            dismissAll$: dismissAllSubject.asObservable()
+          } satisfies Partial<AlertsStore>
+        }
+      ]
+    }).compileComponents();
 
-		mockElementRef = {
-			nativeElement: {
-				addEventListener: jest.fn(),
-				removeEventListener: jest.fn(),
-			},
-		};
+    fixture = TestBed.createComponent(AlertComponent);
+    component = fixture.componentInstance;
 
-		await TestBed.configureTestingModule({
-		imports: [AlertComponent],
-		providers: [
-			provideZonelessChangeDetection(),
-			{ provide: ElementRef, useValue: mockElementRef },
-			{ provide: AlertsStore, useValue: mockAlertsStoreService },
-			ChangeDetectorRef,
-		]
-		}).compileComponents();
+    fixture.componentRef.setInput('alertParams', createAlert());
+  });
 
-		fixture = TestBed.createComponent(AlertComponent);
-		component = fixture.componentInstance;
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
-		component.alertParams = new Alert('Test Alert', 'info', 2000);
-		component.dismissTimeInMillis = 2000;
-	});
+  it('should create', () => {
+    // Act
+    fixture.detectChanges();
 
-	afterEach(() => {
-		jest.useRealTimers();
-	});
+    // Assert
+    expect(component).toBeTruthy();
+  });
 
-	it('should create', () => {
-		// Act
-		fixture.detectChanges();
+  it('dismisses after timeout and becomes DISMISSED on transition end', () => {
+    // Arrange
+    vi.useFakeTimers();
 
-		// Assert
-		expect(component).toBeTruthy();
-	});
+    const dismissTimeInMillis = 3000;
 
-	it('dismisses after timeout and becomes DISMISSED on transition end', () => {
-		jest.useFakeTimers();
+    fixture.componentRef.setInput('alertParams', createAlert(dismissTimeInMillis));
 
-		const dismissTimeInMillis = 3000;
-		component.alertParams = new Alert('Test Alert', 'info', dismissTimeInMillis);
-		component.dismissTimeInMillis = dismissTimeInMillis;
+    const setDismissalStartSpy = vi.spyOn(component, 'setDismissalStart');
 
-		const setDismissalStartSpy = jest.spyOn(component, 'setDismissalStart');
+    // Act
+    fixture.detectChanges();
+    vi.advanceTimersByTime(dismissTimeInMillis);
 
-		// kick off ngOnInit subscriptions
-		fixture.detectChanges();
+    // Assert
+    expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
+    expect(component.state()).toBe(AlertState.DISMISS);
 
-		// fast-forward the dismissal timer
-		jest.advanceTimersByTime(dismissTimeInMillis);
+    // Act
+    component.onContainerTransitionEnd({ propertyName: 'opacity' } as TransitionEvent);
 
-		// after the timer, we should be transitioning out (DISMISS)
-		expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
-		expect(component.alertParams.state).toBe(AlertState.DISMISS);
+    // Assert
+    expect(component.state()).toBe(AlertState.DISMISSED);
+  });
 
-		// simulate the end of the CSS transition to finalize as DISMISSED
-		component.onContainerTransitionEnd({ propertyName: 'opacity' } as unknown as TransitionEvent);
-		// (or: { propertyName: 'opacity' })
+  it('should dismiss alert when dismissAll$ was called', () => {
+    // Arrange
+    const setDismissalStartSpy = vi.spyOn(component, 'setDismissalStart');
 
-		expect(component.alertParams.state).toBe(AlertState.DISMISSED);
+    // Act
+    fixture.detectChanges();
+    dismissAllSubject.next();
 
-		jest.useRealTimers();
-	});
+    // Assert
+    expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
+    expect(component.state()).toBe(AlertState.DISMISS);
+  });
 
-	it('should dismiss alert when dismissAll$ was called', () => {
-		// Arrange
-		const setDismissalStartSpy = jest.spyOn(component, 'setDismissalStart');
+  it('should dismiss alert on mouseup', () => {
+    // Arrange
+    const setDismissalStartSpy = vi.spyOn(component, 'setDismissalStart');
 
-		// Act
-		fixture.detectChanges();
-		dismissAllSubject.next();
+    // Act
+    fixture.detectChanges();
+    fixture.nativeElement.dispatchEvent(new Event('mouseup'));
 
-		// Assert
-		expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
-	});
+    // Assert
+    expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
+    expect(component.state()).toBe(AlertState.DISMISS);
+  });
 
-	it('should dismiss alert on mouseup', () => {
-		// Arrange
-		const setDismissalStartSpy = jest.spyOn(component, 'setDismissalStart');
+  it('should extend display-time of alert on mouseleave', () => {
+    // Arrange
+    vi.useFakeTimers();
 
-		// Act
-		fixture.detectChanges();
-		fixture.nativeElement.dispatchEvent(new Event('mouseup'));
+    const dismissTimeInMillis = 4000;
 
-		// Assert
-		expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
-	});
+    fixture.componentRef.setInput('alertParams', createAlert(dismissTimeInMillis));
 
-	it('should extend display-time of alert on mouseleave', () => {
-		// Arrange
-		jest.useFakeTimers();
-		const dismissTimeInMillis = 4000;
-		component.alertParams = new Alert('Test Alert', 'info', dismissTimeInMillis);
-		component.dismissTimeInMillis = dismissTimeInMillis;
-		const setDismissalStartSpy = jest.spyOn(component, 'setDismissalStart');
+    const setDismissalStartSpy = vi.spyOn(component, 'setDismissalStart');
 
-		// Act
-		fixture.detectChanges();
-		jest.advanceTimersByTime(3000);
-		fixture.nativeElement.dispatchEvent(new Event('mouseenter'));
-		fixture.nativeElement.dispatchEvent(new Event('mouseleave'));
-		jest.advanceTimersByTime(1000);
+    // Act
+    fixture.detectChanges();
 
-		// Assert
-		// after altogether 4 sec the alert should not yet be dismissed,
-		// because mouseleave should have extended the display-time by another 4 sec:
-		expect(setDismissalStartSpy).toHaveBeenCalledTimes(0);
+    vi.advanceTimersByTime(3000);
 
-		// Act
-		jest.advanceTimersByTime(3000);
+    fixture.nativeElement.dispatchEvent(new Event('mouseenter'));
+    fixture.nativeElement.dispatchEvent(new Event('mouseleave'));
 
-		// Assert
-		// 4 sec after mouseleave (1000 + 3000 ms) the alert should be dismissed:
-		expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
-	});
+    vi.advanceTimersByTime(1000);
 
-	it('should *not* dismiss alert as long as mouse is placed above alert', () => {
-		// Arrange
-		jest.useFakeTimers();
-		const setDismissalStartSpy = jest.spyOn(component, 'setDismissalStart');
+    // Assert
+    // After altogether 4 sec the alert should not yet be dismissed,
+    // because mouseleave should have extended the display-time by another 4 sec:
+    expect(setDismissalStartSpy).toHaveBeenCalledTimes(0);
 
-		// Act
-		fixture.detectChanges();
-		fixture.nativeElement.dispatchEvent(new Event('mouseenter'));
-		jest.advanceTimersByTime(100_000);
+    // Act
+    vi.advanceTimersByTime(3000);
 
-		// Assert
-		expect(setDismissalStartSpy).toHaveBeenCalledTimes(0);
-	});
+    // Assert
+    // 4 sec after mouseleave (1000 + 3000 ms) the alert should be dismissed:
+    expect(setDismissalStartSpy).toHaveBeenCalledTimes(1);
+    expect(component.state()).toBe(AlertState.DISMISS);
+  });
 
-	it('should set alert state to DISMISS when dismissal starts', () => {
-		// Act
-		component.setDismissalStart();
+  it('should *not* dismiss alert as long as mouse is placed above alert', () => {
+    // Arrange
+    vi.useFakeTimers();
 
-		// Assert
-		expect(component.alertParams.state).toBe(AlertState.DISMISS);
-	});
+    const setDismissalStartSpy = vi.spyOn(component, 'setDismissalStart');
 
-	it('should update alert state to DISMISSED after leave transition ends', () => {
-		// Arrange: component is in the middle of dismissing
-		component.alertParams = { state: AlertState.DISMISS } as any;
+    // Act
+    fixture.detectChanges();
 
-		// Act: simulate the relevant CSS transition finishing
-		const evt = { propertyName: 'opacity' } as unknown as TransitionEvent;
-		component.onContainerTransitionEnd(evt);
+    fixture.nativeElement.dispatchEvent(new Event('mouseenter'));
+    vi.advanceTimersByTime(100_000);
 
-		// Assert
-		expect(component.alertParams.state).toBe(AlertState.DISMISSED);
-	});
+    // Assert
+    expect(setDismissalStartSpy).toHaveBeenCalledTimes(0);
+    expect(component.state()).toBe(AlertState.DISPLAY);
+  });
 
-	it('should clean up subscriptions on destroy', () => {
-		// Arrange
-		const unsubscribeSpy = jest.spyOn(component['destroy$'], 'complete');
+  it('should set alert state to DISMISS when dismissal starts', () => {
+    // Act
+    fixture.detectChanges();
+    component.setDismissalStart();
 
-		// Act
-		fixture.detectChanges();
-		fixture.destroy();
+    // Assert
+    expect(component.state()).toBe(AlertState.DISMISS);
+  });
 
-		// Assert
-		expect(unsubscribeSpy).toHaveBeenCalled();
-	});
+  it('should update alert state to DISMISSED after leave transition ends', () => {
+    // Arrange
+    component.state.set(AlertState.DISMISS);
 
+    // Act
+    component.onContainerTransitionEnd({ propertyName: 'opacity' } as TransitionEvent);
+
+    // Assert
+    expect(component.state()).toBe(AlertState.DISMISSED);
+  });
+
+  it('should ignore irrelevant transition properties', () => {
+    // Arrange
+    component.state.set(AlertState.DISMISS);
+
+    // Act
+    component.onContainerTransitionEnd({ propertyName: 'color' } as TransitionEvent);
+
+    // Assert
+    expect(component.state()).toBe(AlertState.DISMISS);
+  });
+
+  it('should clean up subscriptions on destroy', () => {
+    // Arrange
+    const setDismissalStartSpy = vi.spyOn(component, 'setDismissalStart');
+
+    fixture.detectChanges();
+
+    // Act
+    fixture.destroy();
+    dismissAllSubject.next();
+
+    // Assert
+    expect(setDismissalStartSpy).toHaveBeenCalledTimes(0);
+  });
 });

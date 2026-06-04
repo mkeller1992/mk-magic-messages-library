@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AlertsService, MockAlertsService } from '@mk-magic-alerts';
 import { AppComponent } from './app.component';
@@ -11,7 +12,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
 
     // Suppress console.logs
-    jest.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
 
     await TestBed.configureTestingModule({
       imports: [AppComponent],
@@ -28,7 +29,7 @@ describe('AppComponent', () => {
   });
 
   afterEach(() => {
-    jest.useRealTimers(); // Clean up and use real timers after tests
+    vi.useRealTimers(); // Clean up and use real timers after tests
   });
 
   it('should create', () => {
@@ -36,12 +37,12 @@ describe('AppComponent', () => {
   });
 
   it('should call AlertsService methods on ngOnInit', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const showSuccessSpy = jest.spyOn(mockAlertsService, 'showSuccess');
-    const showErrorSpy = jest.spyOn(mockAlertsService, 'showError');
-    const showInfoSpy = jest.spyOn(mockAlertsService, 'showInfo');
-    const showWarningSpy = jest.spyOn(mockAlertsService, 'showWarning');
+    const showSuccessSpy = vi.spyOn(mockAlertsService, 'showSuccess');
+    const showErrorSpy = vi.spyOn(mockAlertsService, 'showError');
+    const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
+    const showWarningSpy = vi.spyOn(mockAlertsService, 'showWarning');
 
     component.ngOnInit();
 
@@ -49,14 +50,14 @@ describe('AppComponent', () => {
     expect(showSuccessSpy).toHaveBeenCalledWith('Success-Alert', 5_000);
 
     // Advance timers just enough for the first setTimeout to trigger
-    jest.advanceTimersByTime(500);
+    vi.advanceTimersByTime(500);
     expect(showErrorSpy).toHaveBeenCalledWith('Error-Alert', 5_000);
 
     // Advance timers to trigger the second setTimeout
-    jest.advanceTimersByTime(500);
+    vi.advanceTimersByTime(500);
     expect(showInfoSpy).toHaveBeenCalledWith('Info-Alert', 5_000);
     // Advance timers for the third setTimeout
-    jest.advanceTimersByTime(500);
+    vi.advanceTimersByTime(500);
     expect(showWarningSpy).toHaveBeenCalledWith('Warning-Alert', 5_000);
   });
 });

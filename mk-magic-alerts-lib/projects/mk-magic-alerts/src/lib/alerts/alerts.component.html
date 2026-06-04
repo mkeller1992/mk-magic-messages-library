@@ -5,8 +5,7 @@
 <div id="mk-magic-messages" class="alerts-container">
 	@for (alertParams of alerts(); track alertParams.id) {
 		<app-alert
-			[alertParams]="alertParams"
-			[dismissTimeInMillis]="alertParams.dismissTimeInMillis">
+			[alertParams]="alertParams">
 		</app-alert>
 	}
 </div>
