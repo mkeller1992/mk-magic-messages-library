@@ -120,7 +120,7 @@ To facilitate unit testing of components and services that depend on `AlertsServ
     });
     ```
 
-3. **Spying on Methods**: In your tests, you can now spy on the `MockAlertsService` methods using Jest's `spyOn` method. This allows you to mock return values, verify that the methods were called, and inspect the arguments passed to them.
+3. **Spying on Methods**: In your tests, you can now spy on the `MockAlertsService` methods using vitest's `spyOn` method. This allows you to mock return values, verify that the methods were called, and inspect the arguments passed to them.
 
     ```typescript
     it('should call showInfo method', () => {
