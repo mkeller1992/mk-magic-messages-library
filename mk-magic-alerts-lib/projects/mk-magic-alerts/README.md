@@ -65,6 +65,7 @@ Available entry animations:
 | `AlertEntryAnimation.DOT` | Starts as a small dot in the top-left corner and grows into the alert. |
 | `AlertEntryAnimation.BURST` | Pops out from the center with a short, elastic overshoot. |
 | `AlertEntryAnimation.DROP` | Drops in from above with a subtle bounce. |
+| `AlertEntryAnimation.SLIDE_LEFT` | Slides in horizontally from the left. |
 | `AlertEntryAnimation.SLIDE_RIGHT` | Slides in horizontally from the right. |
 | `AlertEntryAnimation.UNFOLD` | Opens vertically from the top, like unfolding paper. |
 

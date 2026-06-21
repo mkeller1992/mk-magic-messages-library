@@ -2,6 +2,7 @@ export const AlertEntryAnimation = {
   DOT: 'dot',
   BURST: 'burst',
   DROP: 'drop',
+  SLIDE_LEFT: 'slide-left',
   SLIDE_RIGHT: 'slide-right',
   UNFOLD: 'unfold'
 } as const;

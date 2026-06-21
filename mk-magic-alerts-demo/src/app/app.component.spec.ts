@@ -113,16 +113,18 @@ describe('AppComponent', () => {
     vi.runAllTimers();
 
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DOT);
-    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DOT);
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.BURST);
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DROP);
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.SLIDE_LEFT);
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.SLIDE_RIGHT);
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.UNFOLD);
-    expect(showInfoSpy).toHaveBeenCalledTimes(5);
-    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Dot', 7_000);
-    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Burst', 7_000);
-    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Drop', 7_000);
-    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Slide right', 7_000);
-    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Unfold', 7_000);
+    expect(showInfoSpy).toHaveBeenCalledTimes(6);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Dot', 8_500);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Burst', 8_500);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Drop', 8_500);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Slide left', 8_500);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Slide right', 8_500);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Unfold', 8_500);
   });
 
 });

@@ -197,6 +197,18 @@ $neg-gap: -$gap-size;
   }
 
   /* =========================================================
+   * Variant: slide in from the left
+   * ========================================================= */
+
+  .alert-enter-slide-left {
+    @include enter-alert(alert-enter-slide-left, 0.4s cubic-bezier(0.22, 1, 0.36, 1), left center);
+  }
+
+  .alert-leave-slide-left {
+    @include leave-alert(alert-leave-slide-left, 0.44s, left center);
+  }
+
+  /* =========================================================
    * Variant: unfold vertically in place from a thin top edge
    * ========================================================= */
 
@@ -367,6 +379,20 @@ $neg-gap: -$gap-size;
   }
 }
 
+@keyframes alert-enter-slide-left {
+  from {
+    transform: translateX(-42px);
+    opacity: 0;
+    border-width: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    border-width: 1px;
+  }
+}
+
 @keyframes alert-enter-unfold {
   from {
     transform: scaleY(0.02);
@@ -420,6 +446,18 @@ $neg-gap: -$gap-size;
 @keyframes alert-leave-slide-right {
   to {
     transform: translateX(28px);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    margin-top: $neg-gap;
+  }
+}
+
+@keyframes alert-leave-slide-left {
+  to {
+    transform: translateX(-28px);
     opacity: 0;
     height: 0;
     padding-top: 0;

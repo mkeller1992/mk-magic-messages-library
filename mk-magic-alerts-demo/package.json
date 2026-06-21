@@ -1,6 +1,6 @@
 {
 	"name": "mk-magic-alerts-demo",
-	"version": "0.22.7",
+	"version": "0.22.8",
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve --port 4800",

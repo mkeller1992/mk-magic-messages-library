@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
 		{ value: AlertEntryAnimation.DOT, label: 'Dot' },
 		{ value: AlertEntryAnimation.BURST, label: 'Burst' },
 		{ value: AlertEntryAnimation.DROP, label: 'Drop' },
+		{ value: AlertEntryAnimation.SLIDE_LEFT, label: 'Slide left' },
 		{ value: AlertEntryAnimation.SLIDE_RIGHT, label: 'Slide right' },
 		{ value: AlertEntryAnimation.UNFOLD, label: 'Unfold' }
 	];
@@ -62,7 +63,7 @@ export class AppComponent implements OnInit {
 			setTimeout(() => {
 				this.msgSvc.setEntryAnimation(option.value);
 				this.msgSvc.setAlertAppearance(this.getSelectedAlertAppearance());
-				this.msgSvc.showInfo(`Entry animation: ${option.label}`, 7_000);
+				this.msgSvc.showInfo(`Entry animation: ${option.label}`, 8_500);
 			}, index * 1_500);
 		});
 	}

@@ -76,7 +76,7 @@ describe('AlertComponent', () => {
 
   it('should apply the selected entry animation class immediately', () => {
     // Arrange
-    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.DROP);
+    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.SLIDE_LEFT);
 
     // Act
     fixture.detectChanges();
@@ -84,7 +84,7 @@ describe('AlertComponent', () => {
     const alertContainer = fixture.nativeElement.querySelector('.alert-container') as HTMLElement;
 
     // Assert
-    expect(alertContainer.classList.contains('alert-enter-drop')).toBe(true);
+    expect(alertContainer.classList.contains('alert-enter-slide-left')).toBe(true);
   });
 
   it('should keep the initial entry animation when the input changes later', () => {
