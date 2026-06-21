@@ -233,6 +233,9 @@ describe('AlertComponent', () => {
 
   it('should update alert state to DISMISSED after leave animation ends', () => {
     // Arrange
+    const alert = createAlert();
+
+    fixture.componentRef.setInput('alertParams', alert);
     fixture.detectChanges();
     component.state.set(AlertState.DISMISS);
 
@@ -243,6 +246,7 @@ describe('AlertComponent', () => {
 
     // Assert
     expect(component.state()).toBe(AlertState.DISMISSED);
+    expect(alert.state).toBe(AlertState.DISMISSED);
   });
 
   it('should ignore child animation end while alert is dismissing', () => {

@@ -91,6 +91,7 @@ export class AlertComponent implements OnInit {
       this.state() === AlertState.DISMISS &&
       event.target === this.container()?.nativeElement
     ) {
+      this.alertParams().state = AlertState.DISMISSED;
       this.state.set(AlertState.DISMISSED);
     }
   }

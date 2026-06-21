@@ -76,7 +76,6 @@ export class AlertsService {
 
 	clear() {
 		this.alertsStore.dismissAll();
-		this.syncAlertsToContainer();
 		this.queueContainerRender();
 	}
 
@@ -85,6 +84,8 @@ export class AlertsService {
 	}
 
 	private queueContainerRender(): void {
+		// This container is created outside the normal component tree, so input updates
+		// need an explicit render pass to show reliably in production and zoneless apps.
 		if (this.renderQueued) {
 			return;
 		}

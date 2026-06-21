@@ -152,14 +152,11 @@ describe('AlertsService', () => {
     });
 
     it('should render the alerts container after adding an alert', async () => {
-      const alertsComponentRef = (service as any).alertsComponentRef;
-      const detectChangesSpy = vi.spyOn(alertsComponentRef.changeDetectorRef, 'detectChanges');
-
       service.showSuccess('Rendered alert');
 
       await Promise.resolve();
 
-      expect(detectChangesSpy).toHaveBeenCalledTimes(1);
+      expect(document.body.textContent).toContain('Rendered alert');
     });
   });
 
