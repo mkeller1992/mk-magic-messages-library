@@ -2,6 +2,7 @@ import { ApplicationRef, ComponentRef, Injector, Service, createComponent, injec
 import { AlertsStore } from '../state/alerts.store';
 import { AlertsContainerComponent } from '../components/alerts-container/alerts-container.component';
 import { MAGIC_ALERTS_CONFIG } from '../config/magic-alerts-config';
+import { AlertEntryAnimation } from '../models/alert-entry-animation';
 
 @Service()
 
@@ -48,6 +49,10 @@ export class AlertsService {
 
 	showError(text: string, dismissTimeInMillis: number = 2_147_483_647) {
 		this.alertsStore.addAlert(text, 'error', dismissTimeInMillis);
+	}
+
+	setEntryAnimation(entryAnimation: AlertEntryAnimation): void {
+		this.alertsComponentRef.setInput('entryAnimation', entryAnimation);
 	}
 
 	clear() {

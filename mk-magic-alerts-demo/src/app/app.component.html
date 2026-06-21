@@ -1,5 +1,22 @@
 <div class="container mt-5">
     <form [formGroup]="alertsForm">
+      <div class="form-group row mb-4 alert-form-group">
+        <label for="entryAnimation" class="col-sm-2 col-form-label">Entry Animation:</label>
+        <div class="col-sm-4">
+          <select id="entryAnimation" formControlName="entryAnimation" class="form-control">
+            @for (option of entryAnimationOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-sm-3">
+          <button type="button" class="btn btn-primary" (click)="submitSelectedAnimation()">Display Selected</button>
+        </div>
+        <div class="col-sm-3">
+          <button type="button" class="btn btn-secondary" (click)="submitAllEntryAnimations()">Display All Animations</button>
+        </div>
+      </div>
+
       <!-- Success Alert Form Group -->
       <div class="form-group row mb-4 alert-form-group">
         <label for="successAlert" class="col-sm-2 col-form-label">Success Message:</label>

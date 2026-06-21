@@ -49,7 +49,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(APP_ROUTES),
     provideZonelessChangeDetection(),
     provideMagicAlerts({
-      entryAnimation: AlertEntryAnimation.DROP
+      entryAnimation: AlertEntryAnimation.BURST
     })
   ]
 }).catch(err => console.error(err));
@@ -57,10 +57,20 @@ bootstrapApplication(AppComponent, {
 
 Available entry animations:
 
-- `AlertEntryAnimation.DOT`
-- `AlertEntryAnimation.DROP`
-- `AlertEntryAnimation.SLIDE_RIGHT`
-- `AlertEntryAnimation.UNFOLD`
+| Animation | Description |
+| --- | --- |
+| `AlertEntryAnimation.DOT` | Starts as a small dot in the top-left corner and grows into the alert. |
+| `AlertEntryAnimation.BURST` | Pops out from the center with a short, elastic overshoot. |
+| `AlertEntryAnimation.DROP` | Drops in from above with a subtle bounce. |
+| `AlertEntryAnimation.SLIDE_RIGHT` | Slides in horizontally from the right. |
+| `AlertEntryAnimation.UNFOLD` | Opens vertically from the top, like unfolding paper. |
+
+You can also switch the entry animation at runtime before showing an alert:
+
+```typescript
+this.alertsSvc.setEntryAnimation(AlertEntryAnimation.BURST);
+this.alertsSvc.showInfo('Shown with burst animation');
+```
 
 ## Usage
 

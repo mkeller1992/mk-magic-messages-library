@@ -119,6 +119,16 @@ describe('AlertsService', () => {
     });
   });
 
+  describe('entry animation', () => {
+    it('should update the alerts container entry animation', () => {
+      const alertsComponentRef = (service as any).alertsComponentRef;
+
+      service.setEntryAnimation(AlertEntryAnimation.BURST);
+
+      expect(alertsComponentRef.instance.entryAnimation()).toBe(AlertEntryAnimation.BURST);
+    });
+  });
+
   describe('initialization', () => {
     it('should create the alerts host element', () => {
       expect(document.body.children.length).toBeGreaterThan(0);

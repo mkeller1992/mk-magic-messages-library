@@ -108,6 +108,43 @@ $neg-gap: -$gap-size;
   }
 
   /* =========================================================
+   * Variant: burst from the center with a small overshoot
+   * ========================================================= */
+
+  .alert-enter-burst {
+    transform: scale(1);
+    transform-origin: center;
+    opacity: 1;
+    border-width: 1px;
+
+    transition:
+      transform 0.34s cubic-bezier(0.18, 1.45, 0.35, 1),
+      opacity 0.18s ease-out,
+      border-width 0.18s ease-out;
+
+    @starting-style {
+      transform: scale(0.72);
+      opacity: 0;
+      border-width: 0;
+    }
+
+    .alert-text {
+      opacity: 1;
+      transition: opacity 0.14s ease-out 0.12s;
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+
+  .alert-leave-burst {
+    transform-origin: center;
+
+    @include collapse-alert(scale(0.82));
+  }
+
+  /* =========================================================
    * Variant: drop from top with a subtle overshoot
    * ========================================================= */
 

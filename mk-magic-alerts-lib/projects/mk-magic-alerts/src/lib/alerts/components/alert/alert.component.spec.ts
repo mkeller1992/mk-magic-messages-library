@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AlertsStore } from '../../state/alerts.store';
 import { AlertState } from '../../models/alert-state';
 import { Alert } from '../../models/alert.model';
+import { AlertEntryAnimation } from '../../models/alert-entry-animation';
 import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
@@ -54,6 +55,18 @@ describe('AlertComponent', () => {
 
     // Assert
     expect(component).toBeTruthy();
+  });
+
+  it('should derive animation classes from entryAnimation input', () => {
+    // Arrange
+    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.BURST);
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.enterAnimationClass()).toBe('alert-enter-burst');
+    expect(component.leaveAnimationClass()).toBe('alert-leave-burst');
   });
 
   it('dismisses after timeout and becomes DISMISSED on transition end', () => {

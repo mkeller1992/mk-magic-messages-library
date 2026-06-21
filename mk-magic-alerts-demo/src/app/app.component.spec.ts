@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AlertsService, MockAlertsService } from '@mk-magic-alerts';
+import { AlertEntryAnimation, AlertsService, MockAlertsService } from '@mk-magic-alerts';
 import { AppComponent } from './app.component';
 import { provideZonelessChangeDetection } from '@angular/core';
 
@@ -59,5 +59,36 @@ describe('AppComponent', () => {
     // Advance timers for the third setTimeout
     vi.advanceTimersByTime(500);
     expect(showWarningSpy).toHaveBeenCalledWith('Warning-Alert', 5_000);
+  });
+
+  it('should display an alert with the selected entry animation', () => {
+    const setEntryAnimationSpy = vi.spyOn(mockAlertsService, 'setEntryAnimation');
+    const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
+
+    component.alertsForm.patchValue({
+      entryAnimation: AlertEntryAnimation.UNFOLD
+    });
+
+    component.submitSelectedAnimation();
+
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.UNFOLD);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Unfold', 4_000);
+  });
+
+  it('should display all entry animations', () => {
+    vi.useFakeTimers();
+
+    const setEntryAnimationSpy = vi.spyOn(mockAlertsService, 'setEntryAnimation');
+    const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
+
+    component.submitAllEntryAnimations();
+    vi.runAllTimers();
+
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DOT);
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.BURST);
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DROP);
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.SLIDE_RIGHT);
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.UNFOLD);
+    expect(showInfoSpy).toHaveBeenCalledTimes(5);
   });
 });
