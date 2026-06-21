@@ -1,20 +1,60 @@
-<svg width="800" height="96" viewBox="0 0 800 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<svg width="800" height="332" viewBox="0 0 800 332" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Gradient alert appearance preview</title>
-  <desc id="desc">A gradient success alert with a pale green gradient background, rounded icon badge, text, and a close button.</desc>
+  <desc id="desc">Four gradient alerts showing success, error, info, and warning appearances with colored icon badges.</desc>
   <defs>
-    <linearGradient id="successGradient" x1="13" y1="16" x2="773" y2="80" gradientUnits="userSpaceOnUse">
+    <linearGradient id="successGradient" x1="21" y1="20" x2="781" y2="84" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#d8f0dd"/>
       <stop offset="0.68" stop-color="#f6fcf7"/>
       <stop offset="1" stop-color="#ffffff"/>
     </linearGradient>
-    <filter id="gradientShadow" x="-5%" y="-20%" width="110%" height="150%" color-interpolation-filters="sRGB">
+    <linearGradient id="errorGradient" x1="21" y1="93" x2="781" y2="157" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fadcdf"/>
+      <stop offset="0.68" stop-color="#fff7f8"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="infoGradient" x1="21" y1="166" x2="781" y2="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#daebff"/>
+      <stop offset="0.68" stop-color="#f4f9ff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="warningGradient" x1="21" y1="239" x2="781" y2="303" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff0c0"/>
+      <stop offset="0.68" stop-color="#fffbed"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <filter id="gradientShadow" x="-5%" y="-18%" width="110%" height="145%" color-interpolation-filters="sRGB">
       <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.10"/>
-      <feDropShadow dx="0" dy="14" stdDeviation="15" flood-color="#155724" flood-opacity="0.10"/>
+      <feDropShadow dx="0" dy="12" stdDeviation="13" flood-color="#000000" flood-opacity="0.06"/>
     </filter>
   </defs>
-  <rect x="13" y="16" width="760" height="64" rx="10" fill="url(#successGradient)" stroke="#a7cdb0" filter="url(#gradientShadow)"/>
-  <circle cx="52" cy="48" r="20" fill="#c9e8d1"/>
-  <path d="M43 47.5l6.2 6.2L61.8 41" stroke="#155724" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="87" y="55" fill="#155724" font-family="Roboto, Arial, sans-serif" font-size="20" font-weight="400">Success!</text>
-  <path d="M737 40l10 10M747 40l-10 10" stroke="#155724" stroke-width="4" stroke-linecap="round"/>
+
+  <rect x="21" y="20" width="760" height="64" rx="10" fill="url(#successGradient)" stroke="#a7cdb0" filter="url(#gradientShadow)"/>
+  <circle cx="60" cy="52" r="20" fill="#c9e8d1"/>
+  <path d="M51 52l5.8 5.8L69.5 45" stroke="#155724" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="95" y="59" fill="#155724" font-family="Roboto, Arial, sans-serif" font-size="20" font-weight="400">Success-Alert</text>
+  <path d="M745 44l10 10M755 44l-10 10" stroke="#155724" stroke-width="4" stroke-linecap="round"/>
+
+  <rect x="21" y="93" width="760" height="64" rx="10" fill="url(#errorGradient)" stroke="#dfabb1" filter="url(#gradientShadow)"/>
+  <circle cx="60" cy="125" r="20" fill="#f7ccd1"/>
+  <path d="M60 114.2l12.2 21H47.8L60 114.2Z" fill="#721c24"/>
+  <rect x="58.5" y="122.1" width="3" height="7.2" rx="1.5" fill="#f7ccd1"/>
+  <circle cx="60" cy="132.3" r="1.75" fill="#f7ccd1"/>
+  <text x="95" y="132" fill="#721c24" font-family="Roboto, Arial, sans-serif" font-size="20" font-weight="400">Error-Alert</text>
+  <path d="M745 117l10 10M755 117l-10 10" stroke="#721c24" stroke-width="4" stroke-linecap="round"/>
+
+  <rect x="21" y="166" width="760" height="64" rx="10" fill="url(#infoGradient)" stroke="#9ec5f1" filter="url(#gradientShadow)"/>
+  <circle cx="60" cy="198" r="20" fill="#c9e2ff"/>
+  <circle cx="60" cy="198" r="9.5" fill="#004085"/>
+  <rect x="58.6" y="197.2" width="2.8" height="7.2" rx="1.4" fill="#c9e2ff"/>
+  <circle cx="60" cy="191.8" r="1.8" fill="#c9e2ff"/>
+  <text x="95" y="205" fill="#004085" font-family="Roboto, Arial, sans-serif" font-size="20" font-weight="400">Info-Alert</text>
+  <path d="M745 190l10 10M755 190l-10 10" stroke="#004085" stroke-width="4" stroke-linecap="round"/>
+
+  <rect x="21" y="239" width="760" height="64" rx="10" fill="url(#warningGradient)" stroke="#dfc875" filter="url(#gradientShadow)"/>
+  <circle cx="60" cy="271" r="20" fill="#ffe599"/>
+  <path d="M60 260.2l12.2 21H47.8L60 260.2Z" fill="#856404"/>
+  <rect x="58.5" y="268.1" width="3" height="7.2" rx="1.5" fill="#ffe599"/>
+  <circle cx="60" cy="278.3" r="1.75" fill="#ffe599"/>
+  <text x="95" y="278" fill="#856404" font-family="Roboto, Arial, sans-serif" font-size="20" font-weight="400">Warning-Alert</text>
+  <path d="M745 263l10 10M755 263l-10 10" stroke="#856404" stroke-width="4" stroke-linecap="round"/>
 </svg>
