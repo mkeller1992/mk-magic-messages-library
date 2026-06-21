@@ -1,8 +1,20 @@
-name: CI/CD Pipeline
+name: Deploy mk-magic-alerts to npmjs.com
 
 on:
   push:
     branches: [ master ]
+
+# Central versions and reusable action references
+env:
+  BASE_DIR: ./mk-magic-alerts-lib
+  PROJECT_NAME: mk-magic-alerts
+
+  NODE_VERSION: &node-version '24.x'
+  NPM_VERSION: &npm-version 'latest'
+
+  CHECKOUT_ACTION: &checkout-action 'actions/checkout@v7'
+  SETUP_NODE_ACTION: &setup-node-action 'actions/setup-node@v6.4.0'
+  CODECOV_ACTION: &codecov-action 'codecov/codecov-action@v7'
 
 # Needed for OIDC (Trusted Publishing) and for pushing tags back to the repo
 permissions:
@@ -12,23 +24,20 @@ permissions:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    env:
-      BASE_DIR: ./mk-magic-alerts-lib
-      PROJECT_NAME: mk-magic-alerts
 
     steps:
       # Checkout the repository to the runner
-      - uses: actions/checkout@v5
+      - uses: *checkout-action
 
       # Setup Node.js environment
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: *setup-node-action
         with:
-          node-version: '24.x'
+          node-version: ${{ env.NODE_VERSION }}
 
       # Ensure a recent npm that supports Trusted Publishing + provenance
       - name: Ensure recent npm
-        run: npm i -g npm@latest
+        run: npm i -g npm@${{ env.NPM_VERSION }}
 
       # Safety: remove any accidental project .npmrc that could force tokens
       - name: Remove local .npmrc if present
@@ -38,35 +47,55 @@ jobs:
       - name: Install jq
         run: sudo apt-get install -y jq
 
-      # Install dependencies at the root level
+      # Install dependencies at the library level
       - name: Install Dependencies
         run: npm ci
         working-directory: ${{ env.BASE_DIR }}
         env:
-          npm_config_foreground_scripts: 'true'
-          NX_SKIP_NATIVE_BINARY_DOWNLOAD: 'true'
+          npm_config_foreground_scripts: 'true'   # stabilize nx postinstall on CI
+          NX_SKIP_NATIVE_BINARY_DOWNLOAD: 'true'  # prefer JS fallback
           NX_NATIVE: 'false'
           NX_DAEMON: 'false'
 
-      # Run tests at the root level
+      # Run tests at the library level
       - name: Run Tests
         run: npm run test:ci
         working-directory: ${{ env.BASE_DIR }}
 
-      # Upload coverage to Codecov (tokenless with OIDC + Codecov App)
+      # List generated LCOV reports for troubleshooting
+      - name: List coverage reports
+        run: find coverage -name lcov.info -print
+        working-directory: ${{ env.BASE_DIR }}
+
+      # Copy the generated report to a predictable path for Codecov
+      - name: Normalize coverage report path
+        run: |
+          LCOV_FILE="$(find coverage -name lcov.info -print -quit)"
+          if [ -z "$LCOV_FILE" ]; then
+            echo "No lcov.info file found"
+            exit 1
+          fi
+
+          echo "Using coverage report: $LCOV_FILE"
+          mkdir -p coverage/codecov
+          cp "$LCOV_FILE" coverage/codecov/lcov.info
+        working-directory: ${{ env.BASE_DIR }}
+
+      # Upload coverage to Codecov through OIDC
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: *codecov-action
         with:
           use_oidc: true
-          files: ${{ env.BASE_DIR }}/coverage/lcov.info  # point directly to LCOV file for faster uploads
+          files: ${{ env.BASE_DIR }}/coverage/codecov/lcov.info
           disable_search: true                           # skip auto-discovery to avoid noisy gcov/python warnings
+          fail_ci_if_error: true                         # fail the pipeline if the upload fails
 
       # Build the library from the specified subdirectory
       - name: Build Library
         run: npx ng build
         working-directory: ${{ env.BASE_DIR }}/projects/${{ env.PROJECT_NAME }}
 
-      # Check if version has been updated
+      # Check whether the package version is already published
       - name: Check if version has been updated
         id: check_version
         run: |
@@ -78,20 +107,22 @@ jobs:
           # Public package: npm view works without auth
           LATEST_PUBLISHED_VERSION=$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "0.0.0")
           if [ "$CURRENT_VERSION" = "$LATEST_PUBLISHED_VERSION" ]; then
+            echo "Version $CURRENT_VERSION is already published. Skipping publish..."
             echo "execute_publish=false" >> $GITHUB_ENV
           else
+            echo "Version $CURRENT_VERSION is new. Proceeding with publish..."
             echo "execute_publish=true" >> $GITHUB_ENV
           fi
         working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
 
-      # Publish to npm via OIDC (no token)
-      - name: Publish to npm via OIDC (no token)
+      # Publish the library to npm via OIDC
+      - name: Publish to npm via OIDC
         if: env.execute_publish == 'true'
         run: npm publish
         working-directory: ${{ env.BASE_DIR }}/dist/${{ env.PROJECT_NAME }}
         # No NODE_AUTH_TOKEN here — OIDC handles auth
 
-      # Tag commit (push tag back to this repository using the built-in GITHUB_TOKEN)
+      # Tag the published library version
       - name: Tag commit
         if: env.execute_publish == 'true' && success()
         run: |
