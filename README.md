@@ -29,8 +29,6 @@ npm i mk-magic-alerts
 
 No required setup is needed. You can inject `AlertsService` directly.
 
-The alert animations are CSS-based, so you do not need to add `provideAnimations()` or `BrowserAnimationsModule` just for `mk-magic-alerts`.
-
 ### Optional: choose an entry animation
 
 By default, alerts use `AlertEntryAnimation.DOT`. Existing applications do not need to change anything.
