@@ -1,17 +1,20 @@
-<svg width="520" height="92" viewBox="0 0 520 92" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<svg width="800" height="96" viewBox="0 0 800 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Gradient alert appearance preview</title>
-  <desc id="desc">A gradient success alert with a green to white background and a rounded icon badge.</desc>
+  <desc id="desc">A gradient success alert with a pale green gradient background, rounded icon badge, text, and a close button.</desc>
   <defs>
-    <linearGradient id="successGradient" x1="4" y1="10" x2="516" y2="82" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#d5f8dc"/>
-      <stop offset="0.68" stop-color="#ecfff0"/>
+    <linearGradient id="successGradient" x1="13" y1="16" x2="773" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d8f0dd"/>
+      <stop offset="0.68" stop-color="#f6fcf7"/>
       <stop offset="1" stop-color="#ffffff"/>
     </linearGradient>
+    <filter id="gradientShadow" x="-5%" y="-20%" width="110%" height="150%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.10"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="15" flood-color="#155724" flood-opacity="0.10"/>
+    </filter>
   </defs>
-  <rect x="4" y="10" width="512" height="72" rx="4" fill="url(#successGradient)" stroke="#30a24d"/>
-  <rect x="20" y="30" width="32" height="32" rx="16" fill="#30a24d"/>
-  <path d="M28 46.5l5.2 5.2L44.5 40.4" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="66" y="40" fill="#155724" font-family="Roboto, Arial, sans-serif" font-size="17" font-weight="500">Gradient success alert</text>
-  <text x="66" y="62" fill="#155724" font-family="Roboto, Arial, sans-serif" font-size="14">Softer gradient background with a stronger icon badge.</text>
-  <path d="M486 38l16 16M502 38l-16 16" stroke="#155724" stroke-width="2" stroke-linecap="round"/>
+  <rect x="13" y="16" width="760" height="64" rx="10" fill="url(#successGradient)" stroke="#a7cdb0" filter="url(#gradientShadow)"/>
+  <circle cx="52" cy="48" r="20" fill="#c9e8d1"/>
+  <path d="M43 47.5l6.2 6.2L61.8 41" stroke="#155724" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="87" y="55" fill="#155724" font-family="Roboto, Arial, sans-serif" font-size="20" font-weight="400">Success!</text>
+  <path d="M737 40l10 10M747 40l-10 10" stroke="#155724" stroke-width="4" stroke-linecap="round"/>
 </svg>
