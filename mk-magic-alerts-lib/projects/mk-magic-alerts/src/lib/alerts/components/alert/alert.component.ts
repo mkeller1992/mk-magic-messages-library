@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, computed, inject, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, ElementRef, OnInit, AfterViewInit, computed, inject, input, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, fromEvent, race, timer } from 'rxjs';
 import { repeat, take, takeUntil, tap } from 'rxjs/operators';
@@ -16,10 +16,11 @@ import { AlertAppearance } from '../../models/alert-appearance';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NewlineAndTabsPipe]
 })
-export class AlertComponent implements OnInit {
+export class AlertComponent implements OnInit, AfterViewInit {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly alertsStore = inject(AlertsStore);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   readonly alertParams = input.required<Alert>();
   readonly entryAnimation = input.required<AlertEntryAnimation>();
@@ -28,12 +29,18 @@ export class AlertComponent implements OnInit {
   readonly container = viewChild<ElementRef<HTMLElement>>('container');
 
   readonly state = signal<AlertState>(AlertState.DISPLAY);
+  readonly entryAnimationStarted = signal(false);
 
-  readonly isDisplayed = computed(() => this.state() === AlertState.DISPLAY);
+  readonly isRendered = computed(() => this.state() !== AlertState.DISMISSED);
   readonly dismissTimeInMillis = computed(() => this.alertParams().dismissTimeInMillis);
 
   readonly enterAnimationClass = computed(() => `alert-enter-${this.entryAnimation()}`);
   readonly leaveAnimationClass = computed(() => `alert-leave-${this.entryAnimation()}`);
+  readonly animationClass = computed(() =>
+    this.state() === AlertState.DISMISS
+      ? this.leaveAnimationClass()
+      : this.enterAnimationClass()
+  );
 
   ngOnInit(): void {
     const el = this.elementRef.nativeElement;
@@ -63,6 +70,13 @@ export class AlertComponent implements OnInit {
       .subscribe();
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.entryAnimationStarted.set(true);
+      this.changeDetectorRef.detectChanges();
+    });
+  }
+
   /* Triggers the animated disappearing of the alert */
   setDismissalStart(): void {
     if (this.state() !== AlertState.DISMISS) {
@@ -73,7 +87,9 @@ export class AlertComponent implements OnInit {
         el.style.setProperty('--h', `${el.offsetHeight}px`);
       }
 
+      this.entryAnimationStarted.set(false);
       this.state.set(AlertState.DISMISS);
+      this.changeDetectorRef.detectChanges();
     }
   }
 

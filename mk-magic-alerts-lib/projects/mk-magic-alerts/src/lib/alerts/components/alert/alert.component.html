@@ -1,12 +1,11 @@
 @if (alertParams(); as params) {
   <div class="clickable-area">
-    @if (isDisplayed()) {
+    @if (isRendered()) {
       <div
         #container
-        class="alert-container alert-{{ params.type }} alert-{{ alertAppearance() }}"
+        class="alert-container alert-{{ params.type }} alert-{{ alertAppearance() }} {{ animationClass() }}"
+        [class.alert-enter-active]="entryAnimationStarted()"
         role="alert"
-        [animate.enter]="enterAnimationClass()"
-        [animate.leave]="leaveAnimationClass()"
         (transitionend)="onContainerTransitionEnd($event)">
 
         <div class="alert-icon" aria-hidden="true">

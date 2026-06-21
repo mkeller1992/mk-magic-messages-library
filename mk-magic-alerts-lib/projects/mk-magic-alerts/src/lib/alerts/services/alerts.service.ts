@@ -36,6 +36,7 @@ export class AlertsService {
 
 		// Attach the AlertsContainerComponent to the application
 		this.applicationRef.attachView(this.alertsComponentRef.hostView);
+		this.alertsComponentRef.changeDetectorRef.detectChanges();
 	}
 
 	showInfo(text: string, dismissTimeInMillis: number = 10_000) {

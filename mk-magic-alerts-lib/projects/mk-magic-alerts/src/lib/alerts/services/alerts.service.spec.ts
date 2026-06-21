@@ -196,3 +196,33 @@ describe('AlertsService', () => {
     });
   });
 });
+
+describe('AlertsService integration', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+    TestBed.resetTestingModule();
+  });
+
+  it('should render an added alert in the dynamically created container', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideZonelessChangeDetection(),
+        provideMagicAlerts({
+          entryAnimation: AlertEntryAnimation.BURST,
+          alertAppearance: AlertAppearance.CLASSIC
+        }),
+        AlertsStore,
+        AlertsService
+      ]
+    });
+
+    const realService = TestBed.inject(AlertsService);
+
+    realService.showSuccess('Rendered success alert', 4_000);
+
+    await Promise.resolve();
+
+    expect(document.body.textContent).toContain('Rendered success alert');
+    expect(document.body.querySelector('.alert-container.alert-success.alert-classic')).toBeTruthy();
+  });
+});

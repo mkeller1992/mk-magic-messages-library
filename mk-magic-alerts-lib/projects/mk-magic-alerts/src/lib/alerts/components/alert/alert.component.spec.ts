@@ -50,6 +50,7 @@ describe('AlertComponent', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should create', () => {
@@ -70,6 +71,28 @@ describe('AlertComponent', () => {
     // Assert
     expect(component.enterAnimationClass()).toBe('alert-enter-burst');
     expect(component.leaveAnimationClass()).toBe('alert-leave-burst');
+    expect(component.animationClass()).toBe('alert-enter-burst');
+  });
+
+  it('should activate the entry animation after initial render', async () => {
+    // Arrange
+    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.DROP);
+
+    // Act
+    fixture.detectChanges();
+
+    const alertContainer = fixture.nativeElement.querySelector('.alert-container') as HTMLElement;
+
+    // Assert
+    expect(alertContainer.classList.contains('alert-enter-drop')).toBe(true);
+    expect(alertContainer.classList.contains('alert-enter-active')).toBe(false);
+
+    // Act
+    await new Promise(resolve => setTimeout(resolve));
+    fixture.detectChanges();
+
+    // Assert
+    expect(alertContainer.classList.contains('alert-enter-active')).toBe(true);
   });
 
   it('should apply the selected alert appearance class', () => {
@@ -193,6 +216,7 @@ describe('AlertComponent', () => {
 
     // Assert
     expect(component.state()).toBe(AlertState.DISMISS);
+    expect(component.animationClass()).toBe('alert-leave-dot');
   });
 
   it('should update alert state to DISMISSED after leave transition ends', () => {
