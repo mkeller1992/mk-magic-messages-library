@@ -74,7 +74,7 @@ describe('AlertComponent', () => {
     expect(component.animationClass()).toBe('alert-enter-burst');
   });
 
-  it('should activate the entry animation after initial render', async () => {
+  it('should apply the selected entry animation class immediately', () => {
     // Arrange
     fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.DROP);
 
@@ -85,14 +85,24 @@ describe('AlertComponent', () => {
 
     // Assert
     expect(alertContainer.classList.contains('alert-enter-drop')).toBe(true);
-    expect(alertContainer.classList.contains('alert-enter-active')).toBe(false);
+  });
 
-    // Act
-    await new Promise(resolve => setTimeout(resolve));
+  it('should keep the initial entry animation when the input changes later', () => {
+    // Arrange
+    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.DROP);
     fixture.detectChanges();
 
+    // Act
+    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.SLIDE_RIGHT);
+    fixture.detectChanges();
+
+    const alertContainer = fixture.nativeElement.querySelector('.alert-container') as HTMLElement;
+
     // Assert
-    expect(alertContainer.classList.contains('alert-enter-active')).toBe(true);
+    expect(component.fixedEntryAnimation()).toBe(AlertEntryAnimation.DROP);
+    expect(component.enterAnimationClass()).toBe('alert-enter-drop');
+    expect(alertContainer.classList.contains('alert-enter-drop')).toBe(true);
+    expect(alertContainer.classList.contains('alert-enter-slide-right')).toBe(false);
   });
 
   it('should apply the selected alert appearance class', () => {
@@ -107,7 +117,7 @@ describe('AlertComponent', () => {
     expect(alertContainer.classList.contains('alert-gradient')).toBe(true);
   });
 
-  it('dismisses after timeout and becomes DISMISSED on transition end', () => {
+  it('dismisses after timeout and becomes DISMISSED on animation end', () => {
     // Arrange
     vi.useFakeTimers();
 
@@ -126,7 +136,9 @@ describe('AlertComponent', () => {
     expect(component.state()).toBe(AlertState.DISMISS);
 
     // Act
-    component.onContainerTransitionEnd({ propertyName: 'opacity' } as TransitionEvent);
+    const alertContainer = fixture.nativeElement.querySelector('.alert-container') as HTMLElement;
+
+    component.onContainerAnimationEnd({ target: alertContainer } as unknown as AnimationEvent);
 
     // Assert
     expect(component.state()).toBe(AlertState.DISMISSED);
@@ -219,26 +231,46 @@ describe('AlertComponent', () => {
     expect(component.animationClass()).toBe('alert-leave-dot');
   });
 
-  it('should update alert state to DISMISSED after leave transition ends', () => {
+  it('should update alert state to DISMISSED after leave animation ends', () => {
     // Arrange
+    fixture.detectChanges();
     component.state.set(AlertState.DISMISS);
 
     // Act
-    component.onContainerTransitionEnd({ propertyName: 'opacity' } as TransitionEvent);
+    const alertContainer = fixture.nativeElement.querySelector('.alert-container') as HTMLElement;
+
+    component.onContainerAnimationEnd({ target: alertContainer } as unknown as AnimationEvent);
 
     // Assert
     expect(component.state()).toBe(AlertState.DISMISSED);
   });
 
-  it('should ignore irrelevant transition properties', () => {
+  it('should ignore child animation end while alert is dismissing', () => {
     // Arrange
+    fixture.detectChanges();
     component.state.set(AlertState.DISMISS);
 
+    const child = fixture.nativeElement.querySelector('.alert-text') as HTMLElement;
+
     // Act
-    component.onContainerTransitionEnd({ propertyName: 'color' } as TransitionEvent);
+    component.onContainerAnimationEnd({ target: child } as unknown as AnimationEvent);
 
     // Assert
     expect(component.state()).toBe(AlertState.DISMISS);
+  });
+
+  it('should ignore container animation end while alert is displayed', () => {
+    // Arrange
+    fixture.detectChanges();
+    component.state.set(AlertState.DISPLAY);
+
+    const alertContainer = fixture.nativeElement.querySelector('.alert-container') as HTMLElement;
+
+    // Act
+    component.onContainerAnimationEnd({ target: alertContainer } as unknown as AnimationEvent);
+
+    // Assert
+    expect(component.state()).toBe(AlertState.DISPLAY);
   });
 
   it('should clean up subscriptions on destroy', () => {

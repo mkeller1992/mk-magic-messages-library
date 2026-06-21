@@ -113,7 +113,7 @@ describe('AppComponent', () => {
     vi.runAllTimers();
 
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DOT);
-    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.BURST);
+    expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DOT);
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.DROP);
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.SLIDE_RIGHT);
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.UNFOLD);

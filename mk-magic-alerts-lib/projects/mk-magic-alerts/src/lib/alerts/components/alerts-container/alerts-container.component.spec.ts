@@ -1,10 +1,9 @@
-import { Component, Input, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AlertComponent } from '../alert/alert.component';
 import { AlertsContainerComponent } from './alerts-container.component';
-import { AlertsStore } from '../../state/alerts.store';
 import { AlertState } from '../../models/alert-state';
 import { Alert } from '../../models/alert.model';
 import { AlertEntryAnimation } from '../../models/alert-entry-animation';
@@ -52,16 +51,11 @@ describe('AlertsContainerComponent', () => {
     }
   ];
 
-  const alertsStoreMock: Partial<AlertsStore> = {
-    alerts: signal(alerts)
-  };
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AlertsContainerComponent],
       providers: [
-        provideZonelessChangeDetection(),
-        { provide: AlertsStore, useValue: alertsStoreMock }
+        provideZonelessChangeDetection()
       ]
     })
       .overrideComponent(AlertsContainerComponent, {
@@ -77,6 +71,7 @@ describe('AlertsContainerComponent', () => {
     fixture = TestBed.createComponent(AlertsContainerComponent);
     component = fixture.componentInstance;
 
+    fixture.componentRef.setInput('alerts', alerts);
     fixture.detectChanges();
   });
 
@@ -84,7 +79,7 @@ describe('AlertsContainerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should inject alerts from AlertsStore', () => {
+  it('should accept alerts as input', () => {
     expect(component.alerts).toBeDefined();
     expect(component.alerts()).toEqual(alerts);
   });

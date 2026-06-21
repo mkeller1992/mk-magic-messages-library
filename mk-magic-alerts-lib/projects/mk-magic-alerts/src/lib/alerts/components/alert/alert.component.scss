@@ -11,30 +11,26 @@ $hover-color-error: rgb(255, 76, 89);
 $gap-size: 5px;
 $neg-gap: -$gap-size;
 
-@mixin collapse-alert($transform, $transform-duration: 0.3s) {
-  transform: $transform;
-  opacity: 0;
-
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  border-width: 0;
-  margin-top: $neg-gap;
-
-  transition:
-    transform $transform-duration ease-in,
-    opacity 0.2s ease-in,
-    height 0.45s ease,
-    padding-top 0.45s ease,
-    padding-bottom 0.45s ease,
-    border-width 0.45s ease,
-    margin-top 0.45s ease;
+@mixin enter-alert($animation-name, $duration, $origin) {
+  transform-origin: $origin;
+  animation: $animation-name $duration both;
 
   .alert-text,
   .alert-icon,
   .btn-dismiss {
-    opacity: 0;
-    transition: opacity 0.05s linear;
+    animation: alert-content-in 0.12s linear 0.12s both;
+  }
+}
+
+@mixin leave-alert($animation-name, $duration, $origin) {
+  height: var(--h, auto);
+  transform-origin: $origin;
+  animation: $animation-name $duration ease-in forwards;
+
+  .alert-text,
+  .alert-icon,
+  .btn-dismiss {
+    animation: alert-content-out 0.08s linear forwards;
   }
 }
 
@@ -157,40 +153,11 @@ $neg-gap: -$gap-size;
    * ========================================================= */
 
   .alert-enter-dot {
-    transform: scale(0);
-    transform-origin: top left;
-    opacity: 0;
-    border-width: 0;
-
-    transition:
-      transform 0.3s ease,
-      opacity 0.3s ease,
-      border-width 0.3s ease;
-
-    .alert-text,
-    .alert-icon,
-    .btn-dismiss {
-      opacity: 0;
-      transition: opacity 0.1s linear 0.3s;
-    }
-
-    &.alert-enter-active {
-      transform: none;
-      opacity: 1;
-      border-width: 1px;
-
-      .alert-text,
-      .alert-icon,
-      .btn-dismiss {
-        opacity: 1;
-      }
-    }
+    @include enter-alert(alert-enter-dot, 0.32s ease, top left);
   }
 
   .alert-leave-dot {
-    transform-origin: top left;
-
-    @include collapse-alert(scale(0), 0.5s);
+    @include leave-alert(alert-leave-dot, 0.48s, top left);
   }
 
   /* =========================================================
@@ -198,40 +165,11 @@ $neg-gap: -$gap-size;
    * ========================================================= */
 
   .alert-enter-burst {
-    transform: scale(0.72);
-    transform-origin: center;
-    opacity: 0;
-    border-width: 0;
-
-    transition:
-      transform 0.34s cubic-bezier(0.18, 1.45, 0.35, 1),
-      opacity 0.18s ease-out,
-      border-width 0.18s ease-out;
-
-    .alert-text,
-    .alert-icon,
-    .btn-dismiss {
-      opacity: 0;
-      transition: opacity 0.14s ease-out 0.12s;
-    }
-
-    &.alert-enter-active {
-      transform: scale(1);
-      opacity: 1;
-      border-width: 1px;
-
-      .alert-text,
-      .alert-icon,
-      .btn-dismiss {
-        opacity: 1;
-      }
-    }
+    @include enter-alert(alert-enter-burst, 0.36s cubic-bezier(0.18, 1.45, 0.35, 1), center);
   }
 
   .alert-leave-burst {
-    transform-origin: center;
-
-    @include collapse-alert(scale(0.82));
+    @include leave-alert(alert-leave-burst, 0.42s, center);
   }
 
   /* =========================================================
@@ -239,40 +177,11 @@ $neg-gap: -$gap-size;
    * ========================================================= */
 
   .alert-enter-drop {
-    transform: translateY(-18px) scale(0.96);
-    transform-origin: center top;
-    opacity: 0;
-    border-width: 0;
-
-    transition:
-      transform 0.38s cubic-bezier(0.22, 1.35, 0.36, 1),
-      opacity 0.22s ease-out,
-      border-width 0.22s ease-out;
-
-    .alert-text,
-    .alert-icon,
-    .btn-dismiss {
-      opacity: 0;
-      transition: opacity 0.16s ease-out 0.12s;
-    }
-
-    &.alert-enter-active {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-      border-width: 1px;
-
-      .alert-text,
-      .alert-icon,
-      .btn-dismiss {
-        opacity: 1;
-      }
-    }
+    @include enter-alert(alert-enter-drop, 0.4s cubic-bezier(0.22, 1.35, 0.36, 1), center top);
   }
 
   .alert-leave-drop {
-    transform-origin: center top;
-
-    @include collapse-alert(translateY(-10px) scale(0.96));
+    @include leave-alert(alert-leave-drop, 0.42s, center top);
   }
 
   /* =========================================================
@@ -280,40 +189,11 @@ $neg-gap: -$gap-size;
    * ========================================================= */
 
   .alert-enter-slide-right {
-    transform: translateX(42px);
-    transform-origin: right center;
-    opacity: 0;
-    border-width: 0;
-
-    transition:
-      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.2s ease-out,
-      border-width 0.2s ease-out;
-
-    .alert-text,
-    .alert-icon,
-    .btn-dismiss {
-      opacity: 0;
-      transition: opacity 0.14s ease-out 0.1s;
-    }
-
-    &.alert-enter-active {
-      transform: translateX(0);
-      opacity: 1;
-      border-width: 1px;
-
-      .alert-text,
-      .alert-icon,
-      .btn-dismiss {
-        opacity: 1;
-      }
-    }
+    @include enter-alert(alert-enter-slide-right, 0.36s cubic-bezier(0.22, 1, 0.36, 1), right center);
   }
 
   .alert-leave-slide-right {
-    transform-origin: right center;
-
-    @include collapse-alert(translateX(28px));
+    @include leave-alert(alert-leave-slide-right, 0.42s, right center);
   }
 
   /* =========================================================
@@ -321,40 +201,11 @@ $neg-gap: -$gap-size;
    * ========================================================= */
 
   .alert-enter-unfold {
-    transform: translateY(-8px) scaleY(0);
-    transform-origin: center top;
-    opacity: 0;
-    border-width: 0;
-
-    transition:
-      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.18s ease-out,
-      border-width 0.2s ease-out;
-
-    .alert-text,
-    .alert-icon,
-    .btn-dismiss {
-      opacity: 0;
-      transition: opacity 0.16s ease-out 0.14s;
-    }
-
-    &.alert-enter-active {
-      transform: translateY(0) scaleY(1);
-      opacity: 1;
-      border-width: 1px;
-
-      .alert-text,
-      .alert-icon,
-      .btn-dismiss {
-        opacity: 1;
-      }
-    }
+    @include enter-alert(alert-enter-unfold, 0.36s cubic-bezier(0.22, 1, 0.36, 1), center top);
   }
 
   .alert-leave-unfold {
-    transform-origin: center top;
-
-    @include collapse-alert(translateY(-8px) scaleY(0));
+    @include leave-alert(alert-leave-unfold, 0.42s, center top);
   }
 
   /* =========================================================
@@ -431,5 +282,151 @@ $neg-gap: -$gap-size;
   .clickable-area * {
     transition-duration: 1ms !important;
     animation-duration: 1ms !important;
+  }
+}
+
+@keyframes alert-content-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes alert-content-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes alert-enter-dot {
+  from {
+    transform: scale(0);
+    opacity: 0;
+    border-width: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+    border-width: 1px;
+  }
+}
+
+@keyframes alert-enter-burst {
+  from {
+    transform: scale(0.72);
+    opacity: 0;
+    border-width: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+    border-width: 1px;
+  }
+}
+
+@keyframes alert-enter-drop {
+  from {
+    transform: translateY(-18px) scale(0.96);
+    opacity: 0;
+    border-width: 0;
+  }
+
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    border-width: 1px;
+  }
+}
+
+@keyframes alert-enter-slide-right {
+  from {
+    transform: translateX(42px);
+    opacity: 0;
+    border-width: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    border-width: 1px;
+  }
+}
+
+@keyframes alert-enter-unfold {
+  from {
+    transform: translateY(-8px) scaleY(0);
+    opacity: 0;
+    border-width: 0;
+  }
+
+  to {
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+    border-width: 1px;
+  }
+}
+
+@keyframes alert-leave-dot {
+  to {
+    transform: scale(0);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    margin-top: $neg-gap;
+  }
+}
+
+@keyframes alert-leave-burst {
+  to {
+    transform: scale(0.82);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    margin-top: $neg-gap;
+  }
+}
+
+@keyframes alert-leave-drop {
+  to {
+    transform: translateY(-10px) scale(0.96);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    margin-top: $neg-gap;
+  }
+}
+
+@keyframes alert-leave-slide-right {
+  to {
+    transform: translateX(28px);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    margin-top: $neg-gap;
+  }
+}
+
+@keyframes alert-leave-unfold {
+  to {
+    transform: translateY(-8px) scaleY(0);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    margin-top: $neg-gap;
   }
 }

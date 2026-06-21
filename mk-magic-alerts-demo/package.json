@@ -1,6 +1,6 @@
 {
 	"name": "mk-magic-alerts-demo",
-	"version": "0.22.6",
+	"version": "0.22.7",
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve --port 4800",
@@ -10,7 +10,8 @@
 		"test:watch": "ng test --watch",
 		"test:ci": "ng test --watch=false",
 		"reinstall": "npx -y -p rimraf@latest rimraf node_modules && npm ci",
-		"deploy": "ng build --configuration=production --base-href \"/mk-magic-messages-library/\" && node copyIndexTo404.js"
+		"deploy": "ng build --configuration=production --base-href \"/mk-magic-messages-library/\" && node copyIndexTo404.js",
+		"preview:gh-pages": "npm --prefix ../mk-magic-alerts-lib run build && npm run deploy && node previewGhPages.js"
 	},
 	"private": true,
 	"dependencies": {

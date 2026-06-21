@@ -33,6 +33,7 @@ export class AlertsService {
 		});
 		this.alertsComponentRef.setInput('entryAnimation', this.config.entryAnimation);
 		this.alertsComponentRef.setInput('alertAppearance', this.config.alertAppearance);
+		this.alertsComponentRef.setInput('alerts', this.alertsStore.alerts());
 
 		// Attach the AlertsContainerComponent to the application
 		this.applicationRef.attachView(this.alertsComponentRef.hostView);
@@ -41,21 +42,25 @@ export class AlertsService {
 
 	showInfo(text: string, dismissTimeInMillis: number = 10_000) {
 		this.alertsStore.addAlert(text, 'info', dismissTimeInMillis);
+		this.syncAlertsToContainer();
 		this.queueContainerRender();
 	}
 
 	showSuccess(text: string, dismissTimeInMillis: number = 4_000) {
 		this.alertsStore.addAlert(text, 'success', dismissTimeInMillis);
+		this.syncAlertsToContainer();
 		this.queueContainerRender();
 	}
 
 	showWarning(text: string, dismissTimeInMillis: number = 10_000) {
 		this.alertsStore.addAlert(text, 'warning', dismissTimeInMillis);
+		this.syncAlertsToContainer();
 		this.queueContainerRender();
 	}
 
 	showError(text: string, dismissTimeInMillis: number = 2_147_483_647) {
 		this.alertsStore.addAlert(text, 'error', dismissTimeInMillis);
+		this.syncAlertsToContainer();
 		this.queueContainerRender();
 	}
 
@@ -71,7 +76,12 @@ export class AlertsService {
 
 	clear() {
 		this.alertsStore.dismissAll();
+		this.syncAlertsToContainer();
 		this.queueContainerRender();
+	}
+
+	private syncAlertsToContainer(): void {
+		this.alertsComponentRef.setInput('alerts', this.alertsStore.alerts());
 	}
 
 	private queueContainerRender(): void {

@@ -4,9 +4,8 @@
       <div
         #container
         class="alert-container alert-{{ params.type }} alert-{{ alertAppearance() }} {{ animationClass() }}"
-        [class.alert-enter-active]="entryAnimationStarted()"
         role="alert"
-        (transitionend)="onContainerTransitionEnd($event)">
+        (animationend)="onContainerAnimationEnd($event)">
 
         <div class="alert-icon" aria-hidden="true">
           @switch (params.type) {

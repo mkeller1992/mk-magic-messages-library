@@ -1,21 +1,38 @@
 import { provideZonelessChangeDetection, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Subject } from 'rxjs';
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 import { AlertsService } from './alerts.service';
 import { AlertsStore } from '../state/alerts.store';
 import { Alert } from '../models/alert.model';
 import { AlertEntryAnimation } from '../models/alert-entry-animation';
 import { AlertAppearance } from '../models/alert-appearance';
+import { AlertState } from '../models/alert-state';
 import { MAGIC_ALERTS_CONFIG, provideMagicAlerts } from '../config/magic-alerts-config';
 
 describe('AlertsService', () => {
   let service: AlertsService;
   let alertsStoreMock: Partial<AlertsStore>;
+  let alertsStoreSignal: ReturnType<typeof signal<Alert[]>>;
 
   beforeEach(() => {
+    alertsStoreSignal = signal<Alert[]>([]);
+
     alertsStoreMock = {
-      alerts: signal<Alert[]>([]),
-      addAlert: vi.fn(),
+      alerts: alertsStoreSignal,
+      dismissAll$: new Subject<void>().asObservable(),
+      addAlert: vi.fn((text, type, dismissTimeInMillis) => {
+        alertsStoreSignal.set([
+          ...alertsStoreSignal(),
+          {
+            id: `alert-${alertsStoreSignal().length + 1}`,
+            text,
+            type,
+            dismissTimeInMillis,
+            state: AlertState.DISPLAY
+          } as Alert
+        ]);
+      }),
       dismissAll: vi.fn()
     };
 
@@ -121,6 +138,19 @@ describe('AlertsService', () => {
   });
 
   describe('container rendering', () => {
+    it('should sync alerts to the alerts container input after adding an alert', () => {
+      const alertsComponentRef = (service as any).alertsComponentRef;
+
+      service.showSuccess('Synced alert');
+
+      expect(alertsComponentRef.instance.alerts()).toEqual([
+        expect.objectContaining({
+          text: 'Synced alert',
+          type: 'success'
+        })
+      ]);
+    });
+
     it('should render the alerts container after adding an alert', async () => {
       const alertsComponentRef = (service as any).alertsComponentRef;
       const detectChangesSpy = vi.spyOn(alertsComponentRef.changeDetectorRef, 'detectChanges');

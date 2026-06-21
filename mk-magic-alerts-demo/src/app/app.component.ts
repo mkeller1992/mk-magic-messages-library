@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
 		console.log(`Frontend Version: v${packageJson?.version}`);
 
 		this.alertsForm = new FormGroup({
-			entryAnimation: new FormControl(AlertEntryAnimation.BURST, Validators.required),
+			entryAnimation: new FormControl(AlertEntryAnimation.DOT, Validators.required),
 			gradientAppearance: new FormControl(false),
 			successAlert: new FormControl('Success!', Validators.required),
 			successDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
@@ -122,7 +122,7 @@ export class AppComponent implements OnInit {
 	}
 
 	private getSelectedEntryAnimation(): AlertEntryAnimation {
-		return this.alertsForm.value.entryAnimation ?? AlertEntryAnimation.BURST;
+		return this.alertsForm.value.entryAnimation ?? AlertEntryAnimation.DOT;
 	}
 
 	private getAnimationLabel(entryAnimation: AlertEntryAnimation): string {
