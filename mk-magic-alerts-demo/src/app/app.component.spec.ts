@@ -25,14 +25,16 @@ describe('AppComponent', () => {
     fixture = TestBed.createComponent(AppComponent);
     mockAlertsService = TestBed.inject(AlertsService);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   afterEach(() => {
-    vi.useRealTimers(); // Clean up and use real timers after tests
+    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 
@@ -44,24 +46,25 @@ describe('AppComponent', () => {
     const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
     const showWarningSpy = vi.spyOn(mockAlertsService, 'showWarning');
 
-    component.ngOnInit();
+    fixture.detectChanges();
 
-    // No need to advance time for the synchronous call to showSuccess, which should be checked directly
     expect(showSuccessSpy).toHaveBeenCalledWith('Success-Alert', 5_000);
 
-    // Advance timers just enough for the first setTimeout to trigger
-    vi.advanceTimersByTime(500);
+    vi.advanceTimersByTime(1_000);
     expect(showErrorSpy).toHaveBeenCalledWith('Error-Alert', 5_000);
 
-    // Advance timers to trigger the second setTimeout
-    vi.advanceTimersByTime(500);
+    vi.advanceTimersByTime(1_000);
     expect(showInfoSpy).toHaveBeenCalledWith('Info-Alert', 5_000);
-    // Advance timers for the third setTimeout
-    vi.advanceTimersByTime(500);
+
+    vi.advanceTimersByTime(1_000);
     expect(showWarningSpy).toHaveBeenCalledWith('Warning-Alert', 5_000);
   });
 
   it('should display an alert with the selected entry animation', () => {
+    vi.useFakeTimers();
+    fixture.detectChanges();
+    vi.clearAllTimers();
+
     const setEntryAnimationSpy = vi.spyOn(mockAlertsService, 'setEntryAnimation');
     const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
 
@@ -77,6 +80,8 @@ describe('AppComponent', () => {
 
   it('should display all entry animations', () => {
     vi.useFakeTimers();
+    fixture.detectChanges();
+    vi.clearAllTimers();
 
     const setEntryAnimationSpy = vi.spyOn(mockAlertsService, 'setEntryAnimation');
     const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
@@ -90,5 +95,10 @@ describe('AppComponent', () => {
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.SLIDE_RIGHT);
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.UNFOLD);
     expect(showInfoSpy).toHaveBeenCalledTimes(5);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Dot', 7_000);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Burst', 7_000);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Drop', 7_000);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Slide right', 7_000);
+    expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Unfold', 7_000);
   });
 });
