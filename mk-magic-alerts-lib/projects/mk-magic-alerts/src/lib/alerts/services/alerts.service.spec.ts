@@ -120,6 +120,19 @@ describe('AlertsService', () => {
     });
   });
 
+  describe('container rendering', () => {
+    it('should render the alerts container after adding an alert', async () => {
+      const alertsComponentRef = (service as any).alertsComponentRef;
+      const detectChangesSpy = vi.spyOn(alertsComponentRef.changeDetectorRef, 'detectChanges');
+
+      service.showSuccess('Rendered alert');
+
+      await Promise.resolve();
+
+      expect(detectChangesSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('entry animation', () => {
     it('should update the alerts container entry animation', () => {
       const alertsComponentRef = (service as any).alertsComponentRef;

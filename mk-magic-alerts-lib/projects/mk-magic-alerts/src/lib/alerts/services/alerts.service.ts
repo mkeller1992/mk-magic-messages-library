@@ -14,6 +14,7 @@ export class AlertsService {
 	private readonly config = inject(MAGIC_ALERTS_CONFIG);
 
 	private alertsComponentRef!: ComponentRef<AlertsContainerComponent>;
+	private renderQueued = false;
 
 	constructor() {
 		this.initializeAlertsComponent();
@@ -39,29 +40,49 @@ export class AlertsService {
 
 	showInfo(text: string, dismissTimeInMillis: number = 10_000) {
 		this.alertsStore.addAlert(text, 'info', dismissTimeInMillis);
+		this.queueContainerRender();
 	}
 
 	showSuccess(text: string, dismissTimeInMillis: number = 4_000) {
 		this.alertsStore.addAlert(text, 'success', dismissTimeInMillis);
+		this.queueContainerRender();
 	}
 
 	showWarning(text: string, dismissTimeInMillis: number = 10_000) {
 		this.alertsStore.addAlert(text, 'warning', dismissTimeInMillis);
+		this.queueContainerRender();
 	}
 
 	showError(text: string, dismissTimeInMillis: number = 2_147_483_647) {
 		this.alertsStore.addAlert(text, 'error', dismissTimeInMillis);
+		this.queueContainerRender();
 	}
 
 	setEntryAnimation(entryAnimation: AlertEntryAnimation): void {
 		this.alertsComponentRef.setInput('entryAnimation', entryAnimation);
+		this.queueContainerRender();
 	}
 
 	setAlertAppearance(alertAppearance: AlertAppearance): void {
 		this.alertsComponentRef.setInput('alertAppearance', alertAppearance);
+		this.queueContainerRender();
 	}
 
 	clear() {
 		this.alertsStore.dismissAll();
+		this.queueContainerRender();
+	}
+
+	private queueContainerRender(): void {
+		if (this.renderQueued) {
+			return;
+		}
+
+		this.renderQueued = true;
+
+		queueMicrotask(() => {
+			this.renderQueued = false;
+			this.alertsComponentRef.changeDetectorRef.detectChanges();
+		});
 	}
 }
