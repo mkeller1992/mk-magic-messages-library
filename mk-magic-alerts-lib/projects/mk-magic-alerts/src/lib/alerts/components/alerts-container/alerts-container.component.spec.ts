@@ -8,6 +8,7 @@ import { AlertsStore } from '../../state/alerts.store';
 import { AlertState } from '../../models/alert-state';
 import { Alert } from '../../models/alert.model';
 import { AlertEntryAnimation } from '../../models/alert-entry-animation';
+import { AlertAppearance } from '../../models/alert-appearance';
 
 @Component({
   selector: 'app-alert', // Has to equal the selector of the real AlertComponent
@@ -22,6 +23,9 @@ class MockAlertComponent {
 
   @Input()
   entryAnimation = AlertEntryAnimation.DOT;
+
+  @Input()
+  alertAppearance = AlertAppearance.CLASSIC;
 }
 
 describe('AlertsContainerComponent', () => {
@@ -112,6 +116,19 @@ describe('AlertsContainerComponent', () => {
 
     expect(firstAlertComponent.entryAnimation).toBe(AlertEntryAnimation.DROP);
     expect(secondAlertComponent.entryAnimation).toBe(AlertEntryAnimation.DROP);
+  });
+
+  it('should pass alertAppearance to child alert components', () => {
+    fixture.componentRef.setInput('alertAppearance', AlertAppearance.GRADIENT);
+    fixture.detectChanges();
+
+    const alertComponents = fixture.debugElement.queryAll(By.directive(MockAlertComponent));
+
+    const firstAlertComponent = alertComponents[0].componentInstance as MockAlertComponent;
+    const secondAlertComponent = alertComponents[1].componentInstance as MockAlertComponent;
+
+    expect(firstAlertComponent.alertAppearance).toBe(AlertAppearance.GRADIENT);
+    expect(secondAlertComponent.alertAppearance).toBe(AlertAppearance.GRADIENT);
   });
 
 });

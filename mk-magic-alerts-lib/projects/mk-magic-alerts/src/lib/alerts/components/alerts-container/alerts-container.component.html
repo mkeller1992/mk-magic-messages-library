@@ -6,7 +6,8 @@
 	@for (alertParams of alerts(); track alertParams.id) {
 		<app-alert
 			[alertParams]="alertParams"
-			[entryAnimation]="entryAnimation()">
+			[entryAnimation]="entryAnimation()"
+			[alertAppearance]="alertAppearance()">
 		</app-alert>
 	}
 </div>

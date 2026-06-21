@@ -1,14 +1,17 @@
 import { EnvironmentProviders, InjectionToken, makeEnvironmentProviders } from '@angular/core';
 import { AlertEntryAnimation } from '../models/alert-entry-animation';
+import { AlertAppearance } from '../models/alert-appearance';
 
 export interface MagicAlertsConfig {
   entryAnimation: AlertEntryAnimation;
+  alertAppearance: AlertAppearance;
 }
 
 export type MagicAlertsConfigOptions = Partial<MagicAlertsConfig>;
 
 export const DEFAULT_MAGIC_ALERTS_CONFIG: MagicAlertsConfig = {
-  entryAnimation: AlertEntryAnimation.DOT
+  entryAnimation: AlertEntryAnimation.DOT,
+  alertAppearance: AlertAppearance.CLASSIC
 };
 
 export const MAGIC_ALERTS_CONFIG = new InjectionToken<MagicAlertsConfig>('MAGIC_ALERTS_CONFIG', {

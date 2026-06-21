@@ -7,6 +7,7 @@ import { Alert } from '../../models/alert.model';
 import { NewlineAndTabsPipe } from '../../pipes/new-line-and-tabs.pipe';
 import { AlertsStore } from '../../state/alerts.store';
 import { AlertEntryAnimation } from '../../models/alert-entry-animation';
+import { AlertAppearance } from '../../models/alert-appearance';
 
 @Component({
   selector: 'app-alert',
@@ -21,7 +22,8 @@ export class AlertComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly alertParams = input.required<Alert>();
-  readonly entryAnimation = input<AlertEntryAnimation>(AlertEntryAnimation.DOT);
+  readonly entryAnimation = input.required<AlertEntryAnimation>();
+  readonly alertAppearance = input.required<AlertAppearance>();
 
   readonly container = viewChild<ElementRef<HTMLElement>>('container');
 

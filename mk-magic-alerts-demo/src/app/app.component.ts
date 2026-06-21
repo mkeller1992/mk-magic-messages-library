@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlertEntryAnimation, AlertsService } from '@mk-magic-alerts';
+import { AlertAppearance, AlertEntryAnimation, AlertsService } from '@mk-magic-alerts';
 import packageJson from '../../package.json';
 
 interface EntryAnimationOption {
@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
 
 		this.alertsForm = new FormGroup({
 			entryAnimation: new FormControl(AlertEntryAnimation.BURST, Validators.required),
+			gradientAppearance: new FormControl(false),
 			successAlert: new FormControl('Success!', Validators.required),
 			successDuration: new FormControl(3, [Validators.required, Validators.min(1)]),
 			errorAlert: new FormControl('Error!', Validators.required),
@@ -52,6 +53,7 @@ export class AppComponent implements OnInit {
 	submitSelectedAnimation() {
 		const selectedAnimation = this.getSelectedEntryAnimation();
 		this.msgSvc.setEntryAnimation(selectedAnimation);
+		this.msgSvc.setAlertAppearance(this.getSelectedAlertAppearance());
 		this.msgSvc.showInfo(`Entry animation: ${this.getAnimationLabel(selectedAnimation)}`, 4_000);
 	}
 
@@ -59,9 +61,16 @@ export class AppComponent implements OnInit {
 		this.entryAnimationOptions.forEach((option, index) => {
 			setTimeout(() => {
 				this.msgSvc.setEntryAnimation(option.value);
+				this.msgSvc.setAlertAppearance(this.getSelectedAlertAppearance());
 				this.msgSvc.showInfo(`Entry animation: ${option.label}`, 7_000);
 			}, index * 1_500);
 		});
+	}
+
+	submitSelectedAppearance() {
+		const selectedAppearance = this.getSelectedAlertAppearance();
+		this.msgSvc.setAlertAppearance(selectedAppearance);
+		this.msgSvc.showInfo(`Alert appearance: ${this.getAppearanceLabel(selectedAppearance)}`, 4_000);
 	}
 
 	submitSuccess() {
@@ -86,24 +95,28 @@ export class AppComponent implements OnInit {
 
 	private displaySuccess(msg: string, durationInSec: number) {
 		this.msgSvc.setEntryAnimation(this.getSelectedEntryAnimation());
+		this.msgSvc.setAlertAppearance(this.getSelectedAlertAppearance());
 		const durationInMillis = (durationInSec ?? 1) * 1000;
 		this.msgSvc.showSuccess(msg, durationInMillis);
 	}
 
 	private displayError(msg: string, durationInSec: number) {
 		this.msgSvc.setEntryAnimation(this.getSelectedEntryAnimation());
+		this.msgSvc.setAlertAppearance(this.getSelectedAlertAppearance());
 		const durationInMillis = (durationInSec ?? 1) * 1000;
 		this.msgSvc.showError(msg, durationInMillis);
 	}
 
 	private displayInfo(msg: string, durationInSec: number) {
 		this.msgSvc.setEntryAnimation(this.getSelectedEntryAnimation());
+		this.msgSvc.setAlertAppearance(this.getSelectedAlertAppearance());
 		const durationInMillis = (durationInSec ?? 1) * 1000;
 		this.msgSvc.showInfo(msg, durationInMillis);
 	}
 
 	private displayWarning(msg: string, durationInSec: number) {
 		this.msgSvc.setEntryAnimation(this.getSelectedEntryAnimation());
+		this.msgSvc.setAlertAppearance(this.getSelectedAlertAppearance());
 		const durationInMillis = (durationInSec ?? 1) * 1000;
 		this.msgSvc.showWarning(msg, durationInMillis);
 	}
@@ -114,6 +127,16 @@ export class AppComponent implements OnInit {
 
 	private getAnimationLabel(entryAnimation: AlertEntryAnimation): string {
 		return this.entryAnimationOptions.find(option => option.value === entryAnimation)?.label ?? entryAnimation;
+	}
+
+	private getSelectedAlertAppearance(): AlertAppearance {
+		return this.alertsForm.value.gradientAppearance
+			? AlertAppearance.GRADIENT
+			: AlertAppearance.CLASSIC;
+	}
+
+	private getAppearanceLabel(alertAppearance: AlertAppearance): string {
+		return alertAppearance === AlertAppearance.GRADIENT ? 'Gradient' : 'Classic';
 	}
 
 }

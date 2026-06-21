@@ -29,17 +29,17 @@ npm i mk-magic-alerts
 
 No required setup is needed. You can inject `AlertsService` directly.
 
-### Optional: choose an entry animation
+### Optional: configure defaults
 
 By default, alerts use `AlertEntryAnimation.DOT`. Existing applications do not need to change anything.
 
-If you want to choose another animation globally, add `provideMagicAlerts()` to your application providers:
+If you want to choose another animation or appearance globally, add `provideMagicAlerts()` to your application providers:
 
 ```typescript
 import { provideZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { AlertEntryAnimation, provideMagicAlerts } from 'mk-magic-alerts';
+import { AlertAppearance, AlertEntryAnimation, provideMagicAlerts } from 'mk-magic-alerts';
 
 import { AppComponent } from './app/app.component';
 import { APP_ROUTES } from './app/app.routes';
@@ -49,11 +49,14 @@ bootstrapApplication(AppComponent, {
     provideRouter(APP_ROUTES),
     provideZonelessChangeDetection(),
     provideMagicAlerts({
-      entryAnimation: AlertEntryAnimation.BURST
+      entryAnimation: AlertEntryAnimation.BURST,
+      alertAppearance: AlertAppearance.GRADIENT
     })
   ]
 }).catch(err => console.error(err));
 ```
+
+The config option is called `alertAppearance` and defaults to `AlertAppearance.CLASSIC`.
 
 Available entry animations:
 
@@ -70,6 +73,24 @@ You can also switch the entry animation at runtime before showing an alert:
 ```typescript
 this.alertsSvc.setEntryAnimation(AlertEntryAnimation.BURST);
 this.alertsSvc.showInfo('Shown with burst animation');
+```
+
+### Optional: choose an alert appearance
+
+By default, alerts use `AlertAppearance.CLASSIC`. Existing applications do not need to change anything.
+
+Available alert appearances:
+
+| Appearance | Preview | Description |
+| --- | --- | --- |
+| `AlertAppearance.CLASSIC` | ![Classic alert appearance](https://raw.githubusercontent.com/mkeller1992/mk-magic-messages-library/master/docs/alert-appearance-classic.svg) | The existing default style with a flat background and visible border. |
+| `AlertAppearance.GRADIENT` | ![Gradient alert appearance](https://raw.githubusercontent.com/mkeller1992/mk-magic-messages-library/master/docs/alert-appearance-gradient.svg) | A softer gradient style with a stronger icon badge. |
+
+You can also switch the alert appearance at runtime before showing an alert:
+
+```typescript
+this.alertsSvc.setAlertAppearance(AlertAppearance.GRADIENT);
+this.alertsSvc.showInfo('Shown with gradient appearance');
 ```
 
 ## Usage

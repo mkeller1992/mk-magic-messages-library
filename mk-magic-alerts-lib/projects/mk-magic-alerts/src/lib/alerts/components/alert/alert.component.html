@@ -3,16 +3,34 @@
     @if (isDisplayed()) {
       <div
         #container
-        class="alert-container alert-{{ params.type }}"
+        class="alert-container alert-{{ params.type }} alert-{{ alertAppearance() }}"
+        role="alert"
         [animate.enter]="enterAnimationClass()"
         [animate.leave]="leaveAnimationClass()"
         (transitionend)="onContainerTransitionEnd($event)">
 
+        <div class="alert-icon" aria-hidden="true">
+          @switch (params.type) {
+            @case ('info') {
+              <i class="fa fa-info-circle"></i>
+            }
+            @case ('success') {
+              <i class="fa fa-check"></i>
+            }
+            @case ('warning') {
+              <i class="fa fa-exclamation-triangle"></i>
+            }
+            @case ('error') {
+              <i class="fa fa-exclamation-triangle"></i>
+            }
+          }
+        </div>
+
         <div class="alert-text" [innerHtml]="params.text | newlineAndTabs"></div>
 
-        <div class="btn-dismiss">
+        <button type="button" class="btn-dismiss" aria-label="Alert schliessen">
           <i class="fa fa-times"></i>
-        </div>
+        </button>
       </div>
     }
   </div>

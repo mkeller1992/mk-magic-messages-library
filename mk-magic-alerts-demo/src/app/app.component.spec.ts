@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AlertEntryAnimation, AlertsService, MockAlertsService } from '@mk-magic-alerts';
+import { AlertAppearance, AlertEntryAnimation, AlertsService, MockAlertsService } from '@mk-magic-alerts';
 import { AppComponent } from './app.component';
 import { provideZonelessChangeDetection } from '@angular/core';
 
@@ -45,9 +45,11 @@ describe('AppComponent', () => {
     const showErrorSpy = vi.spyOn(mockAlertsService, 'showError');
     const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
     const showWarningSpy = vi.spyOn(mockAlertsService, 'showWarning');
+    const setAlertAppearanceSpy = vi.spyOn(mockAlertsService, 'setAlertAppearance');
 
     fixture.detectChanges();
 
+    expect(setAlertAppearanceSpy).toHaveBeenCalledWith(AlertAppearance.CLASSIC);
     expect(showSuccessSpy).toHaveBeenCalledWith('Success-Alert', 5_000);
 
     vi.advanceTimersByTime(1_000);
@@ -66,16 +68,37 @@ describe('AppComponent', () => {
     vi.clearAllTimers();
 
     const setEntryAnimationSpy = vi.spyOn(mockAlertsService, 'setEntryAnimation');
+    const setAlertAppearanceSpy = vi.spyOn(mockAlertsService, 'setAlertAppearance');
     const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
 
     component.alertsForm.patchValue({
-      entryAnimation: AlertEntryAnimation.UNFOLD
+      entryAnimation: AlertEntryAnimation.UNFOLD,
+      gradientAppearance: true
     });
 
     component.submitSelectedAnimation();
 
     expect(setEntryAnimationSpy).toHaveBeenCalledWith(AlertEntryAnimation.UNFOLD);
+    expect(setAlertAppearanceSpy).toHaveBeenCalledWith(AlertAppearance.GRADIENT);
     expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Unfold', 4_000);
+  });
+
+  it('should display an alert with the selected appearance', () => {
+    vi.useFakeTimers();
+    fixture.detectChanges();
+    vi.clearAllTimers();
+
+    const setAlertAppearanceSpy = vi.spyOn(mockAlertsService, 'setAlertAppearance');
+    const showInfoSpy = vi.spyOn(mockAlertsService, 'showInfo');
+
+    component.alertsForm.patchValue({
+      gradientAppearance: true
+    });
+
+    component.submitSelectedAppearance();
+
+    expect(setAlertAppearanceSpy).toHaveBeenCalledWith(AlertAppearance.GRADIENT);
+    expect(showInfoSpy).toHaveBeenCalledWith('Alert appearance: Gradient', 4_000);
   });
 
   it('should display all entry animations', () => {
@@ -101,4 +124,5 @@ describe('AppComponent', () => {
     expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Slide right', 7_000);
     expect(showInfoSpy).toHaveBeenCalledWith('Entry animation: Unfold', 7_000);
   });
+
 });

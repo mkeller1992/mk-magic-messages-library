@@ -1,12 +1,12 @@
-$color-info: #004085;
-$color-success: #155724;
-$color-warning: #856404;
-$color-error: #721c24;
+$color-info: rgb(0, 64, 133);
+$color-success: rgb(21, 87, 36);
+$color-warning: rgb(133, 100, 4);
+$color-error: rgb(114, 28, 36);
 
-$hover-color-info: #3366ff;
-$hover-color-success: #30a24d;
-$hover-color-warning: #b38600;
-$hover-color-error: #ff4c59;
+$hover-color-info: rgb(51, 102, 255);
+$hover-color-success: rgb(48, 162, 77);
+$hover-color-warning: rgb(179, 134, 0);
+$hover-color-error: rgb(255, 76, 89);
 
 $gap-size: 5px;
 $neg-gap: -$gap-size;
@@ -30,9 +30,50 @@ $neg-gap: -$gap-size;
     border-width 0.45s ease,
     margin-top 0.45s ease;
 
-  .alert-text {
+  .alert-text,
+  .alert-icon,
+  .btn-dismiss {
     opacity: 0;
     transition: opacity 0.05s linear;
+  }
+}
+
+@mixin classic-alert-theme($color, $background-color, $hover-color) {
+  color: $color;
+  border-color: $color;
+  background-color: $background-color;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.08);
+
+  .btn-dismiss {
+    color: inherit;
+
+    &:hover {
+      text-shadow: 0 0 10px $hover-color, 0 0 20px $hover-color;
+    }
+  }
+}
+
+@mixin gradient-alert-theme($color, $background-start, $background-end, $icon-background, $hover-color) {
+  color: $color;
+  border-color: rgba($color, 0.3);
+  background: linear-gradient(105deg, $background-start 0%, $background-end 68%, rgb(255, 255, 255) 100%);
+  box-shadow:
+    0 5px 12px rgba(0, 0, 0, 0.1),
+    0 14px 30px rgba($color, 0.1);
+
+  .alert-icon {
+    color: $color;
+    background-color: $icon-background;
+  }
+
+  .btn-dismiss {
+    color: $color;
+
+    &:hover {
+      color: rgb(255, 255, 255);
+      background-color: $hover-color;
+      box-shadow: 0 3px 9px rgba($hover-color, 0.28);
+    }
   }
 }
 
@@ -53,8 +94,11 @@ $neg-gap: -$gap-size;
     overflow: hidden;
     border: 1px solid;
     border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.08);
     z-index: 1020 !important;
+
+    .alert-icon {
+      display: none;
+    }
 
     .alert-text {
       min-width: 0;
@@ -66,7 +110,45 @@ $neg-gap: -$gap-size;
     .btn-dismiss {
       justify-self: end;
       align-self: baseline;
+      padding: 0;
+      border: 0;
+      background: transparent;
       cursor: pointer;
+      font-size: 15px;
+    }
+
+    &.alert-gradient {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      column-gap: 12px;
+
+      padding: 10px 10px 10px 14px;
+      border-radius: 10px;
+
+      .alert-icon {
+        display: grid;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        border-radius: 50%;
+        font-size: 16px;
+      }
+
+      .alert-text {
+        font: 400 16px/21px Roboto;
+      }
+
+      .btn-dismiss {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        place-items: center;
+        align-self: start;
+        border-radius: 50%;
+        transition:
+          color 0.16s ease,
+          background-color 0.16s ease,
+          box-shadow 0.16s ease;
+      }
     }
   }
 
@@ -91,7 +173,9 @@ $neg-gap: -$gap-size;
       border-width: 0;
     }
 
-    .alert-text {
+    .alert-text,
+    .alert-icon,
+    .btn-dismiss {
       opacity: 1;
       transition: opacity 0.1s linear 0.3s;
 
@@ -128,7 +212,9 @@ $neg-gap: -$gap-size;
       border-width: 0;
     }
 
-    .alert-text {
+    .alert-text,
+    .alert-icon,
+    .btn-dismiss {
       opacity: 1;
       transition: opacity 0.14s ease-out 0.12s;
 
@@ -165,7 +251,9 @@ $neg-gap: -$gap-size;
       border-width: 0;
     }
 
-    .alert-text {
+    .alert-text,
+    .alert-icon,
+    .btn-dismiss {
       opacity: 1;
       transition: opacity 0.16s ease-out 0.12s;
 
@@ -202,7 +290,9 @@ $neg-gap: -$gap-size;
       border-width: 0;
     }
 
-    .alert-text {
+    .alert-text,
+    .alert-icon,
+    .btn-dismiss {
       opacity: 1;
       transition: opacity 0.14s ease-out 0.1s;
 
@@ -239,7 +329,9 @@ $neg-gap: -$gap-size;
       border-width: 0;
     }
 
-    .alert-text {
+    .alert-text,
+    .alert-icon,
+    .btn-dismiss {
       opacity: 1;
       transition: opacity 0.16s ease-out 0.14s;
 
@@ -256,46 +348,70 @@ $neg-gap: -$gap-size;
   }
 
   /* =========================================================
-   * Alert types
+   * Classic alert types: existing default appearance
    * ========================================================= */
 
-  .alert-info {
-    color: $color-info;
-    border-color: $color-info;
-    background-color: #b8daff;
+  .alert-classic {
+    &.alert-info {
+      @include classic-alert-theme($color-info, rgb(184, 218, 255), $hover-color-info);
+    }
 
-    .btn-dismiss:hover {
-      text-shadow: 0 0 10px $hover-color-info, 0 0 20px $hover-color-info;
+    &.alert-success {
+      @include classic-alert-theme($color-success, rgb(195, 230, 203), $hover-color-success);
+    }
+
+    &.alert-warning {
+      @include classic-alert-theme($color-warning, rgb(255, 238, 186), $hover-color-warning);
+    }
+
+    &.alert-error {
+      @include classic-alert-theme($color-error, rgb(248, 215, 218), $hover-color-error);
     }
   }
 
-  .alert-success {
-    color: $color-success;
-    border-color: $color-success;
-    background-color: #c3e6cb;
+  /* =========================================================
+   * Gradient alert types: opt-in appearance
+   * ========================================================= */
 
-    .btn-dismiss:hover {
-      text-shadow: 0 0 10px $hover-color-success, 0 0 20px $hover-color-success;
+  .alert-gradient {
+    &.alert-info {
+      @include gradient-alert-theme(
+        $color-info,
+        rgb(218, 235, 255),
+        rgb(244, 249, 255),
+        rgb(201, 226, 255),
+        $hover-color-info
+      );
     }
-  }
 
-  .alert-warning {
-    color: $color-warning;
-    border-color: $color-warning;
-    background-color: #ffeeba;
-
-    .btn-dismiss:hover {
-      text-shadow: 0 0 10px $hover-color-warning, 0 0 20px $hover-color-warning;
+    &.alert-success {
+      @include gradient-alert-theme(
+        $color-success,
+        rgb(216, 240, 221),
+        rgb(246, 252, 247),
+        rgb(201, 232, 209),
+        $hover-color-success
+      );
     }
-  }
 
-  .alert-error {
-    color: $color-error;
-    border-color: $color-error;
-    background-color: #f8d7da;
+    &.alert-warning {
+      @include gradient-alert-theme(
+        $color-warning,
+        rgb(255, 240, 192),
+        rgb(255, 251, 237),
+        rgb(255, 229, 153),
+        $hover-color-warning
+      );
+    }
 
-    .btn-dismiss:hover {
-      text-shadow: 0 0 10px $hover-color-error, 0 0 20px $hover-color-error;
+    &.alert-error {
+      @include gradient-alert-theme(
+        $color-error,
+        rgb(250, 220, 223),
+        rgb(255, 247, 248),
+        rgb(247, 204, 209),
+        $hover-color-error
+      );
     }
   }
 }

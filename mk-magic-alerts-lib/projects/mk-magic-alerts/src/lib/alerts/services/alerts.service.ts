@@ -3,6 +3,7 @@ import { AlertsStore } from '../state/alerts.store';
 import { AlertsContainerComponent } from '../components/alerts-container/alerts-container.component';
 import { MAGIC_ALERTS_CONFIG } from '../config/magic-alerts-config';
 import { AlertEntryAnimation } from '../models/alert-entry-animation';
+import { AlertAppearance } from '../models/alert-appearance';
 
 @Service()
 
@@ -30,6 +31,7 @@ export class AlertsService {
 			elementInjector: this.injector
 		});
 		this.alertsComponentRef.setInput('entryAnimation', this.config.entryAnimation);
+		this.alertsComponentRef.setInput('alertAppearance', this.config.alertAppearance);
 
 		// Attach the AlertsContainerComponent to the application
 		this.applicationRef.attachView(this.alertsComponentRef.hostView);
@@ -53,6 +55,10 @@ export class AlertsService {
 
 	setEntryAnimation(entryAnimation: AlertEntryAnimation): void {
 		this.alertsComponentRef.setInput('entryAnimation', entryAnimation);
+	}
+
+	setAlertAppearance(alertAppearance: AlertAppearance): void {
+		this.alertsComponentRef.setInput('alertAppearance', alertAppearance);
 	}
 
 	clear() {

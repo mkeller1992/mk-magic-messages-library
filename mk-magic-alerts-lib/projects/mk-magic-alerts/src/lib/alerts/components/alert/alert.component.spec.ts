@@ -6,6 +6,7 @@ import { AlertsStore } from '../../state/alerts.store';
 import { AlertState } from '../../models/alert-state';
 import { Alert } from '../../models/alert.model';
 import { AlertEntryAnimation } from '../../models/alert-entry-animation';
+import { AlertAppearance } from '../../models/alert-appearance';
 import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {
@@ -43,6 +44,8 @@ describe('AlertComponent', () => {
     component = fixture.componentInstance;
 
     fixture.componentRef.setInput('alertParams', createAlert());
+    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.DOT);
+    fixture.componentRef.setInput('alertAppearance', AlertAppearance.CLASSIC);
   });
 
   afterEach(() => {
@@ -67,6 +70,18 @@ describe('AlertComponent', () => {
     // Assert
     expect(component.enterAnimationClass()).toBe('alert-enter-burst');
     expect(component.leaveAnimationClass()).toBe('alert-leave-burst');
+  });
+
+  it('should apply the selected alert appearance class', () => {
+    // Arrange
+    fixture.componentRef.setInput('alertAppearance', AlertAppearance.GRADIENT);
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    const alertContainer = fixture.nativeElement.querySelector('.alert-container') as HTMLElement;
+    expect(alertContainer.classList.contains('alert-gradient')).toBe(true);
   });
 
   it('dismisses after timeout and becomes DISMISSED on transition end', () => {

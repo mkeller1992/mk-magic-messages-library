@@ -5,6 +5,7 @@ import { AlertsService } from './alerts.service';
 import { AlertsStore } from '../state/alerts.store';
 import { Alert } from '../models/alert.model';
 import { AlertEntryAnimation } from '../models/alert-entry-animation';
+import { AlertAppearance } from '../models/alert-appearance';
 import { MAGIC_ALERTS_CONFIG, provideMagicAlerts } from '../config/magic-alerts-config';
 
 describe('AlertsService', () => {
@@ -129,6 +130,16 @@ describe('AlertsService', () => {
     });
   });
 
+  describe('alert appearance', () => {
+    it('should update the alerts container alert appearance', () => {
+      const alertsComponentRef = (service as any).alertsComponentRef;
+
+      service.setAlertAppearance(AlertAppearance.GRADIENT);
+
+      expect(alertsComponentRef.instance.alertAppearance()).toBe(AlertAppearance.GRADIENT);
+    });
+  });
+
   describe('initialization', () => {
     it('should create the alerts host element', () => {
       expect(document.body.children.length).toBeGreaterThan(0);
@@ -139,10 +150,12 @@ describe('AlertsService', () => {
       const alertsComponentRef = (service as any).alertsComponentRef;
 
       expect(config.entryAnimation).toBe(AlertEntryAnimation.DOT);
+      expect(config.alertAppearance).toBe(AlertAppearance.CLASSIC);
       expect(alertsComponentRef.instance.entryAnimation()).toBe(AlertEntryAnimation.DOT);
+      expect(alertsComponentRef.instance.alertAppearance()).toBe(AlertAppearance.CLASSIC);
     });
 
-    it('should accept a configured entry animation', () => {
+    it('should accept configured entry animation and alert appearance', () => {
       TestBed.resetTestingModule();
       document.body.innerHTML = '';
 
@@ -150,7 +163,8 @@ describe('AlertsService', () => {
         providers: [
           provideZonelessChangeDetection(),
           provideMagicAlerts({
-            entryAnimation: AlertEntryAnimation.DROP
+            entryAnimation: AlertEntryAnimation.DROP,
+            alertAppearance: AlertAppearance.GRADIENT
           }),
           { provide: AlertsStore, useValue: alertsStoreMock },
           AlertsService
@@ -163,7 +177,9 @@ describe('AlertsService', () => {
       const alertsComponentRef = (configuredService as any).alertsComponentRef;
 
       expect(config.entryAnimation).toBe(AlertEntryAnimation.DROP);
+      expect(config.alertAppearance).toBe(AlertAppearance.GRADIENT);
       expect(alertsComponentRef.instance.entryAnimation()).toBe(AlertEntryAnimation.DROP);
+      expect(alertsComponentRef.instance.alertAppearance()).toBe(AlertAppearance.GRADIENT);
     });
   });
 });
