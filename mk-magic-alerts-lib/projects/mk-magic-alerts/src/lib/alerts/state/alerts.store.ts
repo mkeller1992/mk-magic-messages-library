@@ -17,7 +17,10 @@ export class AlertsStore {
 		auditTime(100)
 	);
 
-	readonly alerts = toSignal(this.alertsAudited$, { initialValue: [] });
+	readonly alerts = toSignal(this.alertsAudited$, {
+		initialValue: [],
+		manualCleanup: true
+	});
 
 	private readonly dismissAllSubject = new Subject<void>();
 
