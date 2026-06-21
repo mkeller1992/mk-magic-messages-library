@@ -189,11 +189,11 @@ $neg-gap: -$gap-size;
    * ========================================================= */
 
   .alert-enter-slide-right {
-    @include enter-alert(alert-enter-slide-right, 0.36s cubic-bezier(0.22, 1, 0.36, 1), right center);
+    @include enter-alert(alert-enter-slide-right, 0.4s cubic-bezier(0.22, 1, 0.36, 1), right center);
   }
 
   .alert-leave-slide-right {
-    @include leave-alert(alert-leave-slide-right, 0.42s, right center);
+    @include leave-alert(alert-leave-slide-right, 0.44s, right center);
   }
 
   /* =========================================================
