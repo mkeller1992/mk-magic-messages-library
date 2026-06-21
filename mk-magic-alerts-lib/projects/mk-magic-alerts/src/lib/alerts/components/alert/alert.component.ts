@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, com
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, fromEvent, race, timer } from 'rxjs';
 import { repeat, take, takeUntil, tap } from 'rxjs/operators';
-import { AlertsStore } from '../alerts.store';
-import { AlertState } from '../models/alert-state';
-import { Alert } from '../models/alert.model';
-import { NewlineAndTabsPipe } from '../pipes/new-line-and-tabs.pipe';
+import { AlertsStore } from '../../state/alerts.store';
+import { AlertState } from '../../models/alert-state';
+import { Alert } from '../../models/alert.model';
+import { NewlineAndTabsPipe } from '../../pipes/new-line-and-tabs.pipe';
 
 @Component({
   selector: 'app-alert',

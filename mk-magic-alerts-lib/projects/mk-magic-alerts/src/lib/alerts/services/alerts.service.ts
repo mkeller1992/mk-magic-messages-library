@@ -1,6 +1,6 @@
 import { ApplicationRef, ComponentRef, Injector, Service, createComponent, inject } from '@angular/core';
-import { AlertsStore } from './alerts.store';
-import { AlertsComponent } from './alerts.component';
+import { AlertsStore } from '../state/alerts.store';
+import { AlertsContainerComponent } from '../components/alerts-container/alerts-container.component';
 
 @Service()
 
@@ -9,7 +9,7 @@ export class AlertsService {
 	private readonly applicationRef = inject(ApplicationRef);
 	private readonly injector = inject(Injector);
 
-	private alertsComponentRef!: ComponentRef<AlertsComponent>;
+	private alertsComponentRef!: ComponentRef<AlertsContainerComponent>;
 
 	constructor() {
 		this.initializeAlertsComponent();
@@ -19,15 +19,15 @@ export class AlertsService {
 		// Create a div element and append it to the document body
 		const hostElement = document.createElement('div');
 		document.body.appendChild(hostElement);
-	
-		// Create AlertsComponent and attach it to the DOM
-		this.alertsComponentRef = createComponent(AlertsComponent, {
+
+		// Create AlertsContainerComponent and attach it to the DOM
+		this.alertsComponentRef = createComponent(AlertsContainerComponent, {
 			hostElement,
 			environmentInjector: this.applicationRef.injector,
 			elementInjector: this.injector
 		});
-	
-		// Attach the AlertsComponent to the application
+
+		// Attach the AlertsContainerComponent to the application
 		this.applicationRef.attachView(this.alertsComponentRef.hostView);
 	}
 

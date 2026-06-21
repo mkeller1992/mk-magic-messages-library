@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AlertsStore } from './alerts.store';
-import { AlertComponent } from './alert/alert.component';
+import { AlertsStore } from '../../state/alerts.store';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'magic-alerts',
-  templateUrl: './alerts.component.html',
-  styleUrls: ['./alerts.component.scss'],
+  templateUrl: './alerts-container.component.html',
+  styleUrls: ['./alerts-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AlertComponent]
 })
-export class AlertsComponent {
+export class AlertsContainerComponent {
   private readonly alertsStore = inject(AlertsStore);
 
   readonly alerts = this.alertsStore.alerts;

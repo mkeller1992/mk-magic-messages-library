@@ -1,9 +1,9 @@
 import { Service } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, Observable, Subject, auditTime } from 'rxjs';
-import { AlertState } from './models/alert-state';
-import { AlertType } from './models/alert-type';
-import { Alert } from './models/alert.model';
+import { AlertState } from '../models/alert-state';
+import { AlertType } from '../models/alert-type';
+import { Alert } from '../models/alert.model';
 
 @Service()
 

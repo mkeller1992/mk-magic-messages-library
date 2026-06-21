@@ -2,9 +2,9 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { AlertsStore } from '../alerts.store';
-import { AlertState } from '../models/alert-state';
-import { Alert } from '../models/alert.model';
+import { AlertsStore } from '../../state/alerts.store';
+import { AlertState } from '../../models/alert-state';
+import { Alert } from '../../models/alert.model';
 import { AlertComponent } from './alert.component';
 
 describe('AlertComponent', () => {

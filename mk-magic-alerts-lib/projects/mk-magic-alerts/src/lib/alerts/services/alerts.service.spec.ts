@@ -2,8 +2,8 @@ import { provideZonelessChangeDetection, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 import { AlertsService } from './alerts.service';
-import { AlertsStore } from './alerts.store';
-import { Alert } from './models/alert.model';
+import { AlertsStore } from '../state/alerts.store';
+import { Alert } from '../models/alert.model';
 
 describe('AlertsService', () => {
   let service: AlertsService;

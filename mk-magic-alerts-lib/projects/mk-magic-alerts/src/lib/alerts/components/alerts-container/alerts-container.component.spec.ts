@@ -2,11 +2,11 @@ import { Component, Input, provideZonelessChangeDetection, signal } from '@angul
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { AlertComponent } from './alert/alert.component';
-import { AlertsComponent } from './alerts.component';
-import { AlertsStore } from './alerts.store';
-import { AlertState } from './models/alert-state';
-import { Alert } from './models/alert.model';
+import { AlertComponent } from '../alert/alert.component';
+import { AlertsContainerComponent } from './alerts-container.component';
+import { AlertsStore } from '../../state/alerts.store';
+import { AlertState } from '../../models/alert-state';
+import { Alert } from '../../models/alert.model';
 
 @Component({
   selector: 'app-alert', // Has to equal the selector of the real AlertComponent
@@ -20,9 +20,9 @@ class MockAlertComponent {
   dismissTimeInMillis = 0;
 }
 
-describe('AlertsComponent', () => {
-  let component: AlertsComponent;
-  let fixture: ComponentFixture<AlertsComponent>;
+describe('AlertsContainerComponent', () => {
+  let component: AlertsContainerComponent;
+  let fixture: ComponentFixture<AlertsContainerComponent>;
 
   const infoAlertTxt = 'Info Alert';
   const errorAlertTxt = 'Error Alert';
@@ -50,13 +50,13 @@ describe('AlertsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AlertsComponent],
+      imports: [AlertsContainerComponent],
       providers: [
         provideZonelessChangeDetection(),
         { provide: AlertsStore, useValue: alertsStoreMock }
       ]
     })
-      .overrideComponent(AlertsComponent, {
+      .overrideComponent(AlertsContainerComponent, {
         remove: {
           imports: [AlertComponent]
         },
@@ -66,7 +66,7 @@ describe('AlertsComponent', () => {
       })
       .compileComponents();
 
-    fixture = TestBed.createComponent(AlertsComponent);
+    fixture = TestBed.createComponent(AlertsContainerComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
