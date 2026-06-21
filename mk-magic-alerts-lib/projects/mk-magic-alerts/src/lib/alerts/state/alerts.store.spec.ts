@@ -8,8 +8,6 @@ describe('AlertsStore', () => {
   let service: AlertsStore;
 
   beforeEach(() => {
-    vi.useFakeTimers();
-
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
@@ -21,7 +19,6 @@ describe('AlertsStore', () => {
   });
 
   afterEach(() => {
-    vi.useRealTimers();
     TestBed.resetTestingModule();
   });
 
@@ -41,10 +38,6 @@ describe('AlertsStore', () => {
     service.addAlert(infoTxt, 'info', 600);
     service.addAlert(warningTxt, 'warning', 700);
     service.addAlert(errorTxt, 'error', 800);
-
-    // Flush the auditTime(100)
-    // Corresponds to the value of auditTime() in the alerts-pipe
-    vi.advanceTimersByTime(100);
 
     const alerts = service.alerts();
 
@@ -89,8 +82,6 @@ describe('AlertsStore', () => {
     service.addAlert('First Alert', 'info', 1000);
     service.addAlert('Second Alert', 'error', 1000);
 
-    vi.advanceTimersByTime(100);
-
     const alerts = service.alerts();
 
     // Assert
@@ -102,15 +93,11 @@ describe('AlertsStore', () => {
     // Arrange
     service.addAlert('Dismissed Alert', 'info', 1000);
 
-    vi.advanceTimersByTime(100);
-
     const firstAlert = service.alerts()[0];
     firstAlert.state = AlertState.DISMISSED;
 
     // Act
     service.addAlert('New Alert', 'success', 2000);
-
-    vi.advanceTimersByTime(100);
 
     const alerts = service.alerts();
 

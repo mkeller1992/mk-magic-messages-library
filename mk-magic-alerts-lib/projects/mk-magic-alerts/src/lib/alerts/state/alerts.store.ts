@@ -1,6 +1,6 @@
 import { Service } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, Observable, Subject, auditTime } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AlertState } from '../models/alert-state';
 import { AlertType } from '../models/alert-type';
 import { Alert } from '../models/alert.model';
@@ -12,12 +12,7 @@ export class AlertsStore {
 
 	private nextAlertId = 1;
 
-	// Added 'auditTime(100)' to prevent error 'NG0100: Expression has changed after it was checked'
-	private readonly alertsAudited$: Observable<Alert[]> = this.alertsSubject.asObservable().pipe(
-		auditTime(100)
-	);
-
-	readonly alerts = toSignal(this.alertsAudited$, {
+	readonly alerts = toSignal(this.alertsSubject.asObservable(), {
 		initialValue: [],
 		manualCleanup: true
 	});
