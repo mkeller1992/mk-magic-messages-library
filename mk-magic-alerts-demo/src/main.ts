@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom, provideZonelessChangeDetection } from '@angular/core';
+import { enableProdMode, provideZonelessChangeDetection } from '@angular/core';
 
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
@@ -14,7 +14,7 @@ bootstrapApplication(AppComponent,
   {
     providers: [
 		provideRouter(APP_ROUTES, withComponentInputBinding()),
-		provideZonelessChangeDetection(),
+		provideZonelessChangeDetection()
     ]
   })
   .catch(err => console.error(err));

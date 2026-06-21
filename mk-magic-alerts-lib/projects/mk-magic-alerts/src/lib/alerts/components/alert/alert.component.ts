@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, com
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, fromEvent, race, timer } from 'rxjs';
 import { repeat, take, takeUntil, tap } from 'rxjs/operators';
-import { AlertsStore } from '../../state/alerts.store';
 import { AlertState } from '../../models/alert-state';
 import { Alert } from '../../models/alert.model';
 import { NewlineAndTabsPipe } from '../../pipes/new-line-and-tabs.pipe';
+import { AlertsStore } from '../../state/alerts.store';
+import { AlertEntryAnimation } from '../../models/alert-entry-animation';
 
 @Component({
   selector: 'app-alert',
@@ -20,14 +21,17 @@ export class AlertComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly alertParams = input.required<Alert>();
+  readonly entryAnimation = input<AlertEntryAnimation>(AlertEntryAnimation.DOT);
 
   readonly container = viewChild<ElementRef<HTMLElement>>('container');
 
   readonly state = signal<AlertState>(AlertState.DISPLAY);
 
   readonly isDisplayed = computed(() => this.state() === AlertState.DISPLAY);
-
   readonly dismissTimeInMillis = computed(() => this.alertParams().dismissTimeInMillis);
+
+  readonly enterAnimationClass = computed(() => `alert-enter-${this.entryAnimation()}`);
+  readonly leaveAnimationClass = computed(() => `alert-leave-${this.entryAnimation()}`);
 
   ngOnInit(): void {
     const el = this.elementRef.nativeElement;
@@ -45,12 +49,12 @@ export class AlertComponent implements OnInit {
     // unless user hovers over the alert with a cursor => 'takeUntil()' and 'repeat()'
     const dismissalAfterTimeout$: Observable<0> = timer(this.dismissTimeInMillis()).pipe(
       takeUntil(mouseenter$),
-      repeat({ delay: () => mouseleave$ }) // on mouseleave: Resubscribe to source (here: 'timer()')
+      repeat({ delay: () => mouseleave$ })
     );
 
     race([dismissalByUser$, dismissalByService$, dismissalAfterTimeout$])
       .pipe(
-        take(1), // after first emission, unsubscribe also from the winning observable
+        take(1),
         tap(() => this.setDismissalStart()),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -73,7 +77,6 @@ export class AlertComponent implements OnInit {
 
   /** After the leave transition finishes, mark as DISMISSED */
   onContainerTransitionEnd(e: TransitionEvent): void {
-    // Listen for a property used in your leave transition
     if (
       this.state() === AlertState.DISMISS &&
       (e.propertyName === 'height' || e.propertyName === 'opacity')

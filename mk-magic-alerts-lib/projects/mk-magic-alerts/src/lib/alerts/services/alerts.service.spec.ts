@@ -4,6 +4,8 @@ import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 import { AlertsService } from './alerts.service';
 import { AlertsStore } from '../state/alerts.store';
 import { Alert } from '../models/alert.model';
+import { AlertEntryAnimation } from '../models/alert-entry-animation';
+import { MAGIC_ALERTS_CONFIG, provideMagicAlerts } from '../config/magic-alerts-config';
 
 describe('AlertsService', () => {
   let service: AlertsService;
@@ -120,6 +122,38 @@ describe('AlertsService', () => {
   describe('initialization', () => {
     it('should create the alerts host element', () => {
       expect(document.body.children.length).toBeGreaterThan(0);
+    });
+
+    it('should use dot entry animation by default', () => {
+      const config = TestBed.inject(MAGIC_ALERTS_CONFIG);
+      const alertsComponentRef = (service as any).alertsComponentRef;
+
+      expect(config.entryAnimation).toBe(AlertEntryAnimation.DOT);
+      expect(alertsComponentRef.instance.entryAnimation()).toBe(AlertEntryAnimation.DOT);
+    });
+
+    it('should accept a configured entry animation', () => {
+      TestBed.resetTestingModule();
+      document.body.innerHTML = '';
+
+      TestBed.configureTestingModule({
+        providers: [
+          provideZonelessChangeDetection(),
+          provideMagicAlerts({
+            entryAnimation: AlertEntryAnimation.DROP
+          }),
+          { provide: AlertsStore, useValue: alertsStoreMock },
+          AlertsService
+        ]
+      });
+
+      const configuredService = TestBed.inject(AlertsService);
+
+      const config = TestBed.inject(MAGIC_ALERTS_CONFIG);
+      const alertsComponentRef = (configuredService as any).alertsComponentRef;
+
+      expect(config.entryAnimation).toBe(AlertEntryAnimation.DROP);
+      expect(alertsComponentRef.instance.entryAnimation()).toBe(AlertEntryAnimation.DROP);
     });
   });
 });

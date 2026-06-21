@@ -7,6 +7,7 @@ import { AlertsContainerComponent } from './alerts-container.component';
 import { AlertsStore } from '../../state/alerts.store';
 import { AlertState } from '../../models/alert-state';
 import { Alert } from '../../models/alert.model';
+import { AlertEntryAnimation } from '../../models/alert-entry-animation';
 
 @Component({
   selector: 'app-alert', // Has to equal the selector of the real AlertComponent
@@ -18,6 +19,9 @@ class MockAlertComponent {
 
   @Input()
   dismissTimeInMillis = 0;
+
+  @Input()
+  entryAnimation = AlertEntryAnimation.DOT;
 }
 
 describe('AlertsContainerComponent', () => {
@@ -95,6 +99,19 @@ describe('AlertsContainerComponent', () => {
 
     expect(firstAlertComponent.alertParams).toEqual(alerts[0]);
     expect(secondAlertComponent.alertParams).toEqual(alerts[1]);
+  });
+
+  it('should pass entryAnimation to child alert components', () => {
+    fixture.componentRef.setInput('entryAnimation', AlertEntryAnimation.DROP);
+    fixture.detectChanges();
+
+    const alertComponents = fixture.debugElement.queryAll(By.directive(MockAlertComponent));
+
+    const firstAlertComponent = alertComponents[0].componentInstance as MockAlertComponent;
+    const secondAlertComponent = alertComponents[1].componentInstance as MockAlertComponent;
+
+    expect(firstAlertComponent.entryAnimation).toBe(AlertEntryAnimation.DROP);
+    expect(secondAlertComponent.entryAnimation).toBe(AlertEntryAnimation.DROP);
   });
 
 });

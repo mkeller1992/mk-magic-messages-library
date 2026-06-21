@@ -11,39 +11,56 @@ $hover-color-error: #ff4c59;
 $gap-size: 5px;
 $neg-gap: -$gap-size;
 
+@mixin collapse-alert($transform, $transform-duration: 0.3s) {
+  transform: $transform;
+  opacity: 0;
+
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+  margin-top: $neg-gap;
+
+  transition:
+    transform $transform-duration ease-in,
+    opacity 0.2s ease-in,
+    height 0.45s ease,
+    padding-top 0.45s ease,
+    padding-bottom 0.45s ease,
+    border-width 0.45s ease,
+    margin-top 0.45s ease;
+
+  .alert-text {
+    opacity: 0;
+    transition: opacity 0.05s linear;
+  }
+}
+
 .clickable-area {
   cursor: pointer;
   margin-top: $gap-size;
 
   .alert-container {
     position: relative;
-    padding: 5px 15px;
-    margin: 0;
-    border-radius: 4px;
-    border-width: 1px;
-    border-style: solid;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08), 0 6px 20px rgba(0,0,0,0.08);
-    z-index: 1020 !important;
-
     display: grid;
-    grid-template-columns: 1fr auto; /* text | close */
+    grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 15px;
     align-items: center;
 
-    /* Anchor transforms to top-left so scale looks like “shrink to TL” */
-    transform-origin: 0 0;
-    transform-box: border-box;
-
-    /* Layout height is driven by this var (set in TS) */
     height: var(--h, auto);
+    margin: 0;
+    padding: 5px 15px;
+    overflow: hidden;
+    border: 1px solid;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.08);
+    z-index: 1020 !important;
 
     .alert-text {
       min-width: 0;
-      font: 400 16px/20px Roboto;
-      transition: opacity .1s linear;
       overflow-wrap: anywhere;
       word-break: break-word;
+      font: 400 16px/20px Roboto;
     }
 
     .btn-dismiss {
@@ -53,58 +70,158 @@ $neg-gap: -$gap-size;
     }
   }
 
-  /* ===== ENTER: dot → box (visual) ===== */
-  .alert-enter {
-    transform: none;   /* end */
+  /* =========================================================
+   * Default: dot → box from top-left
+   * ========================================================= */
+
+  .alert-enter-dot {
+    transform: none;
+    transform-origin: top left;
     opacity: 1;
     border-width: 1px;
+
     transition:
-      transform .3s ease,
-      opacity .3s ease,
-      border-width .3s ease;
+      transform 0.3s ease,
+      opacity 0.3s ease,
+      border-width 0.3s ease;
 
     @starting-style {
-      transform: scale(0); /* start as a dot at TL */
+      transform: scale(0);
       opacity: 0;
       border-width: 0;
     }
 
     .alert-text {
       opacity: 1;
-      transition: opacity .1s linear .3s;
-      @starting-style { opacity: 0; }
+      transition: opacity 0.1s linear 0.3s;
+
+      @starting-style {
+        opacity: 0;
+      }
     }
   }
 
-  /* ===== LEAVE: box → dot at TL (visual) + smooth reflow (layout) ===== */
-  .alert-leave {
-    /* Visual shrink to TL */
-    transform: scale(0);
-    opacity: 0;
+  .alert-leave-dot {
+    transform-origin: top left;
 
-    /* Layout collapse for smooth sibling “ripple up” */
-    height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-	margin-top: $neg-gap; // Makes the disappearing of the gap bewteen alerts smoother
+    @include collapse-alert(scale(0), 0.5s);
+  }
+
+  /* =========================================================
+   * Variant: drop from top with a subtle overshoot
+   * ========================================================= */
+
+  .alert-enter-drop {
+    transform: translateY(0) scale(1);
+    transform-origin: center top;
+    opacity: 1;
+    border-width: 1px;
 
     transition:
-      transform .5s ease,
-      opacity .5s ease,
-      height .5s ease,
-      padding-top .5s ease,
-      padding-bottom .5s ease,
-      border-width .5s ease,
-	  margin-top .5s ease;
+      transform 0.38s cubic-bezier(0.22, 1.35, 0.36, 1),
+      opacity 0.22s ease-out,
+      border-width 0.22s ease-out;
+
+    @starting-style {
+      transform: translateY(-18px) scale(0.96);
+      opacity: 0;
+      border-width: 0;
+    }
 
     .alert-text {
-      opacity: 0;
-      transition: opacity .05s linear;
+      opacity: 1;
+      transition: opacity 0.16s ease-out 0.12s;
+
+      @starting-style {
+        opacity: 0;
+      }
     }
   }
-  
-  /* ===================== VARIANTS ===================== */
+
+  .alert-leave-drop {
+    transform-origin: center top;
+
+    @include collapse-alert(translateY(-10px) scale(0.96));
+  }
+
+  /* =========================================================
+   * Variant: slide in from the right
+   * ========================================================= */
+
+  .alert-enter-slide-right {
+    transform: translateX(0);
+    transform-origin: right center;
+    opacity: 1;
+    border-width: 1px;
+
+    transition:
+      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.2s ease-out,
+      border-width 0.2s ease-out;
+
+    @starting-style {
+      transform: translateX(42px);
+      opacity: 0;
+      border-width: 0;
+    }
+
+    .alert-text {
+      opacity: 1;
+      transition: opacity 0.14s ease-out 0.1s;
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+
+  .alert-leave-slide-right {
+    transform-origin: right center;
+
+    @include collapse-alert(translateX(28px));
+  }
+
+  /* =========================================================
+   * Variant: unfold vertically from the top
+   * ========================================================= */
+
+  .alert-enter-unfold {
+    transform: translateY(0) scaleY(1);
+    transform-origin: center top;
+    opacity: 1;
+    border-width: 1px;
+
+    transition:
+      transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.18s ease-out,
+      border-width 0.2s ease-out;
+
+    @starting-style {
+      transform: translateY(-8px) scaleY(0);
+      opacity: 0;
+      border-width: 0;
+    }
+
+    .alert-text {
+      opacity: 1;
+      transition: opacity 0.16s ease-out 0.14s;
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+
+  .alert-leave-unfold {
+    transform-origin: center top;
+
+    @include collapse-alert(translateY(-8px) scaleY(0));
+  }
+
+  /* =========================================================
+   * Alert types
+   * ========================================================= */
+
   .alert-info {
     color: $color-info;
     border-color: $color-info;
@@ -143,5 +260,13 @@ $neg-gap: -$gap-size;
     .btn-dismiss:hover {
       text-shadow: 0 0 10px $hover-color-error, 0 0 20px $hover-color-error;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clickable-area,
+  .clickable-area * {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
   }
 }

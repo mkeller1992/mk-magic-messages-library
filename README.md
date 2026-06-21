@@ -4,14 +4,15 @@
 ![build status](https://github.com/mkeller1992/mk-magic-messages-library/actions/workflows/npm-publish.yml/badge.svg)
 [![codecov](https://codecov.io/gh/mkeller1992/mk-magic-messages-library/graph/badge.svg?token=FZYEC8Y47D)](https://codecov.io/gh/mkeller1992/mk-magic-messages-library)
 
-Display animated success-, info-, warning- and error-alerts in your Angular application.
+Display animated success, info, warning and error alerts in your Angular application.
 
 The latest library version is compatible with **Angular 22**.
-Starting with version 20.1.0, `mk-magic-alerts` is fully **zoneless-compatible**. 
+Starting with version 20.1.0, `mk-magic-alerts` is fully **zoneless-compatible**.
 
 ---
 
 ## Demo
+
 https://mkeller1992.github.io/mk-magic-messages-library
 
 ---
@@ -19,67 +20,83 @@ https://mkeller1992.github.io/mk-magic-messages-library
 ## Install
 
 #### [npm](https://www.npmjs.com/package/mk-magic-alerts)
-```
+
+```bash
 npm i mk-magic-alerts
 ```
 
 ## Setup
 
-### For apps based on `Standalone Components`
-Make sure `provideAnimations()` is included in your `main.ts`:
+No required setup is needed. You can inject `AlertsService` directly.
+
+The alert animations are CSS-based, so you do not need to add `provideAnimations()` or `BrowserAnimationsModule` just for `mk-magic-alerts`.
+
+### Optional: choose an entry animation
+
+By default, alerts use `AlertEntryAnimation.DOT`. Existing applications do not need to change anything.
+
+If you want to choose another animation globally, add `provideMagicAlerts()` to your application providers:
+
 ```typescript
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { AlertEntryAnimation, provideMagicAlerts } from 'mk-magic-alerts';
+
+import { AppComponent } from './app/app.component';
+import { APP_ROUTES } from './app/app.routes';
 
 bootstrapApplication(AppComponent, {
-	providers: [
-		importProvidersFrom(),
-		provideRouter(APP_ROUTES),
-		provideAnimations() // this is required!
-	]
+  providers: [
+    provideRouter(APP_ROUTES),
+    provideZonelessChangeDetection(),
+    provideMagicAlerts({
+      entryAnimation: AlertEntryAnimation.DROP
+    })
+  ]
 }).catch(err => console.error(err));
 ```
 
-### For apps based on `ngModule`
-Make sure `BrowserAnimationsModule` is included in your `@NgModule`:
-```typescript
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+Available entry animations:
 
-@NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule // this is required!
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
-```
+- `AlertEntryAnimation.DOT`
+- `AlertEntryAnimation.DROP`
+- `AlertEntryAnimation.SLIDE_RIGHT`
+- `AlertEntryAnimation.UNFOLD`
 
 ## Usage
-1. Inject `AlertsService` into your component to invoke different kind of alerts as shown below:
+
+Inject `AlertsService` into your component and call the alert methods:
 
 ```typescript
+import { Component, inject } from '@angular/core';
 import { AlertsService } from 'mk-magic-alerts';
 
-private readonly alertsSvc = inject(AlertsService);
+@Component({
+  selector: 'app-example',
+  template: '<button type="button" (click)="showAlert()">Show alert</button>'
+})
+export class ExampleComponent {
+  private readonly alertsSvc = inject(AlertsService);
 
-ngOnInit(): void {
-  const displayDurationInMillis = 3000;		
-  this.alertsSvc.showError('Show me for 3 sec', displayDurationInMillis);
+  showAlert(): void {
+    const displayDurationInMillis = 3000;
 
-  this.alertsSvc.showError('Show me till user clicks exit');
-
-  this.alertsSvc.showInfo('Info Alert');
-  this.alertsSvc.showSuccess('Success Alert');
-  this.alertsSvc.showWarning('Warn Alert');
+    this.alertsSvc.showError('Show me for 3 sec', displayDurationInMillis);
+    this.alertsSvc.showInfo('Info Alert');
+    this.alertsSvc.showSuccess('Success Alert');
+    this.alertsSvc.showWarning('Warning Alert');
+  }
 }
 ```
 
-2. To remove all active alerts, invoke the `clear()`-method:
+To show an error alert until the user dismisses it, call `showError()` without a custom duration:
+
+```typescript
+this.alertsSvc.showError('Show me until the user dismisses me');
+```
+
+To remove all active alerts, call `clear()`:
 
 ```typescript
 this.alertsSvc.clear();
@@ -87,47 +104,28 @@ this.alertsSvc.clear();
 
 ## Mocking AlertsService for Unit Testing
 
-To facilitate unit testing of components and services that depend on `AlertsService`, our library provides a `MockAlertsService`. This mock implementation offers empty methods corresponding to those of the actual `AlertsService`, allowing you to easily spy on them and control their behavior in your tests without having to worry about their real implementations.
+The library provides `MockAlertsService` for tests that depend on `AlertsService`. It exposes the same public methods with empty implementations, so you can spy on them without triggering the real alert behavior.
 
-### Usage
+```typescript
+import { TestBed } from '@angular/core/testing';
+import { AlertsService, MockAlertsService } from 'mk-magic-alerts';
 
-1. **Import the Mock Service**: First, ensure that the `MockAlertsService` is imported into your test file.
+TestBed.configureTestingModule({
+  providers: [
+    { provide: AlertsService, useClass: MockAlertsService }
+  ]
+});
+```
 
-    ```typescript
-    import { MockAlertsService } from 'mk-magic-alerts';
-    ```
+You can then use your test runner's spy API:
 
-2. **Configure TestBed**: Use `MockAlertsService` to replace `AlertsService` in your TestBed configuration. This is done by providing it in the `providers` array of your test module setup.
+```typescript
+it('should call showInfo', () => {
+  const alertsService = TestBed.inject(AlertsService);
+  const showInfoSpy = vi.spyOn(alertsService, 'showInfo');
 
-    ```typescript
-    TestBed.configureTestingModule({
-      // Other configuration...
-      providers: [
-        { provide: AlertsService, useClass: MockAlertsService }
-      ]
-    });
-    ```
+  alertsService.showInfo('Expected text');
 
-    Alternatively, if you prefer to directly instantiate and provide the mock without Angular's dependency injection, you can create an instance of the mock and use `useValue`:
-
-    ```typescript
-    const mockAlertsService = new MockAlertsService();
-    TestBed.configureTestingModule({
-      // Other configuration...
-      providers: [
-        { provide: AlertsService, useValue: mockAlertsService }
-      ]
-    });
-    ```
-
-3. **Spying on Methods**: In your tests, you can now spy on the `MockAlertsService` methods using vitest's `spyOn` method. This allows you to mock return values, verify that the methods were called, and inspect the arguments passed to them.
-
-    ```typescript
-    it('should call showInfo method', () => {
-      // Assuming you're inside a describe block for a component or service
-      const alertsService = TestBed.inject(AlertsService);
-      const showInfoSpy = vi.spyOn(alertsService, 'showInfo');
-      // Trigger the action that results in showInfo being called
-      expect(showInfoSpy).toHaveBeenCalledWith('Expected text', 10000);
-    });
-    ```
+  expect(showInfoSpy).toHaveBeenCalledWith('Expected text');
+});
+```

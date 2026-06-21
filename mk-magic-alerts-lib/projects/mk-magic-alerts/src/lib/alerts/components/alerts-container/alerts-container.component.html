@@ -5,7 +5,8 @@
 <div id="mk-magic-messages" class="alerts-container">
 	@for (alertParams of alerts(); track alertParams.id) {
 		<app-alert
-			[alertParams]="alertParams">
+			[alertParams]="alertParams"
+			[entryAnimation]="entryAnimation()">
 		</app-alert>
 	}
 </div>

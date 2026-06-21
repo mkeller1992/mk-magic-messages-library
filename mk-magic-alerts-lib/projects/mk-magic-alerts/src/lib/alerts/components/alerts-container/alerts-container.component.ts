@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { AlertsStore } from '../../state/alerts.store';
 import { AlertComponent } from '../alert/alert.component';
+import { AlertEntryAnimation } from '../../models/alert-entry-animation';
 
 @Component({
   selector: 'magic-alerts',
@@ -11,6 +12,8 @@ import { AlertComponent } from '../alert/alert.component';
 })
 export class AlertsContainerComponent {
   private readonly alertsStore = inject(AlertsStore);
+
+  readonly entryAnimation = input<AlertEntryAnimation>(AlertEntryAnimation.DOT);
 
   readonly alerts = this.alertsStore.alerts;
 }

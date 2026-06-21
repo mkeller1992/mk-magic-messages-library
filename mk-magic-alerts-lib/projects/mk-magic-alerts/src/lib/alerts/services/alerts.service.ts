@@ -1,6 +1,7 @@
 import { ApplicationRef, ComponentRef, Injector, Service, createComponent, inject } from '@angular/core';
 import { AlertsStore } from '../state/alerts.store';
 import { AlertsContainerComponent } from '../components/alerts-container/alerts-container.component';
+import { MAGIC_ALERTS_CONFIG } from '../config/magic-alerts-config';
 
 @Service()
 
@@ -8,6 +9,7 @@ export class AlertsService {
 	private readonly alertsStore = inject(AlertsStore);
 	private readonly applicationRef = inject(ApplicationRef);
 	private readonly injector = inject(Injector);
+	private readonly config = inject(MAGIC_ALERTS_CONFIG);
 
 	private alertsComponentRef!: ComponentRef<AlertsContainerComponent>;
 
@@ -26,6 +28,7 @@ export class AlertsService {
 			environmentInjector: this.applicationRef.injector,
 			elementInjector: this.injector
 		});
+		this.alertsComponentRef.setInput('entryAnimation', this.config.entryAnimation);
 
 		// Attach the AlertsContainerComponent to the application
 		this.applicationRef.attachView(this.alertsComponentRef.hostView);
