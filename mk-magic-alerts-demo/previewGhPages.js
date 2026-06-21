@@ -4,7 +4,15 @@ const path = require('path');
 
 const port = Number(process.env.PORT ?? 4899);
 const baseHref = '/mk-magic-messages-library/';
+const previewUrl = `http://localhost:${port}${baseHref}`;
 const distPath = path.join(__dirname, 'dist', 'mk-magic-alerts-demo', 'browser');
+
+const colors = {
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  green: '\x1b[32m',
+  cyan: '\x1b[96m'
+};
 
 const contentTypes = {
   '.css': 'text/css; charset=utf-8',
@@ -69,5 +77,7 @@ http.createServer((req, res) => {
     sendFile(res, path.join(distPath, 'index.html'));
   });
 }).listen(port, () => {
-  console.log(`GitHub Pages preview: http://localhost:${port}${baseHref}`);
+  console.log('');
+  console.log(`${colors.green}->${colors.reset} ${colors.bold}Local:${colors.reset}   ${colors.cyan}${previewUrl}${colors.reset}`);
+  console.log('');
 });

@@ -173,15 +173,15 @@ $neg-gap: -$gap-size;
   }
 
   /* =========================================================
-   * Variant: drop from top with a subtle overshoot
+   * Variant: drop from above with a visible bounce
    * ========================================================= */
 
   .alert-enter-drop {
-    @include enter-alert(alert-enter-drop, 0.4s cubic-bezier(0.22, 1.35, 0.36, 1), center top);
+    @include enter-alert(alert-enter-drop, 0.48s cubic-bezier(0.2, 1.25, 0.34, 1), center top);
   }
 
   .alert-leave-drop {
-    @include leave-alert(alert-leave-drop, 0.42s, center top);
+    @include leave-alert(alert-leave-drop, 0.4s, center top);
   }
 
   /* =========================================================
@@ -197,15 +197,15 @@ $neg-gap: -$gap-size;
   }
 
   /* =========================================================
-   * Variant: unfold vertically from the top
+   * Variant: unfold vertically in place from a thin top edge
    * ========================================================= */
 
   .alert-enter-unfold {
-    @include enter-alert(alert-enter-unfold, 0.36s cubic-bezier(0.22, 1, 0.36, 1), center top);
+    @include enter-alert(alert-enter-unfold, 0.42s cubic-bezier(0.22, 1, 0.36, 1), center top);
   }
 
   .alert-leave-unfold {
-    @include leave-alert(alert-leave-unfold, 0.42s, center top);
+    @include leave-alert(alert-leave-unfold, 0.44s, center top);
   }
 
   /* =========================================================
@@ -330,13 +330,23 @@ $neg-gap: -$gap-size;
 }
 
 @keyframes alert-enter-drop {
-  from {
-    transform: translateY(-18px) scale(0.96);
+  0% {
+    transform: translateY(-48px) scale(0.98);
     opacity: 0;
     border-width: 0;
   }
 
-  to {
+  64% {
+    transform: translateY(5px) scale(1.01);
+    opacity: 1;
+    border-width: 1px;
+  }
+
+  82% {
+    transform: translateY(-2px) scale(0.995);
+  }
+
+  100% {
     transform: translateY(0) scale(1);
     opacity: 1;
     border-width: 1px;
@@ -359,13 +369,13 @@ $neg-gap: -$gap-size;
 
 @keyframes alert-enter-unfold {
   from {
-    transform: translateY(-8px) scaleY(0);
+    transform: scaleY(0.02);
     opacity: 0;
     border-width: 0;
   }
 
   to {
-    transform: translateY(0) scaleY(1);
+    transform: scaleY(1);
     opacity: 1;
     border-width: 1px;
   }
@@ -397,7 +407,7 @@ $neg-gap: -$gap-size;
 
 @keyframes alert-leave-drop {
   to {
-    transform: translateY(-10px) scale(0.96);
+    transform: translateY(18px) scale(0.98);
     opacity: 0;
     height: 0;
     padding-top: 0;
@@ -421,7 +431,7 @@ $neg-gap: -$gap-size;
 
 @keyframes alert-leave-unfold {
   to {
-    transform: translateY(-8px) scaleY(0);
+    transform: scaleY(0.04);
     opacity: 0;
     height: 0;
     padding-top: 0;
