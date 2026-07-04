@@ -121,6 +121,7 @@ $neg-gap: -$gap-size;
       border-radius: 10px;
 
       .alert-icon {
+		align-self: start;
         display: grid;
         width: 32px;
         height: 32px;
