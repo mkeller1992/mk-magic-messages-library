@@ -26,11 +26,11 @@ export class AlertsStore {
 	}
 
 	addAlert(text: string, type: AlertType, dismissTimeInMillis: number): void {
-		// Remove already dismissed alerts
+		// Remove alerts that already started or finished their exit animation.
 		// filter() makes a shallow copy of the array (a new array, but pointing to the same objects)
 		 const activeAlerts = this.alertsSubject
 			.getValue()
-			.filter((alert) => alert.state !== AlertState.DISMISSED);
+			.filter((alert) => alert.state === AlertState.DISPLAY);
 
 		// Create and add new message:
 		this.alertsSubject.next([

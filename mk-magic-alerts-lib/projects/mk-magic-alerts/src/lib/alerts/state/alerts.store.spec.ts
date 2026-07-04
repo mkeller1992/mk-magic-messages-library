@@ -108,6 +108,25 @@ describe('AlertsStore', () => {
     expect(alerts[0].state).toBe(AlertState.DISPLAY);
   });
 
+  it('should remove dismissing alerts before adding a new alert', () => {
+    // Arrange
+    service.addAlert('Dismissing Alert', 'info', 1000);
+
+    const firstAlert = service.alerts()[0];
+    firstAlert.state = AlertState.DISMISS;
+
+    // Act
+    service.addAlert('New Alert', 'success', 2000);
+
+    const alerts = service.alerts();
+
+    // Assert
+    expect(alerts).toHaveLength(1);
+    expect(alerts[0].text).toBe('New Alert');
+    expect(alerts[0].type).toBe('success');
+    expect(alerts[0].state).toBe(AlertState.DISPLAY);
+  });
+
   it('should emit from dismissAll$ when dismissAll is called', () => {
     // Arrange
     const callback = vi.fn();

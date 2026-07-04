@@ -3,7 +3,7 @@
     @if (isRendered()) {
       <div
         #container
-        class="alert-container alert-{{ params.type }} alert-{{ alertAppearance() }} {{ animationClass() }}"
+        class="alert-container alert-{{ params.type }} alert-{{ fixedAlertAppearance() }} {{ animationClass() }}"
         role="alert"
         (animationend)="onContainerAnimationEnd($event)">
 

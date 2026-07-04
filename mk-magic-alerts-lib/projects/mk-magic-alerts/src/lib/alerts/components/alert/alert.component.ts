@@ -29,6 +29,8 @@ export class AlertComponent implements OnInit {
 
   readonly state = signal<AlertState>(AlertState.DISPLAY);
   readonly fixedEntryAnimation = signal<AlertEntryAnimation>(AlertEntryAnimation.DOT);
+  readonly fixedAlertAppearance = signal<AlertAppearance>(AlertAppearance.CLASSIC);
+  readonly entryAnimationDone = signal(false);
 
   readonly isRendered = computed(() => this.state() !== AlertState.DISMISSED);
   readonly dismissTimeInMillis = computed(() => this.alertParams().dismissTimeInMillis);
@@ -38,11 +40,14 @@ export class AlertComponent implements OnInit {
   readonly animationClass = computed(() =>
     this.state() === AlertState.DISMISS
       ? this.leaveAnimationClass()
-      : this.enterAnimationClass()
+      : this.entryAnimationDone()
+        ? ''
+        : this.enterAnimationClass()
   );
 
   ngOnInit(): void {
     this.fixedEntryAnimation.set(this.entryAnimation());
+    this.fixedAlertAppearance.set(this.alertAppearance());
 
     const el = this.elementRef.nativeElement;
 
@@ -81,18 +86,23 @@ export class AlertComponent implements OnInit {
         el.style.setProperty('--h', `${el.offsetHeight}px`);
       }
 
+      this.alertParams().state = AlertState.DISMISS;
       this.state.set(AlertState.DISMISS);
     }
   }
 
   /** After the leave animation finishes, mark as DISMISSED */
   onContainerAnimationEnd(event: AnimationEvent): void {
-    if (
-      this.state() === AlertState.DISMISS &&
-      event.target === this.container()?.nativeElement
-    ) {
+    if (event.target !== this.container()?.nativeElement) {
+      return;
+    }
+
+    if (this.state() === AlertState.DISMISS) {
       this.alertParams().state = AlertState.DISMISSED;
       this.state.set(AlertState.DISMISSED);
+      return;
     }
+
+    this.entryAnimationDone.set(true);
   }
 }

@@ -66,9 +66,7 @@ $neg-gap: -$gap-size;
     color: $color;
 
     &:hover {
-      color: rgb(255, 255, 255);
-      background-color: $hover-color;
-      box-shadow: 0 3px 9px rgba($hover-color, 0.28);
+      text-shadow: 0 0 10px $hover-color, 0 0 20px $hover-color;
     }
   }
 }
